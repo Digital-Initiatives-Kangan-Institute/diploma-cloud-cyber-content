@@ -5,3 +5,6 @@ templates/
 # Python bytecode
 __pycache__/
 *.pyc
+
+# Office open-file locks (created while a .docx/.xlsx is open in Word/Excel)
+~$*
