@@ -16,43 +16,136 @@ The intent is **realism + navigability**, not technical fidelity. The website is
 
 ## 2. Site structure
 
+The site has two distinct zones with different visual identity (per `scenario/branding/brand-pack.md` §5.1) and different content principles:
+
+- **Public site** — marketing IA, warm cream background, marketing-adjacent voice
+- **Intranet** — functional IA, neutral light-grey background, procedural voice; entered via the mock SSO sign-in gate (§3)
+
+Every page on both zones carries the persistent simulated-environment disclosure banner described in `scenario/branding/brand-pack.md` §5.3.
+
+### 2.1 Content principle — intranet is in-world only
+
+> **Every intranet page is an in-world artefact.** Each page is something a real YAT staff member could plausibly land on while doing their job. Meta-scaffolding for the student / learner ("you are a consultant arriving at YAT…", "this assessment task asks you to…") lives in the assessment-brief documents (the AT `.docx` files), not on the intranet.
+
+When in doubt about a piece of content, the test is: *would a YAT staff member ever read this?* If no, it's meta — and belongs in the AT brief, not the intranet.
+
+The principle drove two reframes during the 2026-05-26 review:
+
+- What was originally drafted as a *project narrative* is reframed as a **Master Services Agreement (MSA)** between YAT and MTS Consulting — the in-world contract document any real organisation engaging a consultancy would have on file. The role brief (`internal-lms-migration-role-brief-S1-CL1-AT1.md`) stays as a separate operational working document, per option 2 in the 2026-05-26 decision.
+- What was originally drafted as *CBA cost inputs* is reframed as the **ICT cost baseline** the consultant draws on — same data, but presented as a YAT-authored cost reference rather than a brief written *to* the consultant.
+
+Both files are scheduled for content reshape; tracked in §9.
+
+### 2.2 Public site sitemap
+
+Locked structure as of 2026-05-26. Stub pages flagged below are TBD content (one-paragraph placeholders sufficient for site-realism — full content not assessment-critical).
+
 ```
-yat-college.example/                            ← public-facing site
-├── /                                           ← homepage (cluster project narrative front page)
-├── /about                                      ← public-about-mission-vision.md
-├── /strategic-plan                             ← public-strategic-plan-summary.md
-├── /people                                     ← public-org-structure.md
-├── /locations                                  ← public-locations-campus.md
-└── /sign-in                                    ← mock SSO sign-in gate (see §3)
-                                                  ↓
-yat-college.example/intranet/                   ← intranet (post-"sign-in")
-├── /                                           ← intranet home (nav to sections below)
-├── /ict/environment              ← state-selector menu → S1-CL1-AT1, etc.
-├── /ict/network-diagram          ← state-selector menu
-├── /ict/lms-server-status        ← state-selector menu
-├── /ict/hardware-inventory       ← state-selector menu
-├── /ict/backup-recovery          ← state-selector menu
-├── /policies/change-management
-├── /policies/user-access
-├── /policies/acceptable-use
-├── /policies/whs
-├── /policies/privacy
-├── /policies/backup-retention
-├── /policies/security-incident-response
-├── /project/strategic-plan       ← internal-ict-strategic-plan-detail.md
-├── /project/role-brief           ← AT-specific
-├── /project/lms-app-spec         ← state-selector menu
-├── /project/migration-requirements
-├── /project/ha-database-requirements
-├── /project/consultation-notes
-├── /project/cba-cost-data
-├── /reference/industry-standards
-├── /reference/legislative-requirements
-├── /reference/reference-architectures
-└── /templates/                                ← downloadable templates (xlsx, docx) — see `assessments/templates/checklist.md`
+yat-college.example/                              [warm cream background, marketing tone]
+
+├── /                                             Homepage — hero, study-areas teaser, why YAT, apply CTA
+│                                                 ↳ content TBD
+│
+├── /study/                                       Study areas catalogue
+│   ├── /study/                                   Index — all study areas (one-para each)
+│   ├── /study/business                              ↳ stub TBD
+│   ├── /study/community-services                    ↳ stub TBD
+│   ├── /study/education                              ↳ stub TBD
+│   ├── /study/information-technology                ↳ stub TBD (features the diploma this site supports)
+│   │   └── /study/information-technology/
+│   │         diploma-cloud-cyber-security        Course detail — light page TBD
+│   ├── /study/health                                ↳ stub TBD
+│   ├── /study/hospitality                           ↳ stub TBD
+│   └── /study/trades                                ↳ stub TBD
+│
+├── /about/                                       About hub
+│   ├── /about/                                   ← public-about-mission-vision.md
+│   ├── /about/strategic-plan                     ← public-strategic-plan-summary.md
+│   └── /about/people                             ← public-org-structure.md
+│
+├── /locations                                    ← public-locations-campus.md
+│
+├── /apply                                        How to enrol — process, intakes, fees
+│                                                 ↳ content TBD
+│
+├── /contact                                      Contact — address, phone, form (submit does nothing)
+│                                                 ↳ content TBD
+│
+└── /sign-in                                      Mock SSO gate (per §3) → redirects to /intranet/
 ```
 
-URL paths above are illustrative — the build pipeline can choose the actual structure.
+### 2.3 Intranet sitemap
+
+Top-level sections and the policy / reference files listed below are locked as of 2026-05-26. The interior of `/intranet/ict/`, `/intranet/projects/`, and `/intranet/templates/` is worked through document-by-document as content is authored. The structure shown for `/intranet/projects/lms-cloud-migration/` is the *current proposal* for the in-flight cluster, refined as files get reframed (engagement agreement, ICT cost baseline).
+
+```
+yat-college.example/intranet/                     [neutral light-grey background, denser layout]
+
+├── /intranet/                                    Intranet home — welcome, featured project banner, quick links
+│                                                 ↳ content TBD
+│
+├── /intranet/ict/                                ICT department
+│                                                 ↳ children worked through doc-by-doc;
+│                                                   proposed state-bearing pages: environment, network-diagram,
+│                                                   lms-server-status, hardware-inventory, backup-recovery
+│
+├── /intranet/policies/                           Policies & procedures (locked, all stable)
+│   ├── /intranet/policies/change-management      ← internal-change-management-procedure.md
+│   ├── /intranet/policies/user-access            ← internal-user-access-policy.md
+│   ├── /intranet/policies/acceptable-use         ← internal-acceptable-use-policy.md
+│   ├── /intranet/policies/whs                    ← internal-whs-policy.md
+│   ├── /intranet/policies/privacy                ← internal-privacy-policy.md
+│   ├── /intranet/policies/backup-retention       ← internal-backup-retention-policy.md
+│   ├── /intranet/policies/security-incident      ← internal-security-and-incident-response.md
+│   └── /intranet/policies/records-management     ← internal-records-management-policy.md
+│
+├── /intranet/projects/                           Projects — current + mock past
+│                                                 ↳ per-project structure worked through doc-by-doc;
+│                                                   current LMS-migration project's structure proposed below
+│   │
+│   └── /intranet/projects/lms-cloud-migration/   Current project — LMS cloud migration
+│       ├── /intranet/projects/lms-cloud-migration/                        Project home — overview + artefact index
+│       ├── /intranet/projects/lms-cloud-migration/master-services-agreement   ← NEW — reframed from public-cluster-project-narrative.md
+│       ├── /intranet/projects/lms-cloud-migration/strategic-plan          ← internal-ict-strategic-plan-detail.md
+│       ├── /intranet/projects/lms-cloud-migration/role-brief/                                state-bearing
+│       │   └── /role-brief/s1-cl1-at1            ← internal-lms-migration-role-brief-S1-CL1-AT1.md
+│       ├── /intranet/projects/lms-cloud-migration/lms-app-spec/                              state-bearing
+│       │   └── /lms-app-spec/s1-cl1-at1          ← internal-lms-application-spec-S1-CL1-AT1.md
+│       ├── /intranet/projects/lms-cloud-migration/migration-requirements/                    state-bearing
+│       │   └── /migration-requirements/s1-cl1-at1                                            ← internal-lms-cloud-migration-requirements-S1-CL1-AT1.md
+│       ├── /intranet/projects/lms-cloud-migration/ha-database-requirements/                  state-bearing
+│       │   └── /ha-database-requirements/s1-cl1-at3                                          ← internal-ha-database-requirements-S1-CL1-AT3.md
+│       ├── /intranet/projects/lms-cloud-migration/consultation-notes/                        state-bearing
+│       │   └── /consultation-notes/s1-cl1-at1    ← internal-ict-manager-consultation-notes-S1-CL1-AT1.md
+│       ├── /intranet/projects/lms-cloud-migration/ict-cost-baseline/                         state-bearing  [REFRAMED from CBA cost inputs]
+│       │   └── /ict-cost-baseline/s1-cl1-at1     ← internal-cba-cost-inputs-S1-CL1-AT1.md (rename TBD)
+│       └── /intranet/projects/lms-cloud-migration/cloud-architecture-design/                 state-bearing
+│           └── /cloud-architecture-design/s1-cl1-at2                                         ← internal-lms-cloud-architecture-design-S1-CL1-AT2.md
+│
+├── /intranet/reference/                          Reference & standards (locked, all stable)
+│   ├── /intranet/reference/industry-standards    ← internal-industry-standards-reference.md
+│   ├── /intranet/reference/legislative           ← internal-legislative-requirements-reference.md
+│   └── /intranet/reference/reference-architectures ← internal-reference-architectures.md
+│
+└── /intranet/templates/                          Document templates (downloadable .docx / .pptx)
+                                                  ↳ children worked through doc-by-doc; current templates folder:
+                                                    business-case, business-case-presentation, feedback-record,
+                                                    deployment-report [state-bearing], ha-design [state-bearing],
+                                                    ha-deployment-report [state-bearing]
+```
+
+### 2.4 Extensibility — adding sections cheaply
+
+The intranet structure is designed so adding a new top-level section (or a new project under `/intranet/projects/`) costs minimal effort. Six patterns the build pipeline will follow:
+
+1. **Section registry as config, not code.** A single small config file lists the intranet sections (`ict`, `policies`, `projects`, `reference`, `templates`) with display name, short description, ordering, and any per-section flags. Navigation components read from this list — adding a new section = one entry in the registry + one content folder; nav, breadcrumbs, sitemap-builders all update automatically.
+2. **One section-landing template.** Every section index (`/intranet/ict/`, `/intranet/policies/`, …) renders from the same template: section heading + intro paragraph + listing of pages in the section grouped by topic. New section's landing page = zero new template code.
+3. **SSG content collections per section.** Drop a markdown file into a section folder, the build picks it up automatically. New policy = drop the file in `/intranet/policies/`; new project = create `/intranet/projects/{slug}/` and drop files in. No manual route registration.
+4. **Site chrome decoupled from section structure.** Disclosure banner, header, footer, breadcrumbs read from the registry — none hard-code section names. Adding / renaming a section doesn't touch global layout code.
+5. **State-versioning is a page-level concern, not a section concern.** Any page in any section can be state-bearing or stable, signalled by filename suffix per §4.1. No section needs special-case handling to support versioned pages.
+6. **Documented URL convention.** Public uses `/{section}/{page}`. Intranet uses `/intranet/{section}/{topic}` (stable pages) or `/intranet/{section}/{topic}/{version}` (state-bearing pages) per §4. New sections follow the same pattern — no per-section URL invention.
+
+URL paths above are illustrative in detail (slug spellings, sub-page nesting) but follow this stable convention.
 
 ## 3. Mock SSO sign-in gate
 
@@ -96,21 +189,45 @@ Some intranet pages carry a state that evolves across the course. The current IC
 
 - Source filename suffix encodes the AT the version was authored for: `internal-ict-environment-overview-S1-CL1-AT1.md`.
 - The "Relevant to:" header at the top of each markdown source file tells the reader which ATs the version applies to (`S1-CL1 AT1, AT2, AT3`).
-- The build process collects all versions of a given page into a single URL with a **state-selector menu**.
+- Each version is rendered as its own URL (one page per source file). There is **no global state machine** — the site does not ask students which assessment they are on, store that choice, or swap content based on it.
 
-### 4.2 State-selector menu
+### 4.2 Surfacing versions to students — two complementary mechanisms
 
-At the top of every state-bearing page, the rendered HTML shows a menu listing all available versions of that page, with the current version highlighted. Example:
+**(a) Versioned-document index on the linking page.** Wherever a state-bearing document is referenced from an intranet topic / index page, the link block lists every available version with the assessment range it applies to. Example markup:
 
 ```
-ICT Environment Overview — viewing state: [ S1-CL1 AT1, AT2, AT3 ✓ ] [ S1-CL2 AT1 ] [ S1-CL3 AT1 ] ...
+ICT Environment Overview
+
+The version to read depends on which assessment you are doing. Select the one that matches your current cluster + AT.
+
+  S1-CL1 AT1 through S1-CL1 AT3  →  [link]
+  S1-CL2 AT1                     →  [link]
+  S1-CL3 AT1 and onward          →  [link]
 ```
 
-Clicking a different state link navigates to the equivalent page for that AT. Students working on (say) S1-CL2 AT1 read the YAT environment as it is at that point; the URL path makes this obvious; the menu lets them flip back to see earlier states if they want to understand how YAT got here.
+**(b) "Other versions" breadcrumb at the top of each version page.** A small passive note (not an interactive selector) tells the student which version they are looking at and points at sibling URLs. Example:
 
-### 4.3 Initial scope
+```
+You are viewing the S1-CL1-AT1 version.
+Other versions: S1-CL2-AT1 · S1-CL3-AT1
+```
 
-For this cluster (S1-CL1) only the AT1-suffixed versions exist. Later clusters will add their own snapshots. The state-selector should still render even when only one version exists (highlighted, no other options) — this keeps the UI consistent.
+Purpose: students who arrive via a direct link, search result, or browser history still know which version they have and can pivot to a sibling without going back to the index page.
+
+### 4.3 Why this approach (and what we rejected)
+
+An earlier draft of this spec described a live state-selector menu at the top of every state-bearing page (clicking a state link swaps the page). A more elaborate alternative would have asked students at first visit "which assessment are you up to?" and re-rendered the whole site against that selection.
+
+Both were rejected (2026-05-26, Tim) in favour of the index-listing + passive-breadcrumb approach above, because:
+
+- It **exposes YAT's evolution** as part of the learning rather than hiding it behind a state machine — students can see how the environment changed at each cluster boundary.
+- It avoids state-storage edge cases (localStorage / cookies / URL params), multi-tab inconsistency, and direct-link breakage that a global state model introduces.
+- It costs nothing to build beyond ordinary markdown links and a tiny template snippet for the breadcrumb.
+- Pages with only one version need no special handling — the index simply lists one link; the breadcrumb on the page says "current version".
+
+### 4.4 Initial scope
+
+For this cluster (S1-CL1) only the AT1-suffixed versions exist. Later clusters will add their own snapshots; each addition is a new file at a new URL, a new line on the relevant index page, and a new entry in the "other versions" breadcrumb on existing version pages.
 
 ## 5. Stable pages
 
@@ -122,20 +239,19 @@ If a stable document later needs versioning (e.g. the org structure when YAT exp
 
 ## 6. Navigation and discoverability
 
-- **Public homepage:** the cluster project narrative front page, with a clear path to the "sign in to intranet" gate.
-- **Intranet home:** sectioned navigation matching the structure in §2 (ICT environment, Policies, Project materials, References).
+- **Public homepage:** a marketing-style RTO homepage (hero, study-areas teaser, why YAT, apply CTA) with a prominent "Sign in" link top-right routing to the SSO gate (§3).
+- **Public global nav:** Study · About · Locations · Apply · Contact · Sign in.
+- **Intranet home:** welcome + featured-project banner + section nav matching the five top-level intranet sections in §2.3 (ICT, Policies, Projects, Reference, Templates).
+- **Intranet global nav:** ICT · Policies · Projects · Reference · Templates, plus breadcrumbs on every interior page.
 - **Cross-references:** in-text links between scenario markdown files (`internal-change-management-procedure.md` etc.) are preserved as in-page hyperlinks in the rendered site.
-- **State indicator on every state-bearing page:** so students always know which version of YAT they're looking at.
+- **Version surfacing on state-bearing content:** index pages list each version with its assessment range; each version page carries a small "other versions" breadcrumb (see §4.2). No global state machine.
+- **Site-wide simulated-environment disclosure banner:** thin ochre strip across the very top of every page on both zones and the sign-in gate, per `scenario/branding/brand-pack.md` §5.3.
 
 ## 7. Hosting and build
 
 - **Hosting (TBD):** Cloudflare Pages (per Tim's earlier suggestion) or similar free static-site hosting. Alternative candidates: GitHub Pages, Netlify, Vercel, an internal-Kangan-hosted equivalent.
-- **Build pipeline (TBD):** a static site generator that takes the markdown source files in `scenario/` and produces the rendered HTML site. Plausible options:
-  - **MkDocs / MkDocs Material** — markdown-native, generates clean documentation-style sites; supports search out of the box.
-  - **Hugo** — fast, flexible, more theming work.
-  - **Eleventy** — minimal, very flexible templating.
-  - **Astro** — modern, component-based, good for the SSO page styling.
-- **State-selector implementation:** the build process needs to detect AT-suffixed source files, group them by topic, and inject the state-selector menu at the top of each rendered page.
+- **Build pipeline:** **Astro** (locked 2026-05-26). Component-based SSG, handles the dual public/intranet layout + the SSO page well, native content collections for markdown source files with frontmatter validation, idiomatic support for the state-versioned URL scheme.
+- **Version surfacing implementation:** the build process needs to detect AT-suffixed source files, group them by topic, render each as its own URL, and (a) feed the grouped list into the linking index page and (b) inject the "other versions" breadcrumb at the top of each version page (see §4.2). No global state, no client-side JS required for this.
 - **Domain (TBD):** something clearly fictional (e.g. `yat-college.example`, `yatcollege.test`) — must not be a real organisation's domain.
 
 ## 8. What's not in scope for the website
@@ -146,18 +262,34 @@ If a stable document later needs versioning (e.g. the org structure when YAT exp
 - No external API integrations.
 - No content management system — content is authored as markdown in the source tree, version-controlled in the repo, and built into the site by the pipeline.
 
-## 9. Open questions (TBD)
+## 9. Open items
 
-1. SSG choice (MkDocs / Hugo / Eleventy / Astro / other).
-2. Hosting platform (Cloudflare Pages vs alternatives).
-3. Domain.
-4. Visual theme — full custom design vs adapting an SSG default theme.
-5. SSO page styling — match a specific real-world SSO (Entra/Okta) closely, or generic-looking.
-6. Whether the state-selector should be a horizontal bar, a dropdown, or a sidebar widget.
-7. Whether the public homepage and intranet share visual identity, or whether the intranet has a distinctly "internal" look.
+### 9.1 Design questions (TBD)
+
+1. Hosting platform (Cloudflare Pages vs alternatives).
+2. Domain.
+3. Visual theme — full custom design vs adapting an Astro starter template (e.g. Starlight for docs-style intranet content). Brand pack at `scenario/branding/brand-pack.md` provides direction; CSS / theme implementation still to design.
+4. SSO page styling — match a specific real-world SSO (Entra / Okta) closely, or generic-looking.
+5. Cross-repo content sourcing — scenario `.md` files live in `diploma-cloud-cyber/scenario/`; the Astro site repo (`diploma-cloud-cyber-website`) needs them at build time. Options: git submodule, CI sync step, or local-dev path-mapping + CI copy.
+
+(Earlier open question on SSG choice — resolved 2026-05-26: Astro.)
+
+(Earlier open question on whether the intranet has a distinctly "internal" look — resolved 2026-05-26 by the brand pack: yes, neutral light-grey background and denser layout vs. the public site's warm cream. See `scenario/branding/brand-pack.md` §5.1.)
+
+### 9.2 Scheduled content reshapes
+
+These are approved design decisions awaiting authoring work, not open questions:
+
+1. **Reframe project narrative → Master Services Agreement (MSA).** Replace `public-cluster-project-narrative.md` with an MSA between YAT and MTS Consulting. Same scope-of-engagement information, structured as a contract (parties, scope, out-of-scope, deliverables, term, governance, acceptance, change control, signatures). Mounts at `/intranet/projects/lms-cloud-migration/master-services-agreement`. File likely renames `public-cluster-project-narrative.md` → `internal-master-services-agreement-S1-CL1.md` (rename TBD-confirm).
+2. **Reframe CBA cost inputs → ICT cost baseline.** Restructure `internal-cba-cost-inputs-S1-CL1-AT1.md` from "inputs for the consultant" framing into a YAT-authored cost baseline / FY26 budget extract that the consultant draws on. Same data, in-world voice. File likely renames `internal-cba-cost-inputs-S1-CL1-AT1.md` → `internal-ict-cost-baseline-S1-CL1-AT1.md` (rename TBD-confirm).
+3. **Author public-site stub pages.** `/`, `/study/*`, `/apply`, `/contact` content listed as TBD in §2.2.
+4. **Author intranet home + project landing page content.** `/intranet/`, `/intranet/projects/`, `/intranet/projects/lms-cloud-migration/` are all section / project landing pages without content yet.
 
 ---
 
 ## Changelog
 
 - **2026-05-23:** Initial spec. Absorbed the previously-stubbed `public-mock-sso-signin.md` (which is removed) into §3 here.
+- **2026-05-26:** §4 reworked. Replaced the live state-selector menu approach with index-listing + passive "other versions" breadcrumb (per Tim). Rationale + rejected alternatives now captured in §4.3. Open question §9.6 (selector form factor) removed as no longer applicable.
+- **2026-05-26:** §2 reworked. Split into two-zone structure (public + intranet) with separate sitemap trees per Tim's framing. Added §2.1 in-world-only content principle. Public-site sitemap locked with stub-page placeholders. Intranet sitemap locked at top-level categories + the listed policy / reference files; ICT children, project sub-structure, and templates content marked as "worked through doc-by-doc". Added §2.4 extensibility patterns. §6 navigation bullets updated to reflect new sitemap. Two content reshapes scheduled (project narrative → MSA; CBA cost inputs → ICT cost baseline) — tracked in §9.2.
+- **2026-05-26:** SSG locked to **Astro** (§7). §9.1 SSG-choice question resolved; renumbered. Added new §9.1 question on cross-repo content sourcing (Astro site repo needs scenario `.md` files at build time).

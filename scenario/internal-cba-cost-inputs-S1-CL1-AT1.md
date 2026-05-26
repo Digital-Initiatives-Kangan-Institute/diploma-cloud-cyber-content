@@ -1,79 +1,52 @@
-# YAT College — Cost-Benefit Analysis: Cost Inputs
+# ICT Cost Baseline — Learning Management System (FY26)
 
 **Relevant to:** S1-CL1 AT1
 
-**UoC references this document satisfies:**
-- [ICTICT517 PC 3.1] Develop action plan to implement proposed changes including prioritised schedule and consistency with organisational policy and procedures
-- [ICTICT517 KE 1] Key sections of an action plan for ICT implementation projects
-- [ICTICT517 FS Numeracy] Interprets numerical data and applies mathematical calculations to assess the financial implications of introducing changes
-- Supports the AT1 CBA work (port of the structure of 517 AT3 Part 1)
+**UoC references this document supports:** Provides YAT-internal cost and operational planning data drawn on by consultants and YAT staff. Supports student evidencing of [ICTICT517 PC 3.1] (action-plan development with cost grounding), [ICTICT517 KE 1] (action-plan knowledge requirements), and [ICTICT517 FS Numeracy] (numerical interpretation + financial-implication analysis) via the AT1 CBA work. The document itself is reference data, not an action plan.
 
-**Source status:** ✅ Authored 2026-05-23 (Claude). Provides the YAT-internal cost inputs and common assumptions the student needs to undertake the CBA. **The student is responsible for sourcing cloud-side cost figures and producing the comparison and recommendation themselves — this pack provides inputs, not the analysis.** All dollar figures are Claude-proposed plausible values for the YAT scenario — they are **not** real YAT figures. **TBD** confirm or replace with real planning figures before live delivery.
+**Source status:** 🟢 Reframed 2026-05-26 from the prior `internal-cba-cost-inputs-S1-CL1-AT1.md` (which addressed the consultant directly with "what this pack provides / does not provide" framing) into an in-world YAT-internal cost baseline document per the `scenario/website.md` §2.1 in-world-only principle. All dollar figures preserved verbatim from the prior version — they remain Claude-proposed plausible values for the YAT scenario, **not** real YAT figures. **TBD** confirm or replace with real planning figures before live delivery. File rename from `internal-cba-cost-inputs-S1-CL1-AT1.md` → `internal-ict-cost-baseline-S1-CL1-AT1.md` is **TBD-confirm**.
 
 ---
 
-## 1. Purpose and how to use this pack
+## Document control
 
-This pack provides:
+| | |
+|---|---|
+| Document title | ICT Cost Baseline — Learning Management System (FY26) |
+| Document owner | YAT ICT Manager (Sam Walker, TBD-confirm) |
+| Prepared by | YAT ICT in conjunction with YAT Finance |
+| Effective from | FY26 commencement |
+| Review cycle | Annual, or on material change to LMS operating model |
+| Classification | Internal — ICT, Finance, and engaged consultants on signed MSA |
+| Currency | Australian Dollars (AUD), exclusive of GST, at 2026 price levels |
 
-- **YAT-internal data** about the current on-premises LMS environment that you (the MTS consultant) couldn't reasonably know without working with YAT — current server age, electricity costs, server-room rent allocation, current backup arrangements, current MTS contract value, current ICT staff allocations.
-- **Common assumptions** YAT has set for this engagement (user population, growth, availability targets, indicative downtime cost, fully-loaded ICT FTE cost).
-- **Methodology guidance** for how the CBA should be structured.
-- **Pointers** to where to research the cloud-side cost data.
+---
 
-What this pack **does not** provide:
+## 1. Purpose
 
-- The cloud-side (AWS) cost figures. **You must research current AWS pricing yourself** using the AWS Pricing Calculator and AWS service pricing pages, sized to the cloud architecture you propose. Your CBA submission must show your sizing assumptions and the AWS line items you derived.
-- The 5-year projection.
-- The comparison.
-- The recommendation.
+This document sets out the cost baseline for YAT's current on-premises Learning Management System (LMS) and the common planning assumptions used by ICT when evaluating changes to the LMS operating model. It draws together cost lines from the FY26 ICT operating budget, facilities allocations, software licensing records, and YAT's existing external support contracts.
 
-All of that is your CBA work. This pack is the inputs. Populate the supplied CBA template (`ICTICT517_Cost Benefit Analysis template.xlsx`) with the inputs below and your researched cloud-side figures.
+The document is referenced when ICT reviews, change proposals, or external engagements (such as the in-flight LMS Cloud Migration project) need a consistent, current view of what the LMS costs YAT today.
 
-All figures below are in **Australian Dollars (AUD)**, exclusive of GST, at 2026 price levels.
-
-### Scope of the consulting engagement vs scope of the CBA
-
-The **MTS consulting engagement scope** (see `internal-lms-migration-role-brief-S1-CL1-AT1.md` § Scope of the MTS consulting engagement) covers the cloud infrastructure only. LMS application installation, data migration, cutover, and organisational change management are **YAT in-house IT's responsibility**.
-
-The **CBA scope is different and broader.** The Business Case is for the YAT board; the board is approving the *whole change*, not just the MTS share. So the CBA must include both:
-
-- **MTS-priced costs** — what YAT will pay MTS for consulting work (one-off project labour + ongoing infrastructure support)
-- **AWS-direct costs** — what YAT will pay AWS (compute, database, network, storage, monitoring, support tier)
-- **YAT-internal costs** — what YAT bears as in-house cost: YAT IT staff time during the project + application deployment + data migration + cutover + organisational change management + decommissioning
-
-A CBA that omits YAT-internal cost categories gives the board an unrealistic basis for decision-making and will be marked as incomplete. The Action Plan (§10 of the Business Case) distributes responsibility for who does what; the CBA totals the cost of doing it all.
-
-## 2. Common assumptions
+## 2. Common planning assumptions
 
 | Assumption | Value | Source |
-|---|---|---|
+|---|---|---:|
 | LMS user population | ~800 students + ~60 staff | `public-org-structure.md` |
 | Concurrent users (typical / peak) | 200–300 / 500–700 | `internal-lms-application-spec-S1-CL1-AT1.md` |
-| Annual student growth | +15% per year | YAT Business Objectives (affects scale-up assumptions in out-years — factor this into your cloud sizing and your "staying on-prem" capacity projections) |
+| Annual student growth | +15% per year | YAT Business Objectives — affects capacity-planning assumptions in out-years |
 | Current measured LMS availability | 99.2% | `internal-lms-migration-role-brief-S1-CL1-AT1.md` |
 | Target LMS availability | 99.9% | YAT ICT Strategic Plan |
-| Indicative cost of downtime to YAT | $750 per hour during teaching hours, $0 outside teaching hours | **TBD** YAT-estimated; reflects student impact, staff productivity, reputational risk |
-| Fully-loaded ICT FTE cost | $115,000 per FTE/year | **TBD** — reflects salary + superannuation + on-costs |
-| Analysis period | 5 years | Per the action plan brief and `ICTICT517_Cost Benefit Analysis template.xlsx` |
-| Inflation factor | (configurable in the CBA template — applied at your discretion with justification) | — |
+| Indicative cost of downtime to YAT | $750 per hour during teaching hours, $0 outside teaching hours | TBD — YAT-estimated; reflects student impact, staff productivity, reputational risk |
+| Fully-loaded ICT FTE cost | $115,000 per FTE / year | TBD — reflects salary + superannuation + on-costs |
+| ICT planning horizon for LMS | 5 years | YAT ICT Strategic Plan |
+| Productive hours per FTE per year | ~1,820 | YAT Finance convention |
 
-## 3. Current on-prem (Option A baseline) — YAT-supplied cost inputs
+## 3. Current on-premises LMS — cost baseline
 
-You are evaluating both *continuing on-prem* (a real option YAT may choose) and *migrating to cloud*. The on-prem option requires YAT to refresh the current end-of-life LMS server. Below are the cost inputs YAT has identified for the on-prem renewal option.
+### 3.1 Recurring operating costs (per year)
 
-### 3.1 One-off capital required for on-prem renewal
-
-| Item | Cost |
-|---|---:|
-| Replacement LMS server (mid-range enterprise, dual PSU, RAID-10 SSDs, 5-year warranty) | $25,000 |
-| Backup tape library refresh + drive | $8,000 |
-| UPS upgrade (server-room rack UPS) | $3,000 |
-| Migration labour to move LMS to new server (one-off, in-house) | $15,000 |
-
-### 3.2 Current recurring on-prem costs (per year)
-
-These are the actual costs YAT incurs today for the LMS. Use these as the baseline for the on-prem option; if you propose changes to the on-prem operation, adjust with justification.
+These are the actual costs YAT incurs today to operate the LMS on-premises.
 
 | Category | Item | Annual cost |
 |---|---|---:|
@@ -90,66 +63,50 @@ These are the actual costs YAT incurs today for the LMS. Use these as the baseli
 | | Incident response (~0.05 FTE) | (apply $115k FTE rate) |
 | External support | Current MTS application support contract (existing engagement, ongoing) | $30,000 |
 
-## 4. Cloud (Option B) — methodology guidance and research pointers
+### 3.2 Capital required if YAT continues on-premises
 
-The cloud-side cost figures are **your work**. The points below are what YAT expects to see covered in your AWS option, and where to source the pricing data.
+The current LMS server is approaching end-of-life; continuing the on-prem operating model requires a one-off hardware and ancillary refresh:
 
-### 4.1 Categories your AWS option must include
+| Item | Cost |
+|---|---:|
+| Replacement LMS server (mid-range enterprise, dual PSU, RAID-10 SSDs, 5-year warranty) | $25,000 |
+| Backup tape library refresh + drive | $8,000 |
+| UPS upgrade (server-room rack UPS) | $3,000 |
+| Migration labour to move LMS to new server (one-off, in-house) | $15,000 |
 
-At minimum, your AWS line items must cover:
+These figures are the cost basis against which any alternative operating model (managed hosting, cloud migration) is compared.
 
-- **Compute** — the EC2 instances (or equivalent compute) hosting the LMS web/application tier; include base capacity and any scaling/peak capacity assumptions.
-- **Database** — the managed database service (per `internal-ha-database-requirements-S1-CL1-AT3.md` you are required to use AWS RDS Multi-AZ for MySQL or equivalent).
-- **Network** — load balancer, NAT gateway, data transfer.
-- **Storage** — EBS volumes, S3 for LMS attachments, AWS Backup or equivalent.
-- **Monitoring** — CloudWatch metrics, logs, alarms.
-- **Support tier** — AWS Business Support (or higher) is required to meet the 1-hour severity-1 response SLA in `internal-lms-cloud-migration-requirements-S1-CL1-AT1.md`.
+## 4. Cost categorisation framework for change proposals
 
-### 4.2 One-off project costs you must include for the cloud option
+When changes to the LMS operating model are evaluated, the cost lines fall into three cost-bearer categories. Any change proposal — internal or by an engaged consultant — must address all three to give YAT leadership a complete view:
 
-The one-off project costs split across **three cost-bearers**. Your CBA must include line items for each — totalled together they are the Year-1 outlay for Option B.
+1. **External consultant-priced costs** — fees payable to any engaged consultancy (e.g. MTS) for design, build, and ongoing infrastructure support work delivered under a Master Services Agreement.
+2. **Direct vendor / cloud-platform costs** — fees payable directly to platform vendors (e.g. AWS service charges, Microsoft licensing not bundled into existing agreements).
+3. **YAT-internal costs** — work YAT in-house IT undertakes itself. For the LMS this typically includes:
+   - Project oversight + acceptance — ICT staff time during any external delivery (requirements coordination, milestone meetings, acceptance testing). Indicative: ~0.30 FTE × 6 months for a project of LMS-migration scale
+   - Application deployment — installing the DOODLE LMS application onto whatever infrastructure is provided. Indicative: ~80–120 hours
+   - Data migration — extract, transform, and load of the MySQL database, including post-migration verification. Indicative: ~60–100 hours
+   - Cutover — parallel running of old + new environments during transition (~1–2 months of dual-running cost), DNS switch, user redirection, post-cutover incident response ramp. Indicative effort: ~40–60 hours plus the parallel-running infrastructure cost
+   - Organisational change management — Change Advisory Board process per `internal-change-management-procedure.md`, end-user communications (staff + students), training collateral preparation and delivery, post-cutover support ramp. Indicative: ~80–120 hours of ICT + Administrative staff time
+   - Decommissioning of any displaced infrastructure — hardware retirement, secure data destruction per `internal-privacy-policy.md` and records management obligations, facility reclamation. Indicative: ~$2,500 in materials + ~16 hours of ICT time
 
-**MTS-priced (one-off):**
+Apply the FTE / hours figures in §2 to convert effort estimates to dollars (1 FTE-year ≈ 1,820 productive hours).
 
-- MTS consulting labour to design, build, HA-harden, and hand over the cloud infrastructure (the AT2 + AT3 consulting work end-to-end)
+## 5. Operational considerations and ICT priorities
 
-**YAT-internal (one-off) — handled by YAT IT in-scenario:**
+In addition to direct cost comparison, the following operational factors are material to any LMS operating-model decision and are weighted by YAT leadership in change reviews:
 
-- **Project oversight + acceptance** — YAT ICT staff time during the migration project (requirements coordination, attendance at MTS milestone meetings, acceptance testing of the infrastructure handover). Indicative: ~0.30 FTE × 6 months
-- **LMS application deployment** — YAT IT effort to install the DOODLE LMS application onto the new AWS infrastructure once MTS hands it over. Indicative: ~80–120 hours
-- **Data migration** — YAT IT effort to extract the MySQL database from the on-prem LMS and load it into AWS RDS, including data transformation and post-migration verification. Indicative: ~60–100 hours
-- **Cutover** — parallel running of on-prem and cloud during the transition window (~1–2 months of dual-running infrastructure cost), DNS switch, user redirection, post-cutover incident response ramp. Indicative effort: ~40–60 hours plus the parallel-running infrastructure cost
-- **Organisational change management** — Change Advisory Board (CAB) process per YAT's documented change-management procedure, end-user communications (staff + students), training collateral preparation and delivery, post-cutover support ramp. Indicative: ~80–120 hours of YAT ICT + Administrative staff time
-- **Decommissioning** — on-prem LMS server hardware retirement, secure data destruction (per Privacy Act / records management obligations), facility reclamation. Indicative: ~$2,500 in materials + ~16 hours of YAT ICT time
+- **Avoided downtime.** Lifting LMS availability from the current 99.2% to the target 99.9% reduces unplanned downtime by ~61 hours per year. Applying the $750/hour figure from §2 yields an indicative avoided-cost range — actual figure depends on what fraction of that downtime would have fallen during teaching hours.
+- **Capacity for student growth.** The 15% annual growth trajectory requires capacity headroom across all options; capacity planning is a standing consideration in any operating-model decision.
+- **Capacity for assessment-week peaks.** The LMS sees approximately 3× concurrent load during the two-week assessment submission windows each term. Any operating model must handle these peaks without degradation.
+- **Staff capability development.** YAT ICT staff currently have limited cloud-operations experience. Any move to a cloud operating model has implications for staff upskilling and the residual external support requirement.
+- **Vendor dependency, sustainability, cyber security maturity, disaster recovery (whole-campus loss), data residency.** Each is captured in YAT's broader ICT strategic-plan considerations and surfaces in any material change decision.
 
-Apply the $115k/FTE/year rate from §2 to convert FTE-fractions and hours to dollars (1 FTE-year ≈ 1,820 productive hours).
+## 6. References
 
-### 4.3 Out-year operational cost changes you should consider
-
-If you migrate to cloud, several recurring on-prem cost lines should reduce or disappear (electricity, server-room rent allocation, tape media, offsite tape storage, on-prem-server-specific staff time). Other cost lines may change (MTS support contract — typically reduced because managed services reduce app-support burden, but justify your assumption).
-
-### 4.4 Sources for cloud pricing data
-
-- **AWS Pricing Calculator** — [https://calculator.aws](https://calculator.aws) — the canonical place to build your sized estimate. Generate an estimate, export it, attach to your CBA submission as evidence of your figures.
-- **AWS service pricing pages** — [https://aws.amazon.com/pricing/](https://aws.amazon.com/pricing/) — per-service pricing detail. Use Australia (`ap-southeast-2`) prices per the data-residency requirement in `internal-privacy-policy.md`.
-- **AWS Reserved Instance / Savings Plan documentation** — if you propose reserved/savings-plan pricing instead of on-demand, cite the term length and the discount you've applied. Document the trade-off.
-
-## 5. Indirect benefit lines you must consider
-
-The dollar comparison alone is not the full picture. Your CBA submission must also quantify (or at least narratively address) the following indirect benefits:
-
-- **Avoided downtime cost.** At the target 99.9% availability vs the current 99.2%, the avoided downtime is ~61 hours per year. Apply the $750/hour indicative figure (during teaching hours) — note your assumption about how much of that 61 hours falls during teaching hours.
-- **Capacity for student growth.** The 15% annual student growth requires capacity headroom in either option. State how each option handles this.
-- **Capacity for assessment-week peaks.** The LMS sees ~3× concurrent load during the two-week assessment submission windows each term. State how each option handles this.
-- **Staff capability development.** The case study notes YAT ICT staff lack cloud experience. State the implications for either option.
-- **Other intangibles** — vendor lock-in, sustainability, cyber security maturity, disaster recovery (whole-campus loss), data residency — surface those that are material to YAT's decision.
-
-## 6. Submission requirements
-
-Your CBA submission for AT1 must include:
-
-1. The populated `ICTICT517_Cost Benefit Analysis template.xlsx` with line items, year-by-year projections, and totals for both options.
-2. A short written narrative (1–2 pages) covering: your sizing assumptions for AWS, the source of your AWS pricing figures, sensitivity analysis around the key assumptions (especially MTS-support cost, staff-time reduction, RI discount), Year-1 cash-flow profile differences between the two options, intangible factors per §5, and your recommendation.
-3. Supporting evidence — at minimum, an AWS Pricing Calculator export attached to the submission.
-
-The CBA flows into your action plan: the option you recommend in the CBA becomes the basis for the prioritised changes you propose.
+- `public-about-mission-vision.md` — YAT strategic context
+- `internal-ict-strategic-plan-detail.md` — ICT five-year direction, target availability, growth assumptions
+- `internal-lms-application-spec-S1-CL1-AT1.md` — LMS workload + concurrency profile
+- `internal-lms-migration-role-brief-S1-CL1-AT1.md` — current engagement context
+- `internal-change-management-procedure.md` — change governance referenced in §4 / §5
+- `internal-privacy-policy.md` — data residency and secure-destruction obligations
