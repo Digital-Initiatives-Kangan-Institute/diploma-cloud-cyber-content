@@ -115,6 +115,9 @@ The deck is built **once**, in PowerPoint, from the plan. Don't keep the plan sy
 - **Reused activities must respect the depth ceiling** — a large AWS activity often runs far deeper than the AT needs; drop it for this Topic (it belongs to a later, deeper one) rather than overshoot.
 
 **Tempo bands** (for later session-sizing; a Topic may span >1 session): ~15–20 min teach / 40–45 activity = 3 small components per class · ~20–30 / 60–70 = 2 medium · ~30–40 / 140–150 = 1 big/practical-heavy.
+
+**Before committing a deck — size check.** Decks are git-tracked (the repo is the instructor-to-instructor channel), so keep them small enough for plain git. Run `python scripts/inspect_deck.py <deck>` — it reports the deck size and its largest internal objects. If it's large (guideline: warns over 25 MB), find what's driving it and optimise *before* committing: bloat usually rides in on pasted AWS slides (uncompressed images of *any* type, embedded video/audio, dragged-in masters). Fix with PowerPoint > Compress Pictures (whole deck, 150 ppi, delete cropped areas) or by dropping the offending object, then re-run the check. Don't assume the culprit — diagnose it; it won't be the same thing every time.
+
 **Result (S1-CL1):** Topic 1 deck built end-to-end (opener → 5 components, each *teach → exercise → takeaways* → close), reuse-first off ACF M1/M2/M3/M9 with bespoke only for the gaps; exercises run on the Accounting practice scenario. Pattern proven; the plan is now disposable.
 
 ### Still to do (S1-CL1)
