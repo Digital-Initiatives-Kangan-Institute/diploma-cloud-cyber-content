@@ -1,6 +1,6 @@
 # Topic 1 — Cloud literacy · Coverage
 
-**Topic 1 of 22** in the CL1 teaching sequence · **AT1 content Topic** (knowledge foundation) · teaching source: AWS decks (ACF M01/M02/M04/M06–M10, ACA M02).
+**Topic 1 of 14** in the CL1 teaching sequence · **AT1 content Topic** (knowledge foundation) · teaching source: AWS decks (ACF M01/M02/M04/M06–M10, ACA M02).
 
 This file is the **coverage spec** — what this Topic must cover, in UoC and AT1 terms. `teaching.md` and `exercise/` are built to satisfy it.
 
@@ -55,7 +55,7 @@ What in the real AT1 (Business Case) this Topic prepares students for:
 ## Out of scope for this Topic (covered elsewhere)
 
 - **517 knowledge** — action-plan sections (KE 1), evaluation methods (KE 2), evaluation of competing systems (KE 3), current/emerging trends (KE 4) → Topics 2–4.
-- **Hands-on building** of these services (IAM, VPC, EC2, RDS, etc.) → AT2 Topics 9–13. Topic 1 is conceptual breadth only.
+- **Hands-on building** of these services (IAM, VPC, EC2, RDS, etc.) → the AT2 build Topics (6–10). Topic 1 is conceptual breadth only.
 - **CLD401 KE 5–10** (VM/scaling features, shared responsibility, access protocols, DNS, etc.) → evidenced in AT2, taught in its Topics.
 
 ---

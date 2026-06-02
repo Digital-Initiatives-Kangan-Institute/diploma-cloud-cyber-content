@@ -1,6 +1,6 @@
 # Topic 2 — The case for change · Coverage
 
-**Topic 2 of 22** · **AT1 content Topic** (diagnosis) · teaching source: **bespoke** (consulting/analysis — no AWS deck).
+**Topic 2 of 14** · **AT1 content Topic** (diagnosis) · teaching source: **bespoke** (consulting/analysis — no AWS deck).
 
 The coverage spec — what this Topic must cover, in UoC and AT1 terms. `teaching.md` and `exercise/` are built to satisfy it.
 

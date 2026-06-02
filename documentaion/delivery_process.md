@@ -23,7 +23,7 @@
 ## Input state (S1-CL1)
 
 - Cluster folder: `S1-CL1-Cloud-Design-Build/`
-- `delivery/` now holds **`topic_01/` … `topic_22/`** (each with `coverage.md` + `slide_plan.md` + `source_slides/`) plus `planning/` (the retained spine, session scaffold, and deck catalogue).
+- `delivery/` now holds **`topic_01/` … `topic_14/`** (one per content Topic; each with `coverage.md` + `slide_plan.md` + `source_slides/`) plus `planning/` (the retained spine, session scaffold, and deck catalogue). **Assessments are not Topics** — they're lettered non-Topic sessions in the spine, with no `topic_NN/` folder.
 - Available inputs: the three populated AT `.docx` (source of truth), `consolidated_uoc.md`, `assessments/assessment_plan.md`, the shared `scenario/` + the YAT website, and the per-UoC mapping docs under `mappings/`.
 - Institutional template: `templates/Delivery_Plan_Template_v0.1.docx`.
 
@@ -93,7 +93,7 @@ The deck is **generated** from the plan by a per-Topic Kangan build script, then
 **Purpose:** from the assessment itself, identify the conceptual **Topics** — coherent teaching units anchored to the AT's own structure (deliverable sections, appendix/KE questions, marking criteria; the natural movements of producing the deliverable).
 **Inputs:** the AT **`.docx`** (Student + Assessor) — the source of truth (see quirks).
 **Method:** read both; name the Topics (e.g. Business Case = *know the tech → diagnose → build evidence → decide & plan → make the case*); place them in the cluster Topic sequence (content + assessment Topics) against the fixed bookend sessions; create a `topic_NN/` folder each.
-**Result (S1-CL1):** 22 Topics across AT1/AT2/AT3 + onboarding (S1) + catch-up (S31–32).
+**Result (S1-CL1):** 14 content Topics across AT1 (1–5) / AT2 (6–10) / AT3 (11–14); assessments are separate lettered non-Topic sessions (a–i, in delivery order); + onboarding (S1) + catch-up (S31–32).
 
 ### Step 2 — Spec each Topic (`coverage.md`)
 **Purpose:** state what the Topic must cover, in **UoC** and **AT** terms — the contract its materials satisfy. **The AT sets the depth ceiling** — don't teach deeper than the assessment requires (e.g. Topic 1 = exactly Appendix 2 Q1–Q5, *recognise/explain/classify*, not build).

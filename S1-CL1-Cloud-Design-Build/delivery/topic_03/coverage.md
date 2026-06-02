@@ -1,6 +1,6 @@
 # Topic 3 — Building the evidence · Coverage
 
-**Topic 3 of 22** · **AT1 content Topic** (evaluation) · teaching source: **mixed** — bespoke analysis slides + the **AWS Pricing Calculator** activity (a live-tool activity, not image-heavy AWS slides).
+**Topic 3 of 14** · **AT1 content Topic** (evaluation) · teaching source: **mixed** — bespoke analysis slides + the **AWS Pricing Calculator** activity (a live-tool activity, not image-heavy AWS slides).
 
 The coverage spec — what this Topic must cover, in UoC and AT1 terms. `slide_plan.md` and the deck are built to satisfy it.
 
