@@ -14,6 +14,7 @@ Layouts provided:
   content_slide    — title + kicker + bullets (full width)
   visual_slide     — title + kicker + bullets + 0..3 labelled image placeholders
   activity_slide   — gold header band + "ACTIVITY" pill + bullets + timer chip
+  demo_slide       — instructor demo (charcoal band + "DEMONSTRATION" pill); sits before an AWS activity
   takeaways_slide  — light-tint "Key takeaways" cards
   table_slide      — title + kicker + branded table (+ optional note)
   close_slide      — dark closing slide (title + lines)
@@ -276,6 +277,39 @@ def activity_slide(prs, pageno, title, bullets, timer, accent=GOLD):
           fill=BGLIGHT, line=BORDER, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     tbt, tft = _box(s, Inches(0.9), Inches(6.5), Inches(4.0), Inches(0.4), anchor=MSO_ANCHOR.MIDDLE)
     _run(_para(tft, True), "⏱  " + timer, 15, CHAR, bold=True, font=FONT_BOLD)
+    _footer(s, pageno, accent=accent)
+    return s
+
+
+def demo_slide(prs, pageno, title, bullets, accent=GOLD, source=None):
+    """Demo of an AWS task — sits right before the matching activity.
+    The AWS-practical flow is teach → DEMONSTRATE → practice (activity). Charcoal header
+    band (vs the activity's accent band) so 'watch' vs 'do' read differently at a glance.
+    `source` = an AWS recorded-demo reference (e.g. "ACF M04 · IAM"): when given, the slide
+    cues the recorded demo (RECORDED DEMO pill); when None, it's a live instructor demo."""
+    recorded = bool(source)
+    s = _blank(prs)
+    _bg(s, WHITE)
+    _rect(s, Inches(0), Inches(0), Inches(13.333), Inches(1.35), fill=CHAR)
+    pill_w = Inches(2.55) if recorded else Inches(2.45)
+    pill = _rect(s, Inches(0.7), Inches(0.42), pill_w, Inches(0.5),
+                 fill=accent, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    pa = pill.text_frame.paragraphs[0]; pa.alignment = PP_ALIGN.CENTER
+    _run(pa, "RECORDED DEMO" if recorded else "DEMONSTRATION", 13, CHAR, bold=True, font=FONT_BOLD)
+    tb, tf = _box(s, Inches(3.5), Inches(0.34), Inches(9.1), Inches(0.75), anchor=MSO_ANCHOR.MIDDLE)
+    _run(_para(tf, True), title, 25, WHITE, bold=True, font=FONT_BOLD)
+    tb2, tf2 = _box(s, Inches(0.72), Inches(1.7), Inches(11.9), Inches(4.7))
+    _bullets(tf2, bullets, base_size=17)
+    if recorded:
+        chip = "▶  Play the AWS recorded demo (%s) — you do this next" % source
+    else:
+        chip = "▶  Instructor demonstrates live (no recorded demo) — you do this next"
+    chip_w = Inches(8.6) if recorded else Inches(7.2)
+    _rect(s, Inches(0.7), Inches(6.45), chip_w, Inches(0.5),
+          fill=BGLIGHT, line=BORDER, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    tbt, tft = _box(s, Inches(0.9), Inches(6.5), Emu(int(chip_w) - int(Inches(0.4))), Inches(0.4),
+                    anchor=MSO_ANCHOR.MIDDLE)
+    _run(_para(tft, True), chip, 14, CHAR, bold=True, font=FONT_BOLD)
     _footer(s, pageno, accent=accent)
     return s
 
