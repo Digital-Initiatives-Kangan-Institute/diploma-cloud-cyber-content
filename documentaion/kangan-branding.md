@@ -66,7 +66,7 @@ sans-serif throughout; tagline "Unleash You". Corporate-but-approachable TAFE po
 
 ## Applying it to the teaching deck
 
-**Adopted as the brand for all teaching decks (2026-06-01).** Brand helpers + layouts live in `scripts/build_kangan_topic_deck.py`; per-Topic builders (`build_kangan_topic1_deck.py`, `build_kangan_topic3_deck.py`, …) import them. Conventions used:
+**Adopted as the brand for all teaching decks (2026-06-01).** All brand + layout code lives in **`scripts/kangan_deck.py`** — the shared base for every deck. Per-Topic builders (`build_kangan_topic1_deck.py`, `build_kangan_topic2_deck.py`, `build_kangan_topic3_deck.py`, …) are **content-only**: they `import kangan_deck as k` and assemble slides from its layouts. Conventions used:
 
 - **16:9**, white slides, charcoal text, **gold primary** for title rules, table headers,
   the active marker (`■`) and footer rule.
@@ -78,6 +78,6 @@ sans-serif throughout; tagline "Unleash You". Corporate-but-approachable TAFE po
 - **Key-takeaways slides** = light-tint background, each point on a white card with an accent edge.
 - **Footer** = "Kangan Institute" wordmark + page number on a thin accent rule.
 
-> **Tidy-up (TBD):** the brand helpers currently live in `build_kangan_topic_deck.py` (the Topic 2
-> builder) and are imported by the other Topic builders. Worth factoring them into a standalone
-> `kangan_deck.py` (mirroring how `pptx_brand.py` serves the YAT board decks) when convenient.
+> **Base module:** `scripts/kangan_deck.py` holds all brand + layout code (the same role `pptx_brand.py`
+> serves for the YAT board decks). Every teaching deck imports it; per-Topic builders carry content only.
+> To start a new deck: `import kangan_deck as k`, `prs = k.new_deck()`, assemble with the layouts, `k.save(prs, path)`.

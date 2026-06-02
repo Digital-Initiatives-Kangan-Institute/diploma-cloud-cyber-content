@@ -15,82 +15,13 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import build_kangan_topic_deck as k   # noqa: E402
+import kangan_deck as k                 # noqa: E402  brand palette + layouts
+from kangan_deck import visual_slide    # noqa: E402  used bare in build()
 
-from pptx.util import Inches, Pt, Emu  # noqa: E402
-from pptx.dml.color import RGBColor  # noqa: E402
-from pptx.enum.text import PP_ALIGN, MSO_ANCHOR  # noqa: E402
-from pptx.enum.shapes import MSO_SHAPE  # noqa: E402
-from pptx.oxml.ns import qn  # noqa: E402
+OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_01/Topic_01_Slides.pptx"
 
-OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_01/Topic_01_Kangan_experiment.pptx"
-
-# section accents (Topic 2 convention extended to 5 sections)
+# section accents (5 sections)
 A1, A2, A3, A4, A5 = k.MAGENTA, k.SKY, k.GREEN, k.NAVY, k.GOLD_DK
-
-
-def placeholder(slide, l, t, w, h, label, accent=k.GOLD_DK):
-    box = k._rect(slide, l, t, w, h, fill="FBF6E6", line=accent,
-                  shape=MSO_SHAPE.ROUNDED_RECTANGLE)
-    ln = box.line._get_or_add_ln()
-    ln.append(ln.makeelement(qn('a:prstDash'), {'val': 'dash'}))
-    tb, tf = k._box(slide, l, t, w, h, anchor=MSO_ANCHOR.MIDDLE)
-    p = tf.paragraphs[0]; p.alignment = PP_ALIGN.CENTER
-    k._run(p, "🖼", 30, accent, font=k.FONT_BOLD)
-    p2 = tf.add_paragraph(); p2.alignment = PP_ALIGN.CENTER; p2.space_before = Pt(4)
-    k._run(p2, "IMAGE", 12, accent, bold=True, font=k.FONT_BOLD)
-    p3 = tf.add_paragraph(); p3.alignment = PP_ALIGN.CENTER; p3.space_before = Pt(2)
-    k._run(p3, label, 12, k.GREY1, italic=True, font=k.FONT_LT)
-
-
-def _title_block(prs, title, kicker, accent):
-    s = prs.slides.add_slide(prs.slide_layouts[6])
-    k._bg(s, k.WHITE)
-    tb, tf = k._box(s, Inches(0.7), Inches(0.5), Inches(11.9), Inches(1.05))
-    p = k._para(tf, True)
-    k._run(p, title, 28, k.CHAR, bold=True, font=k.FONT_BOLD)
-    if kicker:
-        pk = tf.add_paragraph(); pk.space_before = Pt(2)
-        k._run(pk, kicker, 17, k.GOLD_DK, italic=True, font=k.FONT_LT)
-    k._rect(s, Inches(0.72), Inches(1.5), Inches(1.6), Pt(4), fill=accent)
-    return s
-
-
-def visual_slide(prs, pageno, title, kicker, bullets, images, accent):
-    """Content slide with 0..3 labelled image placeholders + bullets."""
-    s = _title_block(prs, title, kicker, accent)
-    n = len(images)
-    if n == 0:
-        tb, tf = k._box(s, Inches(0.72), Inches(1.85), Inches(11.9), Inches(4.9))
-        k._bullets(tf, bullets, base_size=18)
-    elif n == 1:
-        if bullets:
-            tb, tf = k._box(s, Inches(0.72), Inches(1.9), Inches(6.0), Inches(4.7))
-            k._bullets(tf, bullets, base_size=17)
-            placeholder(s, Inches(7.0), Inches(1.95), Inches(5.6), Inches(4.4), images[0], accent)
-        else:
-            placeholder(s, Inches(2.7), Inches(1.95), Inches(7.9), Inches(4.5), images[0], accent)
-    elif n == 2:
-        if bullets:
-            tb, tf = k._box(s, Inches(0.72), Inches(1.85), Inches(11.9), Inches(1.3))
-            k._bullets(tf, bullets, base_size=16)
-            ytop = Inches(3.35)
-        else:
-            ytop = Inches(2.1)
-        placeholder(s, Inches(0.9), ytop, Inches(5.5), Inches(3.3), images[0], accent)
-        placeholder(s, Inches(6.9), ytop, Inches(5.5), Inches(3.3), images[1], accent)
-    else:  # 3 across
-        if bullets:
-            tb, tf = k._box(s, Inches(0.72), Inches(1.85), Inches(11.9), Inches(1.0))
-            k._bullets(tf, bullets, base_size=16)
-            ytop = Inches(3.0)
-        else:
-            ytop = Inches(2.2)
-        xs = [Inches(0.72), Inches(4.42), Inches(8.12)]
-        for x, lab in zip(xs, images):
-            placeholder(s, x, ytop, Inches(3.6), Inches(3.4), lab, accent)
-    k._footer(s, pageno, accent=accent)
-    return s
 
 
 def build(out_path):
@@ -382,24 +313,14 @@ def build(out_path):
     ], accent=A5)
 
     # ===== Close =====
-    s = prs.slides.add_slide(prs.slide_layouts[6])
-    k._bg(s, k.CHAR)
-    k._rect(s, Inches(0), Inches(0), Inches(0.45), Inches(7.5), fill=k.GOLD)
-    tb, tf = k._box(s, Inches(1.0), Inches(1.6), Inches(11.5), Inches(4.4))
-    p = k._para(tf, True)
-    k._run(p, "From literacy to the job", 40, k.WHITE, bold=True, font=k.FONT_BOLD)
-    for txt in [
+    k.close_slide(prs, "From literacy to the job", [
         "You can now classify deployment and service models, name the building blocks, point to the right standard, and reason about cost.",
         "That's the literacy a consultant needs before recommending whether to move a system to the cloud.",
         "Next, you'll put it to work — weighing the options and making the case for a real migration.",
         "You practised on the Accounting System; the same skills carry to whatever engagement lands on your desk.",
-    ]:
-        pp = tf.add_paragraph(); pp.space_before = Pt(12); pp.line_spacing = 1.05
-        k._run(pp, txt, 18, "E8E8E8", font=k.FONT_LT)
+    ])
 
-    Path(out_path).parent.mkdir(parents=True, exist_ok=True)
-    prs.save(out_path)
-    print(f"Wrote {out_path} ({len(prs.slides._sldIdLst)} slides)")
+    k.save(prs, out_path)
 
 
 if __name__ == "__main__":

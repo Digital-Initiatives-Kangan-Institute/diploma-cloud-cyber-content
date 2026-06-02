@@ -111,7 +111,7 @@ The deck is **generated** from the plan by a per-Topic Kangan build script, then
 
 **Why authored-with-placeholders, not re-skinned:** re-skinning the AWS deck in place mis-sizes text and can't carry vector diagrams; authoring fresh into the Kangan layouts gives a clean, consistent deck, and the placeholders make the (few) images a quick manual paste. (Raster images *can* be auto-extracted, but the clean authored layout is worth the manual image step.)
 
-**Brand:** teaching decks wear **Kangan/BKI** branding (gold `#EDAB0C` + charcoal, Roboto), **not** the in-world YAT case-study brand — see `kangan-branding.md`. Brand helpers + layouts live in `scripts/build_kangan_topic_deck.py`; per-Topic builders import them.
+**Brand:** teaching decks wear **Kangan/BKI** branding (gold `#EDAB0C` + charcoal, Roboto), **not** the in-world YAT case-study brand — see `kangan-branding.md`. All brand + layout code lives in **`scripts/kangan_deck.py`** (the shared base for every deck); per-Topic builders (`build_kangan_topicNN_deck.py`) are content-only and `import kangan_deck as k`.
 
 **Slide-build rules (apply as you place each slide):**
 - **The plan holds briefs, not finished copy.** A `[BESPOKE]` block is the *substance* of a slide; write the actual title + bullets at build time (drafted on demand as the deck is assembled).
