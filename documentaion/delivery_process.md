@@ -23,7 +23,7 @@
 ## Input state (S1-CL1)
 
 - Cluster folder: `S1-CL1-Cloud-Design-Build/`
-- `delivery/` now holds **`topic_01/` … `topic_14/`** (one per content Topic; each with `coverage.md` + `slide_plan.md` + `source_slides/`) plus `planning/` (the retained spine, session scaffold, and deck catalogue). **Assessments are not Topics** — they're lettered non-Topic sessions in the spine, with no `topic_NN/` folder.
+- `delivery/` now holds **`topic_01/` … `topic_14/`** (one per content Topic; each with `coverage.md` + `slide_plan.md`) plus `planning/` (the retained spine, session scaffold, and deck catalogue). **Assessments are not Topics** — they're lettered non-Topic sessions in the spine, with no `topic_NN/` folder.
 - Available inputs: the three populated AT `.docx` (source of truth), `consolidated_uoc.md`, `assessments/assessment_plan.md`, the shared `scenario/` + the YAT website, and the per-UoC mapping docs under `mappings/`.
 - Institutional template: `templates/Delivery_Plan_Template_v0.1.docx`.
 
@@ -84,10 +84,9 @@ topic_NN/
 ├── slide_plan.md        — the build sheet: teach + exercise slides interleaved, in deck order
 │                          ([BESPOKE] = author from brief · [AWS Mx Sy] = AWS slide to reuse · [EX] = exercise)
 │                          — DISPOSABLE: a working aid; delete once the deck is built
-├── Topic_NN_Slides.pptx — the generated Kangan-branded deck — THE ARTEFACT OF RECORD
-└── source_slides/       — the AWS slides this Topic reuses, isolated by the human (git-ignored)
+└── Topic_NN_Slides.pptx — the generated Kangan-branded deck — THE ARTEFACT OF RECORD
 ```
-The deck is **generated** from the plan by a per-Topic Kangan build script, then the human adds the reused images back into the placeholders. The plan isn't kept synced to the deck — it's disposable; the deck is the source of truth.
+The deck is **generated** from the plan by a per-Topic Kangan build script, then the human pastes the reused AWS images into the placeholders **directly from the main AWS deck folder** (`original-materials/…`). The plan isn't kept synced to the deck — it's disposable; the deck is the source of truth.
 
 ### Step 1 — Break the AT into Topics
 **Purpose:** from the assessment itself, identify the conceptual **Topics** — coherent teaching units anchored to the AT's own structure (deliverable sections, appendix/KE questions, marking criteria; the natural movements of producing the deliverable).
@@ -104,12 +103,17 @@ The deck is **generated** from the plan by a per-Topic Kangan build script, then
 **Purpose:** turn the coverage into a slide plan, then **generate** the Kangan-branded Topic deck from it. The **deck is the canonical artefact**; the plan is a working aid, deleted when the deck is done.
 
 **The slide-creation process (settled 2026-06-01):**
-1. **`slide_plan.md`** — walk the Topic's components top-to-bottom; for each, **teach then its exercise**, in deck order. **For a hands-on AWS practical, insert a `[DEMO]` between them — the flow is `teach → demonstrate → practice`** (an instructor demo of the exact task, immediately before the student activity). Non-AWS / analytical activities keep the plain `teach → practice`. Mark each slide `[BESPOKE]` (content brief inline), `[AWS Mx Sy]` (an AWS deck slide to reuse), `[DEMO]` (instructor demo, bespoke), or `[EX]` (exercise). The plan **identifies up front exactly which AWS slides the Topic needs** (deck + slide numbers, via `aws-deck-catalogue-draft.md`). Flag any supporting artefact an exercise needs (e.g. a sizing sheet to publish) inline.
-2. **(human) isolate the AWS slides** — copy the needed AWS slides into `topic_NN/source_slides/included_aws_slides.pptx` (git-ignored).
-3. **(agent) generate the deck** — a per-Topic build script (`scripts/build_kangan_topicNN_deck.py`) authors **every** slide — bespoke *and* AWS-sourced — fresh into the **Kangan brand layouts** (title / divider / content / activity / **demo** / takeaways / table; see `kangan-branding.md`). Each image/diagram (raster or vector) is rendered as a **labelled placeholder box**, not extracted. Output `Topic_NN_Slides.pptx`.
-4. **(human) add the images back** — transfer the real images from `source_slides/` into the placeholder slots in PowerPoint.
+1. **`slide_plan.md`** — walk the Topic's components top-to-bottom; for each, **teach then its exercise**, in deck order. **For a hands-on AWS practical, insert a `[DEMO]` between them — the flow is `teach → demonstrate → practice`** (a demo of the exact task, immediately before the student activity). Non-AWS / analytical activities keep the plain `teach → practice`. Mark each slide `[PRIMER]` (vendor-neutral fundamentals — see primer-first below), `[BESPOKE]` (content brief inline), `[AWS Mx Sy]` (an AWS deck slide to reuse), `[DEMO]` (recorded demo), or `[EX]` (exercise). The plan **pins up front exactly which AWS slides the Topic needs** (deck + slide numbers, via `aws-deck-catalogue-draft.md`) — this pin table is what drives both the agent's reading and the human's image-paste.
+2. **(agent) generate the deck** — a per-Topic build script (`scripts/build_kangan_topicNN_deck.py`) authors **every** slide — bespoke *and* AWS-sourced — fresh into the **Kangan brand layouts** (title / divider / content / activity / **demo** / takeaways / table; see `kangan-branding.md`). The agent reads the pinned AWS slides directly from `original-materials/…` and authors from them (reuse-first, below). Output `Topic_NN_Slides.pptx`.
+3. **(human) paste the AWS images** — drop the reused diagrams/screenshots into the placeholder slots in PowerPoint, **straight from the main AWS deck folder**.
 
-**Why authored-with-placeholders, not re-skinned:** re-skinning the AWS deck in place mis-sizes text and can't carry vector diagrams; authoring fresh into the Kangan layouts gives a clean, consistent deck, and the placeholders make the (few) images a quick manual paste. (Raster images *can* be auto-extracted, but the clean authored layout is worth the manual image step.)
+**Marking the AWS source on a slide** (so provenance is traceable now that there's no `source_slides/` folder):
+- **Slide carries an image/diagram from AWS** → render it as a **labelled image placeholder** naming the AWS ref (e.g. *"AWS — VPC building blocks diagram (ACA M07 S__)"*). The placeholder *is* the source marker; the human pastes the real image over it.
+- **Content/text-only AWS slide (no image to mark on)** → author the content reuse-first **and** add a visible on-slide note **"take from AWS [deck · slide ref]"**, so the source is traceable and the human can cross-check against the original.
+
+**Why authored-with-placeholders, not re-skinned:** re-skinning the AWS deck in place mis-sizes text and can't carry vector diagrams; authoring fresh into the Kangan layouts gives a clean, consistent deck, and the placeholders/notes make the (few) images a quick manual paste from the main folder. (Raster images *can* be auto-extracted, but the clean authored layout is worth the manual image step.)
+
+**Primer-first (no assumed baseline).** Students may not arrive with base IT knowledge, so every technical concept is taught **fundamentals-first**: a short vendor-neutral **`[PRIMER]`** (what the thing *is* — e.g. what a subnet/IP is, how DNS resolves a name, what a firewall does) **before** the AWS-context slide that shows how AWS implements it. Per-concept shape: **`[PRIMER] → [AWS] teach → [DEMO] → [EX]`**. Reuse-first still governs the primer — pin an AWS "basics" slide where one teaches the fundamental; author a bespoke primer only where AWS assumes the knowledge.
 
 **Reuse-first (AWS content) — the governing principle for AWS-heavy topics.** Where an AWS deck covers a teach point, **author the slide FROM the AWS slide's actual content** — extract + read the relevant AWS module(s) from `original-materials/AWS-Instructor Presentations/…` **before** authoring (the AWS decks are the source, not your own knowledge). Bespoke is reserved for genuine gaps (VET evidence discipline, scenario-specific framing, the supplied-design specifics). *Authoring teach content from your own approximation when an AWS deck covers it is the mistake this rule exists to prevent.* The long-path trick for the ACA decks: `cp` to a short Windows-addressable temp dir, then open with python-pptx.
 
