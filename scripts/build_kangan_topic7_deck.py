@@ -149,7 +149,7 @@ def build(path):
         (0, "The exact hostname + certificate domain is implementer decision C8 — confirm it with YAT ICT.",
             {"bold": True, "color": A3, "mark_color": A3}),
     ], accent=A3)
-    content_slide(prs, pg(), "Prove it works — test connectivity", "AWS · ACA M07 S45, S41 · PC 2.6", [
+    content_slide(prs, pg(), "Prove it works — test connectivity", "AWS · ACA M07 S45, S41", [
         (0, "After building, confirm reachability: external access in (reach the service over the VPN) and access between tiers (app → db)."),
         (0, "Reachability Analyzer traces the path and names the blocking component when something can't connect."),
         (0, "VPC flow logs show ACCEPT / REJECT — a REJECT is usually a security-group rule or a missing route.",

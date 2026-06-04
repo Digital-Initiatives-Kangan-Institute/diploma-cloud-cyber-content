@@ -54,7 +54,7 @@ def build(path):
         (0, "Alarms send notifications (e.g. to SNS) or trigger actions (e.g. Auto Scaling)."),
         (0, "Dashboards visualise metrics and alarms; CloudWatch Logs centralises log files.",
             {"bold": True, "color": A1, "mark_color": A1}),
-    ], ["AWS — CloudWatch metrics / alarms / dashboards (ACA M10)"], A1)
+    ], ["AWS — CloudWatch metrics / alarms / dashboards (ACA M10 S9–S12)"], A1)
     table_slide(prs, pg(), "The monitoring you'll build", "the design · §4.10",
                 ["Baseline alarm", "Threshold"],
                 [["EC2 CPU high", "≥ 80% over 10 min"],
