@@ -20,23 +20,28 @@
 
 ## Cluster folder layout (input state)
 
-The target cluster directory is `SX-CLY-<Cluster-Name>/`. Before you start, it must contain:
+The target cluster directory is `SX-CLY-<Cluster-Name>/`. Every cluster folder has one consistent shape — `units_of_competency/` and `mappings/` are **top-level siblings** of `assessments/`. Before you start, it must contain:
 
 ```
 SX-CLY-<Cluster-Name>/
-├── assessments/
-│   ├── units_of_competency/
-│   │   ├── <UNIT_A>_Complete_R1.md       # markdown transcription
-│   │   ├── <UNIT_B>_Complete_R1.md
-│   │   ├── ...
-│   │   └── original/
-│   │       ├── <UNIT_A>_Complete_R1.docx # source UoC (read-only)
-│   │       ├── <UNIT_B>_Complete_R1.docx
-│   │       └── ...
+├── assessments/                          # per-AT folders (AT1/, AT2/, ...) — populated in Steps 6–7
+│   ├── AT1/
+│   ├── AT2/
 │   └── ...
-├── delivery/
-└── ...
+├── delivery/                             # teaching/delivery materials (topic_NN/ etc.)
+├── mappings/                             # per-UoC Assessment Mapping docs (one per unit)
+├── units_of_competency/
+│   ├── <UNIT_A>_Complete_R1.md           # markdown transcription
+│   ├── <UNIT_B>_Complete_R1.md
+│   ├── ...
+│   └── original/
+│       ├── <UNIT_A>_Complete_R1.docx     # source UoC (read-only)
+│       ├── <UNIT_B>_Complete_R1.docx
+│       └── ...
+└── consolidated_uoc.md                   # produced in Step 2 (at the cluster root)
 ```
+
+The validators' `UOC_DIR` and Step 1's `cd` target are `<cluster>/units_of_competency/`.
 
 If any `.md` is missing while its `.docx` exists, transcription is a prerequisite step not covered by this document — stop and surface to Tim.
 
@@ -52,7 +57,7 @@ If any `.md` is missing while its `.docx` exists, transcription is a prerequisit
 1. Use the validator at `<repo_root>/scripts/validate_uoc.py`. If missing, reproduce verbatim from Appendix A.
 2. Run it on all pairs in the cluster:
    ```bash
-   cd <cluster_dir>/assessments/units_of_competency
+   cd <cluster_dir>/units_of_competency
    python3 <repo_root>/scripts/validate_uoc.py \
      original/<UNIT_A>_Complete_R1.docx <UNIT_A>_Complete_R1.md \
      original/<UNIT_B>_Complete_R1.docx <UNIT_B>_Complete_R1.md \
@@ -137,7 +142,7 @@ Use `<repo_root>/scripts/validate_consolidated_uoc.py`. If missing, reproduce ve
 
 ```python
 CLUSTER_DIR = Path(".../SX-CLY-<Cluster-Name>")
-UOC_DIR     = CLUSTER_DIR / "assessments" / "units_of_competency"
+UOC_DIR     = CLUSTER_DIR / "units_of_competency"
 CONSOLIDATED = CLUSTER_DIR / "consolidated_uoc.md"
 UNITS = ["<UNIT_A>", "<UNIT_B>", "<UNIT_C>", ...]
 ```
@@ -652,7 +657,7 @@ CLUSTER_DIR = Path("/Users/timbaird/Documents/Kangan/diploma-cloud-cyber/S1-CL1-
 UNITS = ["ICTCLD401", "ICTCLD502", "ICTICT517"]
 # -------------------------------------------
 
-UOC_DIR = CLUSTER_DIR / "assessments" / "units_of_competency"
+UOC_DIR = CLUSTER_DIR / "units_of_competency"
 CONSOLIDATED = CLUSTER_DIR / "consolidated_uoc.md"
 
 
