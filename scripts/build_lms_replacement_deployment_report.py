@@ -144,7 +144,7 @@ def build(path):
                  "connection. WCAG 2.1 Level AA conformance was confirmed (see §6.4).")
     h3("4.8 Monitoring")
     ex.para(doc, "DOODLE was brought under the existing YAT system-management and monitoring server, with "
-                 "nightly backups configured and monitored per the Backup and Recovery Process.")
+                 "nightly backups configured and monitored per the Backup and Retention Policy.")
     h3("4.9 Cross-Region backup / replication")
     na(doc, "on-premises deployment — cross-Region cloud backup does not apply; backup is to the "
             "system-management server with offsite tape rotation.")
@@ -158,7 +158,7 @@ def build(path):
                ["C3", "Storage sizing", "Local RAID for app/DB; NAS for attachments + backups",
                 "Sized from the migrated data footprint plus growth"],
                ["C4", "Backup schedule", "Nightly to the management server + offsite tape",
-                "Aligned to the existing Backup and Recovery Process windows"]],
+                "Aligned to the existing backup windows (per the Backup and Retention Policy)"]],
               widths=[1.0, 4.2, 5.0, 5.3])
 
     h1("6. Testing, Simulation and Validation")
@@ -198,7 +198,7 @@ def build(path):
     ex.bullets(doc, [
         "The LMS Replacement Solution Design — the operational reference for the deployed architecture.",
         "The as-built documentation set and operational runbooks produced at closure.",
-        "The Backup and Recovery Process and the monitoring on the system-management server.",
+        "The Backup and Retention Policy and the monitoring on the system-management server.",
     ])
     h3("7.3 Known limitations and what's next")
     ex.bullets(doc, [

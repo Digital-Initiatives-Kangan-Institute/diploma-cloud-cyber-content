@@ -17,11 +17,11 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-CLUSTER_DIR = Path("/Users/timbaird/Documents/Kangan/diploma-cloud-cyber/S1-CL1-Cloud-Design-Build")
-UOC_DIR = CLUSTER_DIR / "assessments" / "units_of_competency"
+CLUSTER_DIR = Path(__file__).resolve().parent.parent / "S1-CL2-Cloud-Disaster-Recovery"
+UOC_DIR = CLUSTER_DIR / "units_of_competency"
 CONSOLIDATED = CLUSTER_DIR / "consolidated_uoc.md"
 
-UNITS = ["ICTCLD401", "ICTCLD502", "ICTICT517"]
+UNITS = ["ICTCLD501", "ICTCLD503", "ICTCLD505"]
 
 
 def parse_pcs(md_text: str) -> list[str]:

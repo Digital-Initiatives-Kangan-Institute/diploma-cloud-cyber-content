@@ -186,7 +186,7 @@ def build(path):
                  "standard naming and ownership conventions.")
     h3("4.12 Backup")
     ex.bullets(doc, [
-        "Nightly backup of the DOODLE database and application data to the system-management server, with offsite tape rotation — aligned to the existing Backup and Recovery Process.",
+        "Nightly backup of the DOODLE database and application data to the system-management server, with offsite tape rotation — aligned to the existing Backup and Retention Policy.",
         "GrayBoard is retained (read-only) until acceptance, as the migration rollback position (see §5).",
     ])
     h3("4.13 Recovery objectives")
@@ -205,7 +205,7 @@ def build(path):
               [["C1", "Server specification (CPU / RAM / disk)", "Size against the GrayBoard performance baseline + peak load"],
                ["C2", "MySQL engine version", "Confirm against the DOODLE compatibility matrix"],
                ["C3", "Storage sizing (local + NAS)", "Compute from the migrated data footprint + growth"],
-               ["C4", "Backup schedule specifics", "Align with the existing Backup and Recovery Process windows"]],
+               ["C4", "Backup schedule specifics", "Align with the existing backup windows (per the Backup and Retention Policy)"]],
               widths=[1.0, 7.0, 8.0])
 
     h1("5. Implementation Sequencing")
@@ -236,7 +236,7 @@ def build(path):
     h1("8. References")
     ex.bullets(doc, [
         "LMS Replacement Requirements; Engagement Role Brief; ICT Environment Overview.",
-        "Privacy / Data Handling Policy; User Access Policy; Backup and Recovery Process.",
+        "Privacy / Data Handling Policy; User Access Policy; Backup and Retention Policy.",
         "Standards for RTOs 2015 (record retention); Disability Discrimination Act 1992 (WCAG 2.1 AA).",
     ])
 
