@@ -1,6 +1,6 @@
 # S1-CL2 Cloud Disaster Recovery — Consolidated UoC
 
-> **STATUS: DRAFT.** Every assessable item (PC / FS / PE / KE / AC) from the three cluster units, quoted **verbatim** from the validated UoC transcriptions and tagged `[UNIT SECTION numbering]`. Items are organised under a **topic** structure (Tim's direction, 2026-06-06), with the finer groupings as **sub-topics**. **Groupings, assessment ideas, and the item-level split within "Documenting" are proposals — marked TBD per CLAUDE.md Rule 1.** The topic taxonomy and the two-AT division are per Tim's direction.
+> **STATUS: DRAFT.** Every assessable item (PC / FS / PE / KE / AC) from the three cluster units, quoted **verbatim** from the validated UoC transcriptions and tagged `[UNIT SECTION numbering]`. Items are organised under a **topic** structure (Tim's direction, 2026-06-06), with the finer groupings as **sub-topics**. **The group-level *assessment ideas* are proposals — marked TBD per CLAUDE.md Rule 1.** The topic taxonomy, the two-AT division, and AT1's three-part shape (Part A Solution Design / Part B DR Plan / Part C presentation) are per Tim's direction; see the assessment plan (`assessments/assessment_plan.md`) for the full structure and coverage map.
 
 **Cluster units**
 
@@ -38,22 +38,23 @@ The cluster organises into **four delivery topics**, each with sub-topics (the g
 
 **Assessment deliverables (per Tim's direction — modelled on the S1-CL1 pattern):**
 
-- **AT1 — DR Plan** *(modelled on CL1 AT1 Business Case)* — two parts:
-  - **Part A — written DR plan**, with appendices capturing the artefacts and knowledge evidence that don't sit neatly in the plan body — including the impact analysis and the web-scale/microservice **solution design** that `[ICTCLD503 PC 1.7]` / `[ICTCLD503 PC 2.4]` require to be documented & justified.
-  - **Part B — presentation of the DR plan for approval** — the required verbal walkthrough (`[ICTCLD501 PC 5.1]`), seeking/responding to feedback (`[ICTCLD501 PC 5.2]`), lodgement (`[ICTCLD501 PC 5.3]`) and obtaining sign-off (`[ICTCLD501 PC 5.4]`); evidences FS Oral communication. This is the **design-approval gate** — approval before implementing.
+- **AT1 — Cloud Expansion: Design & DR Plan** *(modelled on CL1 AT1 Business Case)* — three parts:
+  - **Part A — Solution Design** — the web-scale architecture for the global user base **and the microservice** (the audit-log service), documented & justified (`[ICTCLD503 PC 1.7]` / `[ICTCLD503 PC 2.4]`). Data residency is an **input constraint** that shapes this design — it is *why* the microservice exists and where the edge/log-slice sits — not a separate deliverable.
+  - **Part B — DR Plan** — the disaster recovery plan for the system designed in Part A: requirements & impact analysis, RTO/RPO, recovery solutions and the finalised plan (ICTCLD501 elements 1–4). **Pure DR** — "what we do if the system goes down"; no microservice or regulatory content.
+  - **Part C — presentation of Part A + Part B for approval** — the required verbal walkthrough (`[ICTCLD501 PC 5.1]`), seeking/responding to feedback (`[ICTCLD501 PC 5.2]`), lodgement (`[ICTCLD501 PC 5.3]`) and obtaining sign-off (`[ICTCLD501 PC 5.4]`); evidences FS Oral communication. This is the **design-approval gate** — approval before implementing.
 - **AT2 — DR Implementation** *(modelled on CL1 AT2 Deployment Report)* — single part:
   - **A written Deployment Report** submitted for finalisation/approval of the implemented infrastructure — the microservice build (ICTCLD503 element 3), the IaC (ICTCLD505), the monitoring (Topic 3), the **IaC user documentation** (`[ICTCLD505 PC 4.1]`, `[ICTCLD505 PE 4]`), and the **build sign-off** (`[ICTCLD503 PC 4.2]` / `[ICTCLD503 PC 4.3]`, `[ICTCLD505 PC 4.2]`).
 
 **Two approval moments (by design, and UoC-faithful):**
-- **End of AT1 — design approval:** the DR plan + solution design approved at the Part B presentation, before any build. Carries ICTCLD501's element-5 closure.
+- **End of AT1 — design approval:** the Solution Design (Part A) + DR Plan (Part B) approved at the Part C presentation, before any build. Carries ICTCLD501's element-5 closure.
 - **End of AT2 — build sign-off:** the implemented, monitored infrastructure signed off via the Deployment Report. Carries ICTCLD503/505's element-4 closure.
 
-**Documenting resolves cleanly into the two ATs (item-level allocation TBD):**
+**Documenting resolves cleanly into the ATs:**
 
 | Documenting item | Lands in | As |
 |---|---|---|
-| `[ICTCLD501 PC 5.1–5.4]` + FS Oral communication (501) | AT1 Part B | design-approval presentation + feedback + lodgement + sign-off |
-| `[ICTCLD503 PC 1.7]`, `[ICTCLD503 PC 2.4]` + FS Writing (503) | AT1 Part A | solution/architecture design (documented & justified, in/with the DR plan) |
+| `[ICTCLD503 PC 1.7]`, `[ICTCLD503 PC 2.4]` + FS Writing (503) | AT1 Part A | the Solution Design — architecture documented & justified |
+| `[ICTCLD501 PC 5.1–5.4]` + FS Oral communication (501) | AT1 Part C | design-approval presentation + feedback + lodgement + sign-off (of Part A + Part B) |
 | `[ICTCLD505 PC 4.1]`, `[ICTCLD505 PE 4]` + FS Writing (505) | AT2 | Deployment Report — IaC user documentation |
 | `[ICTCLD503 PC 4.2]`/`4.3`, `[ICTCLD505 PC 4.2]` + FS Oral communication (505) | AT2 | Deployment Report — build feedback + final sign-off |
 

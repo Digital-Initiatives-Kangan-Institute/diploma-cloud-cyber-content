@@ -162,6 +162,11 @@ def build(path):
                      "handled by existing HA; application-layer faults owned by another team; assumptions about "
                      "what remains available).")
     bc.response(doc)
+    h3("4.5 Recording the analysis")
+    bc.guidance(doc, "State where the outcomes of this impact analysis are recorded and under what "
+                     "organisational policy (e.g. records-management / documentation procedures), so the "
+                     "analysis is retained, auditable, and available to the recovery team.")
+    bc.response(doc)
 
     h1("5. Recovery Strategy")
     h3("5.1 Options evaluated")
@@ -203,7 +208,9 @@ def build(path):
     h3("6.2 Recovery steps")
     bc.guidance(doc, "Set out the steps of the recovery plan in order, with the owner and a target (cumulative) "
                      "time for each, including key features and the service providers involved. The total must "
-                     "sit within your RTO. Complete the runbook below (add rows as needed).")
+                     "sit within your RTO. Make sure the steps visibly address the risks you prioritised in §4 "
+                     "— your highest-severity risk should be answered first. Complete the runbook below (add "
+                     "rows as needed).")
     bc.table(doc, ["Step", "Action", "Owner", "Target (cumulative)"],
              [["1", "[ … ]", "[ … ]", "[ ]"],
               ["2", "[ … ]", "[ … ]", "[ ]"],

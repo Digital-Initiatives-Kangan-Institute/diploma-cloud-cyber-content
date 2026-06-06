@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the YAT / MTS Solution Design template (.docx) from the brand pack.
+"""Build the YAT / MTS Solution Design template(s) (.docx) from the brand pack.
 
 The third document type alongside Business Case and Deployment Report — the cloud
 solution/architecture design that a Deployment Report then implements. Generalised from
@@ -8,8 +8,16 @@ sections (review of an existing baseline, implementation sequencing/rollback, si
 plan) carry the "Not applicable — reason" convention so a greenfield design can omit them.
 Assessment scaffolding (UoC notes, student ID) stripped.
 
-Usage:  python scripts/build_solution_design_template.py [output.docx]
-Default: ../diploma-cloud-cyber-website/public/templates/YAT-Solution-Design-Template.docx
+Two scoped variants from ONE definition, selected by the `web_scale` flag:
+  * web_scale=False — the base template (CL1 shape: sections 1-9 + Document control).
+    This output is byte-for-byte the long-standing template; CL1 relies on its shape.
+  * web_scale=True  — adds two sections after Architecture Design: §5 Web-scale Design
+    and §6 Microservice and Serverless Design (the rest shift down to §7-§11). Used by
+    CL2 AT1 Part A, where the design includes web-scaling + a microservice. The base
+    sections are identical between the two — only the two extra sections differ — so there
+    is a single source of truth and no drift.
+
+Usage:  python scripts/build_solution_design_template.py   (builds BOTH variants)
 """
 import sys
 from pathlib import Path
@@ -24,7 +32,7 @@ from docx.enum.table import WD_TABLE_ALIGNMENT  # noqa: E402
 from docx.shared import Pt, Cm, RGBColor  # noqa: E402
 
 
-def build(path):
+def build(path, web_scale=False):
     doc = Document()
     bc.configure_styles(doc)
     sec = doc.sections[0]
@@ -68,14 +76,17 @@ def build(path):
     # ---- CONTENTS + convention ----
     doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
     doc.add_paragraph("How to use this template", style="Heading 1")
+    applic_lead = "a given design may mark" if web_scale else "a greenfield design usually marks"
+    applic_examples = ("reviewing an existing baseline, "
+                       + ("web-scale design, microservice / serverless design, " if web_scale else "")
+                       + "implementation sequencing on a live system, and the simulation plan.")
     dr.callout(doc, [
         ("One design for any cloud solution.", "Use this for a greenfield architecture or for hardening / "
          "changing an existing one."),
         ("Complete every section.", "Where a section does not apply, mark it “Not applicable — [reason]” "
          "rather than deleting it."),
-        ("Sections flagged with an applicability note", "(terracotta) are the ones a greenfield design "
-         "usually marks Not applicable — reviewing an existing baseline, implementation sequencing on a "
-         "live system, and the simulation plan."),
+        ("Sections flagged with an applicability note", f"(terracotta) are the ones {applic_lead} "
+         "Not applicable — " + applic_examples),
         ("This design is implemented by a Deployment Report.", "Business Case (why) → Solution Design "
          "(what / how) → Deployment Report (what was built)."),
     ])
@@ -182,7 +193,67 @@ def build(path):
              [["[ … ]", "[ … ]"], ["[ … ]", "[ … ]"]],
              widths=[7.0, 9.0])
 
-    h1("5. Implementation Sequencing")
+    # ---- Optional web-scale + microservice sections (CL2 variant) ----
+    if web_scale:
+        h1("5. Web-scale Design")
+        dr.applic(doc, "designs that scale a web application for growth or a global / multi-region user base (a fixed-capacity design marks this Not applicable)")
+        h3("5.1 Web-scaling needs")
+        bc.guidance(doc, "The scaling drivers this design must meet — load growth, a global / multi-region user "
+                         "base, and the peak-demand profile — confirmed against the business needs.")
+        bc.response(doc)
+        h3("5.2 Scaling by layer")
+        bc.guidance(doc, "For each layer, the cloud service used and how it scales network, compute and storage "
+                         "as utilisation increases.")
+        bc.table(doc, ["Layer", "Service", "How it scales"],
+                 [["Edge / network", "[ e.g. CDN, latency routing ]", "[ … ]"],
+                  ["Compute", "[ … ]", "[ … ]"],
+                  ["Caching / read path", "[ … ]", "[ … ]"],
+                  ["Storage", "[ … ]", "[ … ]"],
+                  ["Database", "[ … ]", "[ … ]"]],
+                 widths=[4.0, 5.5, 6.5])
+        h3("5.3 Global delivery")
+        bc.guidance(doc, "How a global / multi-region user base is served with acceptable latency — edge "
+                         "delivery, routing, and what is served from the edge versus the origin.")
+        bc.response(doc)
+        h3("5.4 Web-scale component choices")
+        bc.guidance(doc, "Justify the component choices across the web-scale options: SQL vs NoSQL databases, "
+                         "monolithic vs microservice architecture, virtual / container / serverless compute, and "
+                         "content delivery networks and in-memory data stores — each chosen where it fits.")
+        bc.response(doc)
+        h3("5.5 Availability and security maintained")
+        bc.guidance(doc, "Confirm the scaling changes preserve availability and security, and note the review "
+                         "that checked this against the requirements.")
+        bc.response(doc)
+
+        h1("6. Microservice and Serverless Design")
+        dr.applic(doc, "designs that include a microservice or serverless component (an infrastructure-only design marks this Not applicable)")
+        h3("6.1 Microservices and data transactions")
+        bc.guidance(doc, "Identify the microservice(s) and the data transaction(s) each handles, according to "
+                         "business needs — one responsibility per service.")
+        bc.response(doc)
+        h3("6.2 Supporting cloud services")
+        bc.guidance(doc, "The cloud services that support the microservice architecture, by concern.")
+        bc.table(doc, ["Concern", "Service", "Why"],
+                 [["Ingress / API", "[ … ]", "[ … ]"],
+                  ["Messaging / queuing", "[ … ]", "[ … ]"],
+                  ["Compute", "[ … ]", "[ … ]"],
+                  ["Persistent storage", "[ … ]", "[ … ]"]],
+                 widths=[4.0, 5.5, 6.5])
+        h3("6.3 Microservice architecture")
+        bc.guidance(doc, "The architecture and event / data flow — how the services are composed, and how the "
+                         "design keeps them highly cohesive and loosely coupled.")
+        bc.response(doc)
+        h3("6.4 Interface / integration contract")
+        bc.guidance(doc, "The API / webhook contract the rest of the system integrates through — endpoint, "
+                         "method and payload schema — the single coupling point between the service and its "
+                         "callers.")
+        bc.response(doc)
+
+    # ---- Sections after the design core (numbers shift when web_scale) ----
+    seq = 7 if web_scale else 5
+    sim, oos, ref, rev = seq + 1, seq + 2, seq + 3, seq + 4
+
+    h1(f"{seq}. Implementation Sequencing")
     dr.applic(doc, "deployments into a running system, where order and rollback matter")
     bc.guidance(doc, "The order the changes are applied, with per-change duration, expected impact, a "
                      "verification step, and a rollback if it fails. State the total window and buffer.")
@@ -191,44 +262,44 @@ def build(path):
               ["2", "[ … ]", "[ … ]", "[ … ]", "[ … ]", "[ … ]"]],
              widths=[0.8, 4.0, 2.0, 3.0, 3.0, 3.0])
 
-    h1("6. Simulation and Verification Plan")
+    h1(f"{sim}. Simulation and Verification Plan")
     dr.applic(doc, "resilience / high-availability designs (the plan the Deployment Report then executes)")
-    h3("6.1 Failure simulation plan")
+    h3(f"{sim}.1 Failure simulation plan")
     bc.table(doc, ["#", "Simulation", "Method", "Expected outcome", "Verification"],
              [["F1", "[ … ]", "[ … ]", "[ … ]", "[ … ]"]],
              widths=[0.8, 3.0, 3.5, 4.5, 4.0])
-    h3("6.2 Resize simulation plan")
+    h3(f"{sim}.2 Resize simulation plan")
     bc.table(doc, ["#", "Simulation", "Method", "Expected outcome", "Verification"],
              [["R1", "[ … ]", "[ … ]", "[ … ]", "[ … ]"]],
              widths=[0.8, 3.0, 3.5, 4.5, 4.0])
-    h3("6.3 Verification criteria")
+    h3(f"{sim}.3 Verification criteria")
     bc.guidance(doc, "The success criteria — what evidence will demonstrate the design works as intended.")
     bc.response(doc)
 
-    h1("7. Out of Scope")
+    h1(f"{oos}. Out of Scope")
     bc.guidance(doc, "What this design deliberately does not address, and why (e.g. cross-Region active-active "
                      "DR, application-layer HA, items owned by another team).")
     bc.response(doc)
 
-    h1("8. References")
+    h1(f"{ref}. References")
     bc.guidance(doc, "The source documents and standards informing this design (requirements, baseline "
                      "design, application specification, reference architectures, industry standards), with "
                      "external sources cited with access dates.")
     bc.response(doc)
 
-    h1("9. Review and Approval")
+    h1(f"{rev}. Review and Approval")
     bc.guidance(doc, "The completed design is submitted to the accepting authority / superior for review. "
                      "The reviewer records their feedback below; the author records how each point was "
                      "addressed; the reviewer then signs off on the design before it is implemented.")
-    h3("9.1 Reviewer feedback and author response")
+    h3(f"{rev}.1 Reviewer feedback and author response")
     bc.table(doc, ["#", "Reviewer feedback / comment", "Author response", "Resulting change"],
              [["1", "[ … ]", "[ … ]", "[ … ]"],
               ["2", "[ … ]", "[ … ]", "[ … ]"],
               ["3", "[ … ]", "[ … ]", "[ … ]"]],
              widths=[0.8, 6.0, 5.2, 4.0])
-    h3("9.2 Sign-off")
+    h3(f"{rev}.2 Sign-off")
     bc.guidance(doc, "The accepting authority records their decision. “Approved with comments” means the "
-                     "design proceeds subject to the changes recorded in §9.1.")
+                     "design proceeds subject to the changes recorded above.")
     bc.table(doc, ["Role", "Name", "Decision", "Date", "Signature"],
              [["Prepared by (author)", "[ name, role ]", "—", "[ DD/MM/YYYY ]", ""],
               ["Reviewed and approved by (accepting authority)", "[ name, role ]",
@@ -251,6 +322,6 @@ def build(path):
 
 
 if __name__ == "__main__":
-    default = "../diploma-cloud-cyber-website/public/templates/YAT-Solution-Design-Template.docx"
-    out = sys.argv[1] if len(sys.argv) > 1 else default
-    build(out)
+    base_dir = Path("../diploma-cloud-cyber-website/public/templates")
+    build(base_dir / "YAT-Solution-Design-Template.docx", web_scale=False)
+    build(base_dir / "YAT-Solution-Design-Template-Webscale.docx", web_scale=True)

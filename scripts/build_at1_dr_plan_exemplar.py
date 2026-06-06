@@ -2,11 +2,18 @@
 """Build the AT1 Disaster Recovery Plan EXEMPLAR (.docx) — assessor marking reference.
 
 A complete, worked model answer for the YAT LMS Global Expansion DR Plan (S1-CL2 AT1
-Part A, ICTCLD501), on the YAT brand. Structured on ICTCLD501's element sequence — prepare,
-impact analysis, develop solutions, finalise plan, test/validate — with a per-section UoC
+Part B, ICTCLD501), on the YAT brand. Structured on ICTCLD501's element sequence — prepare,
+impact analysis, develop solutions, finalise plan, validate/approve — with a per-section UoC
 mapping (ex.uoc "Evidences:" line) so it doubles as the marking reference and the basis the
-student template is stripped back from. Figures are indicative and internally consistent
-(RTO ≤ 4 h / RPO ≤ 1 h; primary ap-southeast-2, recovery ap-south-1).
+student template is stripped back from.
+
+Scope discipline: this is PURE disaster recovery — "what we do if the system goes down". The
+web-scale architecture and the audit-log microservice are the companion Solution Design
+(Part A), NOT here; data residency is an input, and the plan respects it simply by recovering
+into a second *Australian* region so no new cross-border movement of student data occurs.
+
+Figures are indicative and internally consistent (RTO <= 4 h / RPO <= 1 h; primary
+ap-southeast-2 Sydney, recovery ap-southeast-4 Melbourne).
 
 Reuses the docx brand helpers (build_bc_template) + the exemplar helpers (build_bc_exemplar).
 
@@ -55,7 +62,8 @@ def build(path):
         ("Prepared by", "MTS Consultant"),
         ("Date submitted", "[DD/MM/YYYY]"),
         ("Submitted to", "Sam Walker (YAT ICT Manager) · Pat Lin (MTS Senior Consultant)"),
-        ("Related documents", "LMS Global Expansion Solution Design (companion); the Functional & Non-Functional Requirements; the Data Residency & Sovereignty Requirements"),
+        ("Related documents", "LMS Global Expansion Solution Design (the system this plan protects); "
+                              "the Functional & Non-Functional Requirements (RTO / RPO)"),
         ("Classification", "Commercial-in-confidence"),
     ]
     ct = doc.add_table(rows=0, cols=2)
@@ -75,24 +83,22 @@ def build(path):
     # ---- BODY ----
     doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
     h1 = lambda t: doc.add_paragraph(t, style="Heading 1")
-    h3 = lambda t: doc.add_paragraph(t, style="Heading 3")
 
     # 1 Executive Summary
     h1("1. Executive Summary")
     ex.uoc(doc, "[ICTCLD501 PE 1] — overview of the developed and evaluated plan")
     ex.para(doc, "This Disaster Recovery Plan protects the YAT Learning Management System after its expansion "
-                 "to serve the new India-campus cohort. With a partner institution now depending on the LMS, "
-                 "the platform needs to survive the loss of an entire cloud region — a risk the existing "
+                 "to serve the new India-campus cohort. With a partner institution now depending on the "
+                 "platform, the LMS must survive the loss of an entire cloud region — a risk the existing "
                  "in-region high-availability design does not address. The plan analyses three major risk "
-                 "events (loss of the primary region, destructive data loss, and a cyber-security compromise), "
-                 "sets the recovery objectives at RTO ≤ 4 hours and RPO ≤ 1 hour, and recommends a "
-                 "backup-and-restore strategy that recovers the LMS into a second AWS region (Mumbai, "
-                 "ap-south-1).")
-    ex.para(doc, "That recovery region doubles as the home for the India-cohort access logs the data-residency "
-                 "requirements place in India, so recovery and compliance reinforce one another. Recovery is "
-                 "driven from infrastructure-as-code plus automated and cross-region backups, which together "
-                 "rebuild and restore the platform inside the four-hour window. The plan was walked through "
-                 "with the YAT ICT Manager and signed off (§7).")
+                 "events (loss of the primary region, destructive data loss, and a cyber-security "
+                 "compromise), sets the recovery objectives at RTO ≤ 4 hours and RPO ≤ 1 hour, and "
+                 "recommends a backup-and-restore strategy that recovers the LMS into a second Australian "
+                 "region (Melbourne, ap-southeast-4).")
+    ex.para(doc, "Recovery is driven from infrastructure-as-code plus automated and cross-region backups, "
+                 "which together rebuild and restore the platform inside the four-hour window. Recovery is "
+                 "kept within Australia, so restoring the service introduces no new cross-border movement of "
+                 "student data. The plan was walked through with the YAT ICT Manager and signed off (§7).")
 
     # 2 Engagement Context & Scope
     h1("2. Engagement Context and Scope")
@@ -101,19 +107,19 @@ def build(path):
                  "cross-AZ compute) under the prior engagement. This engagement extends it for the India "
                  "campus, and this plan adds the region-level disaster recovery that the partnership makes "
                  "necessary. The business requirement, confirmed with the YAT ICT Manager, is that a disaster "
-                 "affecting the primary region must not lose more than one hour of data (RPO ≤ 1 h) and the "
-                 "LMS must be back in service within four hours (RTO ≤ 4 h), with the India-cohort log "
-                 "residency preserved even during recovery.")
-    ex.para(doc, "In scope: the LMS web/application tier, the database, and the India-resident audit/access-log "
-                 "store, for both cohorts. Out of scope: in-region component/AZ failure (already handled by the "
-                 "existing HA design), application-layer recovery of the DOODLE software (a YAT IT "
-                 "responsibility), and the legal determination of the residency obligations themselves (owned "
-                 "by YAT compliance — this plan designs to them).")
+                 "affecting the primary region must lose no more than one hour of data (RPO ≤ 1 h) and the "
+                 "LMS must be back in service within four hours (RTO ≤ 4 h).")
+    ex.para(doc, "In scope: the LMS web / application tier and the database, for both the Australian and India "
+                 "cohorts. Out of scope: in-region component or Availability-Zone failure (already handled by "
+                 "the existing HA design), application-layer recovery of the DOODLE software (a YAT IT "
+                 "responsibility), and the separate India audit-log store (an independently-durable service "
+                 "designed in the companion Solution Design). The plan designs to the recovery objectives; it "
+                 "does not set them.")
 
     # 3 Current Recovery Position
     h1("3. Current Recovery Position")
     ex.uoc(doc, "[ICTCLD501 PC 1.2] existing organisational recovery plans · [ICTCLD501 PC 1.3] vendor disaster recovery plan and SLAs")
-    ex.para(doc, "Existing arrangements (PC 1.2): the only documented disaster recovery plan is the "
+    ex.para(doc, "Existing arrangements (PC 1.2): the only previously documented disaster recovery plan is the "
                  "deprecated on-premises DR plan, which the cloud migration superseded and which no longer "
                  "applies. The current cloud platform provides in-region resilience — a Multi-AZ database "
                  "with automatic failover, an Auto Scaling group and load balancer across two Availability "
@@ -139,26 +145,23 @@ def build(path):
                  "hour of data; RTO ≤ 4 h means service is restored within four hours of an incident being "
                  "declared. These figures drove the choice of backup cadence and recovery strategy in §5.")
     ex.para(doc, "Data managed (PC 2.3): the LMS database is approximately 40–60 GB and holds student personal "
-                 "information, enrolment and assessment records, and course content; the audit/access-log "
-                 "store holds India-cohort access events. Personal data is subject to the Australian Privacy "
-                 "Act and, for the India cohort, to Indian law — the access logs are residency-bound and must "
-                 "remain in India through recovery.")
-    ex.para(doc, "Risk environment (KE 1): the principal risks to a cloud-hosted, now cross-border, "
-                 "mission-critical service are assessed below.")
+                 "information, enrolment and assessment records, and course content. This data is subject to "
+                 "the Australian Privacy Act; keeping recovery within Australia avoids any new cross-border "
+                 "handling of it.")
+    ex.para(doc, "Risk environment (KE 1): the principal risks to a cloud-hosted, mission-critical service now "
+                 "relied on by a partner institution are assessed below.")
     ex.etable(doc, ["#", "Risk event", "Likelihood", "Impact", "Severity", "Drives"],
               [["RE1", "Loss of the primary region (region-wide AWS outage)", "Low", "Critical", "High",
                 "Cross-region recovery capability"],
                ["RE2", "Destructive data loss (corruption or accidental deletion)", "Medium", "High", "High",
                 "Point-in-time backups (RPO)"],
                ["RE3", "Cyber-security compromise (ransomware / credential abuse)", "Medium", "Critical", "High",
-                "Isolated, immutable, cross-region backups"],
-               ["RE4", "Loss of connectivity between Australia and the India cohort", "Medium", "Medium", "Medium",
-                "Edge delivery + India-region read path"]],
-              widths=[0.9, 5.0, 2.0, 1.8, 1.8, 4.0])
+                "Isolated, immutable, cross-region backups"]],
+              widths=[0.9, 5.4, 2.0, 1.8, 1.8, 4.1])
     ex.para(doc, "Severity of impact and disruption (PC 2.4): RE1 and RE3 are the most severe — both can take "
-                 "the LMS fully offline and, for RE3, threaten data integrity for both cohorts and breach "
+                 "the LMS fully offline, and RE3 also threatens data integrity for both cohorts and the "
                  "obligations to the partner. RE2 is contained to the affected data but can still breach the "
-                 "RPO if backups are inadequate. RE4 degrades the India experience without a full outage.")
+                 "RPO if backups are inadequate.")
     ex.para(doc, "Plan exclusions (PC 2.2): single-component and single-AZ failures are excluded — they are "
                  "handled by the existing in-region HA design, not this plan. Application-layer faults within "
                  "the DOODLE software are excluded as a YAT IT responsibility. The plan assumes recovery into "
@@ -181,17 +184,18 @@ def build(path):
                ["Multi-region Active-Active", "Near-zero", "Near-zero", "Very high",
                 "Far exceeds the requirement; disproportionate"]],
               widths=[4.4, 2.0, 2.4, 2.4, 4.3])
-    ex.para(doc, "Recommended approach: Backup & Restore into Mumbai (ap-south-1). Automated RDS backups give "
-                 "point-in-time restore (RPO in minutes); a cross-region snapshot copy to the India region runs "
-                 "at least hourly (within the 1-hour RPO) and also satisfies the India log-residency "
-                 "requirement; and the infrastructure-as-code templates rebuild the stack in the recovery "
-                 "region by changing the target-region parameter. This is the simplest strategy that meets the "
-                 "objectives — consistent with the requirement to avoid unnecessary cost and complexity.")
+    ex.para(doc, "Recommended approach: Backup & Restore into Melbourne (ap-southeast-4). Automated RDS "
+                 "backups give point-in-time restore (RPO in minutes); a cross-region snapshot copy to the "
+                 "recovery region runs at least hourly (within the 1-hour RPO); and the infrastructure-as-code "
+                 "templates rebuild the stack in the recovery region by changing the target-region parameter. "
+                 "Recovering into a second Australian region keeps student data onshore. This is the simplest "
+                 "strategy that meets the objectives — consistent with the requirement to avoid unnecessary "
+                 "cost and complexity.")
     ex.para(doc, "Vendor protections and risk prioritisation (PC 3.2): the strategy leans on AWS-native "
-                 "protections — durable snapshots, cross-region copy, a separate backup vault with restricted "
-                 "access for ransomware resistance. Risks are prioritised RE1 (region loss) first — addressed "
-                 "by cross-region recovery — then RE2 (data loss) via point-in-time restore, then RE3 "
-                 "(compromise) via isolated, immutable backups held in a different region.")
+                 "protections — durable snapshots, cross-region copy, and a separate backup vault with "
+                 "restricted access for ransomware resistance. Risks are prioritised RE1 (region loss) first — "
+                 "addressed by cross-region recovery — then RE2 (data loss) via point-in-time restore, then "
+                 "RE3 (compromise) via isolated, immutable backups held in a different region.")
     ex.para(doc, "Insurance (PC 3.3): YAT holds a cyber and business-interruption insurance policy. It was "
                  "reviewed as a complementary control, not a substitute for recovery: the policy transfers "
                  "residual financial risk (e.g. breach-response and liability costs) that the technical plan "
@@ -200,7 +204,8 @@ def build(path):
     ex.para(doc, "Other components (PC 3.4): the strategy also includes a recovery runbook, a declaration and "
                  "escalation path, a stakeholder communication plan (including the India partner), DNS "
                  "failover to the recovered endpoint, and the order of recovery across the tiers. The approach "
-                 "aligns with the ICT-continuity standards ISO 22301 and ISO/IEC 27031 (KE 4).")
+                 "aligns with ISO/IEC 27001 and 27002 (information security) and ISO/IEC 27031 (ICT readiness "
+                 "for business continuity) (KE 4).")
 
     # 6 The Disaster Recovery Plan
     h1("6. The Disaster Recovery Plan")
@@ -209,18 +214,18 @@ def build(path):
                  "from §4 — the cross-region rebuild answers RE1, the point-in-time restore answers RE2, and "
                  "restoring from the isolated backup vault answers RE3.")
     ex.para(doc, "Detection and alerting (KE 6): a region-level event is detected by CloudWatch alarms, the AWS "
-                 "Health Dashboard, and the availability monitoring on the audit-log path; breaching the "
+                 "Health Dashboard, and the availability monitoring on the LMS endpoints; breaching the "
                  "detection threshold pages the on-call YAT ICT officer, who declares a disaster and starts the "
                  "runbook.")
     ex.para(doc, "Recovery steps, timelines and service providers (PC 4.2):")
     ex.etable(doc, ["Step", "Action", "Owner", "Target (cumulative)"],
               [["1", "Detect and declare the disaster; notify stakeholders and the India partner", "YAT ICT on-call", "0:20"],
-               ["2", "Provision the recovery stack in ap-south-1 from the IaC templates (region parameter = ap-south-1)", "YAT ICT", "1:30"],
+               ["2", "Provision the recovery stack in ap-southeast-4 from the IaC templates (region parameter = ap-southeast-4)", "YAT ICT", "1:30"],
                ["3", "Restore the database from the latest cross-region snapshot / point-in-time copy", "YAT ICT", "2:45"],
-               ["4", "Confirm the India-resident audit/access-log store is in place and receiving events", "YAT ICT", "3:00"],
+               ["4", "Verify the integrity of the restored data and reconcile to the RPO checkpoint", "YAT ICT", "3:00"],
                ["5", "Validate connectivity and core LMS functions; smoke-test both cohorts", "YAT ICT", "3:30"],
                ["6", "Cut DNS over to the recovered endpoint; confirm users are served", "YAT ICT", "3:50"],
-               ["7", "Post-recovery confirmation, CERT-In/insurer notifications as required, incident log", "YAT ICT", "4:00"]],
+               ["7", "Post-recovery confirmation, insurer / stakeholder notifications as required, incident log", "YAT ICT", "4:00"]],
               widths=[1.0, 8.3, 3.0, 3.2])
     ex.para(doc, "How the plan meets the objectives (PE 3): RPO ≤ 1 h is met because point-in-time backups and "
                  "the at-least-hourly cross-region copy cap data loss below one hour; RTO ≤ 4 h is met because "
@@ -239,10 +244,10 @@ def build(path):
                  "steps, which confirmed the actions and that the timeline stays within the four-hour RTO.")
     ex.para(doc, "Feedback sought and responded to (PC 5.2):")
     ex.etable(doc, ["Feedback received", "From", "Response", "Resulting action"],
-              [["Confirm the India access logs remain in India during a recovery, not just in normal running",
+              [["Confirm recovering into a second region keeps Australian student data onshore",
                 "Sam Walker (YAT ICT Manager)",
-                "Confirmed — the recovery region is the India region (ap-south-1), so the logs stay in-country throughout",
-                "Clarified in §5 and §6 step 4"],
+                "Confirmed — the recovery region is Melbourne (ap-southeast-4), so student data stays in Australia throughout",
+                "Recorded in §5"],
                ["Check the recovery cost is proportionate",
                 "Robin Ng (CFO)",
                 "Backup-and-restore was chosen specifically as the lowest-cost option meeting the objectives (§5)",
