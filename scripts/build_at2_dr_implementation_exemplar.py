@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
-"""Build the S1-CL2 AT2 Deployment Report EXEMPLAR (.docx) — assessor marking reference.
+"""Build the S1-CL2 AT2 Deployment Report EXEMPLAR (.docx) - assessor marking reference.
 
-A worked model answer for the YAT LMS Global Expansion *DR Implementation* (S1-CL2 AT2),
-implementing the AT1-approved design: the audit-log microservice provisioned as
-infrastructure-as-code, with monitoring, built and tested in the AWS Academy lab. Covers
-ICTCLD503 element 3 (microservice build), ICTCLD505 (IaC — operate predefined templates +
-author own), the monitoring strand, and the build documentation + sign-off.
+A worked model answer for the YAT LMS Global Expansion Cloud Microservice & IaC Implementation
+(S1-CL2 AT2), implementing the AT1-approved design: the audit-log microservice. The student
+OPERATES a provided data-store template (DynamoDB) and AUTHORS their own template for the
+microservice (API Gateway + SQS + Lambda) that writes to it, with monitoring, built and tested
+in the AWS Academy lab. Covers ICTCLD503 element 3 (microservice build), ICTCLD505 (IaC -
+operate the provided template + author own), the monitoring strand, and the build documentation
++ sign-off.
 
-Reuses the Deployment Report shell (as CL1 AT2) but with a serverless + IaC build narrative
-(§4) and testing (§6) instead of the EC2/RDS infrastructure sub-sections. Evidence is
-described, not captured: "[SCREENSHOT — should show ...]". Retains UoC `Evidences:` tags and
-the §8 Knowledge Evidence responses (assessor layers an org template omits).
+Reuses the Deployment Report shell (as CL1 AT2) with a serverless + IaC build narrative (S4)
+and testing (S6). Evidence is described, not captured: "[SCREENSHOT - should show ...]". Retains
+UoC `Evidences:` tags and the S8 Knowledge Evidence responses (assessor layers an org template
+omits). The lab environment / deployment region is TBA (advised before the build); region is the
+deploy target, not a template parameter.
 
 Reuses the docx brand helpers (build_bc_template) and prose/table helpers (build_bc_exemplar).
 
@@ -31,7 +34,7 @@ from docx.shared import Pt, Cm, RGBColor  # noqa: E402
 
 def na(doc, reason):
     p = doc.add_paragraph()
-    r = p.add_run(f"Not applicable — {reason}")
+    r = p.add_run(f"Not applicable - {reason}")
     r.bold = True
     r.font.size = Pt(10.5)
     r.font.color.rgb = RGBColor.from_string(bc.TERRACOTTA)
@@ -40,13 +43,13 @@ def na(doc, reason):
 
 
 def ev(doc, kind, desc):
-    """Described-evidence placeholder, e.g. [SCREENSHOT — should show ...]."""
+    """Described-evidence placeholder, e.g. [SCREENSHOT - should show ...]."""
     p = doc.add_paragraph()
     tag = p.add_run(f"[{kind}] ")
     tag.bold = True
     tag.font.size = Pt(9.5)
     tag.font.color.rgb = RGBColor.from_string(bc.TEAL)
-    d = p.add_run("— " + desc)
+    d = p.add_run("- " + desc)
     d.font.size = Pt(9.5)
     d.italic = True
     d.font.color.rgb = RGBColor.from_string(bc.GREY)
@@ -83,18 +86,18 @@ def build(path):
     for _ in range(3):
         doc.add_paragraph()
     doc.add_paragraph(style="Title").add_run("Deployment Report")
-    sub = doc.add_paragraph().add_run("YAT LMS Global Expansion — DR Implementation")
+    sub = doc.add_paragraph().add_run("YAT LMS Global Expansion - Cloud Microservice & IaC Implementation")
     sub.font.size = Pt(15); sub.bold = True; sub.font.color.rgb = RGBColor.from_string(bc.TERRACOTTA)
-    note = doc.add_paragraph().add_run("Assessor exemplar — internal marking reference (not for distribution to students)")
+    note = doc.add_paragraph().add_run("Assessor exemplar - internal marking reference (not for distribution to students)")
     note.italic = True; note.font.size = Pt(10); note.font.color.rgb = RGBColor.from_string(bc.GREY)
     doc.add_paragraph()
     cover = [
-        ("Engagement", "YAT LMS Global Expansion & Disaster Recovery — Implementation"),
+        ("Engagement", "YAT LMS Global Expansion & Disaster Recovery - Implementation"),
         ("Engagement reference", "YAT-MTS-2026-002"),
         ("Report version", "v1.0"),
         ("Prepared by", "MTS Consultant"),
         ("Date submitted", "[DD/MM/YYYY]"),
-        ("Submitted to", "Sam Walker (YAT ICT Manager) · Pat Lin (MTS Senior Consultant)"),
+        ("Submitted to", "Sam Walker (YAT ICT Manager) - Pat Lin (MTS Senior Consultant)"),
         ("Related documents", "LMS Global Expansion Solution Design (the approved design); the Disaster "
                               "Recovery Plan"),
         ("Classification", "Commercial-in-confidence"),
@@ -120,134 +123,143 @@ def build(path):
 
     # 1 Executive Summary
     h1("1. Executive Summary")
-    ex.uoc(doc, "[ICTCLD503 PE 3] · [ICTCLD505 PE 1, 2] — overview of the implemented build")
+    ex.uoc(doc, "[ICTCLD503 PE 3] - [ICTCLD505 PE 1, 2] - overview of the implemented build")
     ex.para(doc, "This Deployment Report documents the Phase 2 implementation of the YAT LMS Global Expansion: "
-                 "the audit-log microservice, provisioned as infrastructure-as-code, with monitoring, built and "
-                 "tested in the AWS Academy lab. It implements the Solution Design approved at AT1.")
-    ex.para(doc, "The build was delivered in three streams: operating a set of predefined infrastructure-as-code "
-                 "templates to stand up the supporting resources; authoring a parameterised template that "
-                 "provisions the microservice itself; and deploying and testing the serverless microservice "
-                 "(API Gateway → SQS → Lambda → DynamoDB). Monitoring alarms were configured, the build was "
-                 "tested and troubleshooted, documented for operational handover, and signed off.")
+                 "the audit-log microservice, built and tested in the AWS Academy lab. It implements the "
+                 "audit-log microservice from the Solution Design approved at AT1.")
+    ex.para(doc, "The build was delivered in three streams: operating the provided infrastructure-as-code "
+                 "template for the audit-log data store (a DynamoDB table); authoring a parameterised template "
+                 "that provisions the microservice itself (API Gateway, queue and writer function) wired to that "
+                 "store; and deploying and testing the serverless microservice end to end. Monitoring was "
+                 "configured, the build was tested and troubleshooted, documented for operational handover, and "
+                 "signed off.")
 
     # 2 Engagement Context
     h1("2. Engagement Context")
-    ex.uoc(doc, "[ICTCLD503 AC 5] · [ICTCLD505 AC 4] (scenario data sources used)")
+    ex.uoc(doc, "[ICTCLD503 AC 5] - [ICTCLD505 AC 4] (scenario data sources used)")
     ex.para(doc, "Following approval of the design at AT1, MTS implemented the audit-log microservice for the "
                  "India-cohort access logs. The implementation was built in the AWS Academy lab environment "
-                 "using the services, code elements and reference data supplied for the engagement.")
-    ex.para(doc, "Lab / region note: the design places the audit log in the India region (ap-south-1). The AWS "
-                 "Academy lab does not offer ap-south-1, so us-west-2 stands in for the India region and "
-                 "us-east-1 for the primary; the mechanics (cross-region separation, IaC, the serverless stack) "
-                 "are real, only the geography is simulated. Region is a template parameter, so the same "
-                 "templates target ap-south-1 in production.")
+                 "using the services, the provided data-store template, the supplied microservice code, and the "
+                 "webhook contract supplied for the engagement.")
+    ex.para(doc, "Lab / region note: the AT1 design places the audit log in the India region (ap-south-1) for "
+                 "data residency. The specific AWS Academy lab environment, and therefore the deployment region, "
+                 "is advised before the build; the region is the deploy target (passed to the deploy command), "
+                 "so the same templates target the lab region during the build and ap-south-1 in production - "
+                 "the mechanics are real, only the geography is configurable.")
 
     # 3 Scope of Deployment
     h1("3. Scope of Deployment")
-    ex.para(doc, "In scope: the audit-log microservice and the infrastructure-as-code that provisions it — "
-                 "operating the predefined templates, authoring the student's own template, the serverless build "
-                 "(API Gateway, SQS, Lambda, DynamoDB), the monitoring alarms, the IaC user documentation, and "
-                 "the build sign-off.")
-    ex.para(doc, "Out of scope: the LMS web-tier scaling changes (CloudFront / caching — a separate LMS "
-                 "workstream, designed but not built here); the disaster-recovery drill itself (covered by the "
-                 "DR Plan); and production cutover. The microservice integrates with the LMS only through the "
-                 "webhook contract, so no change to the live LMS was required.")
+    ex.para(doc, "In scope: the audit-log microservice and the infrastructure-as-code that provisions it - "
+                 "operating the provided data-store template, authoring the microservice template, the "
+                 "serverless build (API Gateway, SQS, Lambda) wired to the provided table, the monitoring, the "
+                 "infrastructure-as-code user documentation, and the build sign-off.")
+    ex.para(doc, "Out of scope: the LMS web-tier scaling changes (CloudFront / caching - designed at AT1, a "
+                 "separate LMS workstream, not built here); the disaster-recovery plan and any recovery drill "
+                 "(the DR Plan, AT1); and production cutover. The microservice integrates with the LMS only "
+                 "through the webhook contract, so no change to the live LMS was required.")
 
     # 4 Build / Change Narrative
     h1("4. Build and Implementation Narrative")
     h3("4.1 Lab environment and access")
     ex.uoc(doc, "[ICTCLD505 AC 1, 5, 7, 8] (vendor platform, IDE, CLI/SSH, console)")
-    ex.para(doc, "Work was performed in the AWS Academy lab via the console, the AWS CLI, and an IDE. A least-"
-                 "privilege execution role was used for the Lambda function (write to the one DynamoDB table and "
-                 "read from the queue only); no long-lived credentials were created.")
-    ev(doc, "SCREENSHOT", "should show the AWS Academy lab session and the IAM execution role's attached policy.")
+    ex.para(doc, "Work was performed in the AWS Academy lab via the console, the AWS CLI, and an IDE. The "
+                 "writer function ran under a least-privilege execution role (write to the one DynamoDB table "
+                 "and read from the queue only); no long-lived credentials were created. The exact lab product "
+                 "and the role/region available are those advised for the assessment.")
+    ev(doc, "SCREENSHOT", "should show the AWS Academy lab session and the function's execution-role policy.")
 
-    h3("4.2 Operating the predefined IaC templates")
-    ex.uoc(doc, "[ICTCLD505 PC 1.1–1.4] · [ICTCLD505 PC 2.1–2.6] · [ICTCLD505 PE 1, 3] · [ICTCLD505 KE 3, 4, 5, 6, 7, 10]")
-    ex.para(doc, "Benefits and service selection (PC 1.1–1.4): infrastructure-as-code was chosen over manual "
-                 "console provisioning because it makes the stack repeatable, reviewable and parameterised by "
-                 "region — exactly what a cross-region recovery design needs. AWS CloudFormation was selected as "
-                 "the IaC service: it is native to the platform, needs no extra tooling, and the lab supports it.")
-    ex.para(doc, "Template syntax and review (PC 2.1, 2.2, KE 5): the supplied templates were read to confirm "
-                 "the resources they create and their dependencies — a DynamoDB table, an SQS queue, and the "
-                 "IAM roles — before deploying. The CloudFormation template language (Resources, Parameters, "
-                 "Outputs, intrinsic functions such as !Ref and !GetAtt) is summarised in §8 Q2.")
-    ex.para(doc, "Deploy, update, delete (PC 2.3–2.5, PE 1): the predefined templates were used to deploy the "
-                 "resources, confirm them in the console, update a stack (changing a parameter and observing the "
+    h3("4.2 Operating the provided data-store template")
+    ex.uoc(doc, "[ICTCLD505 PC 1.1-1.4] - [ICTCLD505 PC 2.1-2.6] - [ICTCLD505 PE 1, 3] - [ICTCLD505 KE 3, 4, 5, 6, 7, 10]")
+    ex.para(doc, "Benefits and service selection (PC 1.1-1.4): infrastructure-as-code was chosen over manual "
+                 "console provisioning because it makes the stack repeatable, reviewable and parameterised - "
+                 "exactly what a multi-environment, multi-region design needs. AWS CloudFormation was selected "
+                 "as the IaC service: it is native to the platform, needs no extra tooling, and the lab supports "
+                 "it.")
+    ex.para(doc, "Template syntax and review (PC 2.1, 2.2, KE 5): the provided data-store template (datastore.yaml) "
+                 "was read to confirm the resource it creates and its outputs - a single DynamoDB audit table, "
+                 "with the table name exported for the microservice stack to consume - before deploying. The "
+                 "CloudFormation template language (Resources, Parameters, Outputs, intrinsic functions such as "
+                 "!Ref and !Sub) is summarised in S8 Q2.")
+    ex.para(doc, "Deploy, update, delete (PC 2.3-2.5, PE 1): the provided template was used to deploy the table, "
+                 "confirm it in the console, update the stack (changing the EnvName parameter and observing the "
                  "change set), and then delete a stack to confirm clean teardown.")
     ex.etable(doc, ["Action", "Command / method", "Result"],
-              [["Deploy", "aws cloudformation deploy --template-file base.yaml --stack-name yat-audit-base",
-                "CREATE_COMPLETE; resources visible in the console"],
-               ["Update", "change a parameter; aws cloudformation deploy (change set reviewed)",
+              [["Deploy", "aws cloudformation deploy --template-file datastore.yaml --stack-name yat-audit-store",
+                "CREATE_COMPLETE; the table visible in the console"],
+               ["Update", "change EnvName; aws cloudformation deploy (change set reviewed)",
                 "UPDATE_COMPLETE; only the intended resource changed"],
-               ["Delete", "aws cloudformation delete-stack --stack-name yat-audit-base",
-                "DELETE_COMPLETE; all resources removed"]],
+               ["Delete", "aws cloudformation delete-stack --stack-name yat-audit-store",
+                "DELETE_COMPLETE; the table removed"]],
               widths=[2.6, 8.4, 5.0])
     ex.para(doc, "Confirm and troubleshoot (PC 2.4, 2.6, KE 7): deployments were confirmed in the console and "
-                 "with describe-stacks; template errors (an invalid attribute and a circular dependency) were "
-                 "diagnosed from the stack events and fixed — see the troubleshooting log in §6.6.")
-    ev(doc, "SCREENSHOT", "should show a CloudFormation stack at CREATE_COMPLETE with its resources tab.")
+                 "with describe-stacks; the deliberately broken copy (datastore-broken.yaml) was deployed, the "
+                 "error read from the stack events, the fault fixed and the stack redeployed - see the "
+                 "troubleshooting log in S6.6.")
+    ev(doc, "SCREENSHOT", "should show the data-store stack at CREATE_COMPLETE with the DynamoDB table.")
 
-    h3("4.3 Authoring the infrastructure-as-code template")
-    ex.uoc(doc, "[ICTCLD505 PC 3.1–3.7] · [ICTCLD505 PE 2] · [ICTCLD505 KE 8, 9]")
-    ex.para(doc, "A template was authored from scratch to provision the microservice as a related set of "
-                 "resources (PC 3.2): the DynamoDB audit table, the SQS queue, the Lambda function, the API "
-                 "Gateway, and the execution role. It was deployed, then updated to add the API Gateway stage "
-                 "(PC 3.3), and parameterised so the same template deploys to either region and to a named "
-                 "environment without editing the body (PC 3.5) — the key code-reuse outcome (KE 8).")
+    h3("4.3 Authoring the microservice infrastructure-as-code template")
+    ex.uoc(doc, "[ICTCLD505 PC 3.1-3.7] - [ICTCLD505 PE 2] - [ICTCLD505 KE 8, 9]")
+    ex.para(doc, "A template was authored from scratch to provision the microservice's own resources (PC 3.2): "
+                 "the SQS queue, the Lambda writer function, and the HTTP API - wired to the audit table created "
+                 "by the provided data-store stack (its name supplied as a parameter, or imported from the "
+                 "stack export). It was deployed, then updated to add the API stage (PC 3.3), and parameterised "
+                 "so the same template deploys to a named environment without editing the body (PC 3.5) - the "
+                 "key code-reuse outcome (KE 8). The deployment region is the deploy target, not a template "
+                 "parameter.")
     code(doc, [
         "Parameters:",
-        "  TargetRegion:   { Type: String, Default: us-west-2 }   # ap-south-1 in production",
         "  EnvName:        { Type: String, Default: dev }",
-        "  RetentionDays:  { Type: Number, Default: 180 }         # CERT-In retention",
+        "  AuditTableName: { Type: String }     # the table from the provided data-store stack",
         "Resources:",
-        "  AuditTable:  { Type: AWS::DynamoDB::Table, Properties: { BillingMode: PAY_PER_REQUEST, ... } }",
         "  EventQueue:  { Type: AWS::SQS::Queue }",
-        "  WriterFn:    { Type: AWS::Lambda::Function, Properties: { Runtime: python3.12, ... } }",
+        "  WriterFn:    { Type: AWS::Lambda::Function, Properties: { Runtime: python3.12,",
+        "                 Environment: { Variables: { AUDIT_TABLE: !Ref AuditTableName } }, ... } }",
+        "  HttpApi:     { Type: AWS::ApiGatewayV2::Api, Properties: { ProtocolType: HTTP } }",
     ])
-    ex.para(doc, "The template follows industry practice (KE 9): parameters not hard-coding, least-privilege "
-                 "roles, tagging (Project/Environment/Owner/DataClassification), and Outputs that export the "
-                 "API endpoint. It was redeployed with a different parameter set to confirm reuse, then the "
-                 "stack was removed cleanly (PC 3.6); template errors were tested and fixed (PC 3.7).")
-    ev(doc, "FILE", "the authored template is attached in Appendix B (audit-service.yaml).")
+    ex.para(doc, "The template follows industry practice (KE 9): parameters not hard-coding, a least-privilege "
+                 "role for the writer, tagging (Project/Environment/Owner/DataClassification), and Outputs that "
+                 "export the API endpoint. It was redeployed with a different parameter set to confirm reuse, "
+                 "then the stack was removed cleanly (PC 3.6); template errors were tested and fixed (PC 3.7).")
+    ev(doc, "FILE", "the authored template is attached in Appendix B (the microservice template).")
 
     h3("4.4 The audit-log microservice")
-    ex.uoc(doc, "[ICTCLD503 PC 3.1–3.4] · [ICTCLD503 PE 3, 4] · [ICTCLD503 KE 5]")
-    ex.para(doc, "Reviewing the design and code (PC 3.1): the supplied microservice code elements (the Lambda "
-                 "handler and the webhook payload schema) were reviewed against the AT1 design before "
-                 "deployment. The data flow is: an event webhook → API Gateway → SQS → Lambda → DynamoDB.")
+    ex.uoc(doc, "[ICTCLD503 PC 3.1-3.4] - [ICTCLD503 PE 3, 4] - [ICTCLD503 KE 5]")
+    ex.para(doc, "Reviewing the design and code (PC 3.1): the supplied microservice code (the writer Lambda) and "
+                 "the webhook payload contract were reviewed against the AT1 design before deployment. The data "
+                 "flow is: an event webhook -> API Gateway -> SQS -> Lambda -> the provided DynamoDB table.")
     ex.para(doc, "Deploy and configure (PC 3.2): the serverless services were deployed and configured via the "
-                 "authored template and the console — the API Gateway POST /events route, the queue as the "
-                 "Lambda event source, and the Lambda writing append-only items to DynamoDB. The webhook "
-                 "contract is the single integration point:")
+                 "authored template - the API Gateway POST /events route, the queue as the Lambda event source, "
+                 "and the Lambda writing append-only items to the provided table (its name supplied to the "
+                 "function as AUDIT_TABLE). The webhook contract is the single integration point:")
     code(doc, [
         "POST /events",
-        "{ event_id, occurred_at, user_ref, cohort, event_type, source_ip }   # signed with a shared key",
+        "{ event_id, occurred_at, user_ref, cohort, event_type, source_ip }",
     ])
     ex.para(doc, "Test and confirm functioning (PC 3.3): sample events were posted and confirmed persisted "
-                 "exactly once in DynamoDB (see §6.3). Troubleshoot (PC 3.4): an IAM permission error and a "
-                 "payload-validation bug were diagnosed from the Lambda logs and fixed (§6.6). Tooling (PE 4): "
-                 "the build used the console, the AWS CLI and the SDK.")
+                 "exactly once in the provided DynamoDB table (see S6.3). Troubleshoot (PC 3.4): an IAM "
+                 "permission error and a payload-validation bug were diagnosed from the Lambda logs and fixed "
+                 "(S6.6). Tooling (PE 4): the build used the console, the AWS CLI and the SDK.")
     ev(doc, "SCREENSHOT", "should show a DynamoDB item written by the Lambda after a test POST to /events.")
 
     h3("4.5 Monitoring and alarms")
-    ex.uoc(doc, "[ICTCLD503 PC 4.1] · [ICTCLD501 KE 6]")
+    ex.uoc(doc, "[ICTCLD503 PC 4.1] - [ICTCLD501 KE 6]")
     ex.para(doc, "Metrics and alarms (PC 4.1): CloudWatch alarms were configured on the queue depth "
-                 "(ApproximateNumberOfMessagesVisible — a scaling/backlog signal), the Lambda error rate and "
-                 "throttles, and the DynamoDB write throttles, each notifying an SNS topic. The queue-depth "
-                 "alarm is the scaling signal — a sustained backlog indicates the writer is not keeping up. This "
-                 "is also the detection technique the DR plan relies on for the audit path (KE 6).")
+                 "(ApproximateNumberOfMessagesVisible - the scaling signal for the SQS-driven function: a "
+                 "sustained backlog means the writer is not keeping up), the Lambda error rate and throttles, "
+                 "and the DynamoDB write throttles, each notifying an SNS topic. The queue-depth alarm is the "
+                 "scaling-relevant metric; it is also the detection technique the DR plan relies on for the "
+                 "audit path (KE 6).")
     ev(doc, "SCREENSHOT", "should show the CloudWatch alarms list with the queue-depth alarm in OK state.")
 
     # 5 Configuration Decisions
     h1("5. Configuration Decisions")
-    ex.uoc(doc, "[ICTCLD505 KE 10, 11] · [ICTCLD503 KE 1, 2] · [ICTCLD505 KE 1, 2] (justified choices, standards)")
+    ex.uoc(doc, "[ICTCLD505 KE 10, 11] - [ICTCLD503 KE 1, 2] - [ICTCLD505 KE 1, 2] (justified choices, standards)")
     ex.etable(doc, ["Decision", "Choice", "Why"],
               [["IaC service", "AWS CloudFormation", "Native to the platform; no extra tooling; supported in the lab"],
-               ["Datastore", "DynamoDB, on-demand (PAY_PER_REQUEST)", "Append-only audit log; scales to zero and to spikes; no capacity to manage"],
+               ["Datastore", "DynamoDB, on-demand (provided template)", "Append-only audit log; scales to zero and to spikes; supplied as the data-store template the student operates"],
                ["Decoupling", "SQS between API Gateway and Lambda", "Buffers spikes so events queue rather than drop"],
                ["Compute", "Lambda (python3.12)", "Serverless; scales with event volume; no servers to run"],
-               ["Region", "Template parameter (us-west-2 / ap-south-1)", "Same template deploys to the lab stand-in or production India region"]],
+               ["Region", "Deploy target (advised lab region; ap-south-1 in production)", "Same template deploys to the lab region or production by changing the deploy target, not the body"]],
               widths=[3.4, 5.0, 7.6])
     ex.para(doc, "Industry standards (KE 1, 2 / 503 + 505): the build uses standard managed cloud services and "
                  "the JSON/HTTPS and IAM standards common to the platform; storage is the managed NoSQL "
@@ -255,50 +267,51 @@ def build(path):
 
     # 6 Testing and Validation
     h1("6. Testing and Validation")
-    ex.uoc(doc, "[ICTCLD503 PC 3.3, 3.4] · [ICTCLD505 PC 2.6, 3.7]")
-    h3("6.1 IaC deploy / update / delete verification")
-    ex.para(doc, "Confirmed each predefined template deploys, updates (via a reviewed change set) and deletes "
-                 "cleanly, with the console and describe-stacks as evidence (PC 2.4).")
-    ev(doc, "SCREENSHOT", "stack events showing CREATE_COMPLETE → UPDATE_COMPLETE → DELETE_COMPLETE.")
+    ex.uoc(doc, "[ICTCLD503 PC 3.3, 3.4] - [ICTCLD505 PC 2.6, 3.7]")
+    h3("6.1 Provided-template operate verification")
+    ex.para(doc, "Confirmed the provided data-store template deploys, updates (via a reviewed change set) and "
+                 "deletes cleanly, with the console and describe-stacks as evidence (PC 2.4).")
+    ev(doc, "SCREENSHOT", "stack events showing CREATE_COMPLETE -> UPDATE_COMPLETE -> DELETE_COMPLETE.")
     h3("6.2 Own-template parameterise and redeploy")
-    ex.para(doc, "Deployed the authored template, then redeployed it with a second parameter set (different "
-                 "EnvName and region) to confirm configuration reuse without editing the template (PC 3.4, 3.5).")
+    ex.para(doc, "Deployed the authored microservice template, then redeployed it with a second parameter set "
+                 "(different EnvName) to confirm configuration reuse without editing the template (PC 3.4, 3.5).")
     h3("6.3 Microservice functional test")
-    ex.para(doc, "Posted sample events to /events and confirmed each was written exactly once to DynamoDB, with "
-                 "the expected attributes, and that an unsigned request was rejected (PC 3.3).")
+    ex.para(doc, "Posted sample events to /events and confirmed each was written exactly once to the provided "
+                 "DynamoDB table, with the expected attributes, and that an invalid event was rejected (PC 3.3).")
     ev(doc, "SCREENSHOT", "the test request, the 200 response, and the resulting DynamoDB item.")
     h3("6.4 Durability test")
     ex.para(doc, "Forced a downstream stall (throttled the writer) and confirmed events queued in SQS and then "
-                 "drained without loss once the writer recovered — the decoupling works as designed.")
+                 "drained without loss once the writer recovered - the decoupling works as designed.")
     h3("6.5 Monitoring / alarm test")
     ex.para(doc, "Drove the queue depth above the threshold and confirmed the alarm transitioned to ALARM and "
                  "notified the SNS topic, then returned to OK as the backlog cleared (PC 4.1).")
     h3("6.6 Troubleshooting log")
     ex.etable(doc, ["Symptom", "Cause", "Fix"],
-              [["Stack CREATE_FAILED — circular dependency", "Role referenced the queue and the queue policy referenced the role",
-                "Split the policy into a separate AWS::IAM::Policy resource"],
+              [["Provided template deploy failed", "The broken copy's KeySchema referenced a key not in AttributeDefinitions",
+                "Added the missing attribute definition; redeployed (PC 2.6)"],
                ["Lambda AccessDenied on PutItem", "Execution role lacked dynamodb:PutItem on the table",
-                "Scoped a PutItem statement to the table ARN"],
+                "Scoped a PutItem statement to the provided table ARN"],
                ["Events accepted but not stored", "Payload-validation bug rejected valid cohort values",
-                "Fixed the schema check; re-tested (§6.3)"]],
+                "Fixed the schema check; re-tested (S6.3)"]],
               widths=[5.2, 5.4, 5.4])
 
     # 7 Operational Handover
     h1("7. Operational Handover")
     h3("7.1 Infrastructure-as-code user documentation")
-    ex.uoc(doc, "[ICTCLD505 PC 4.1] · [ICTCLD505 PE 4] · [ICTCLD505 FS Writing]")
+    ex.uoc(doc, "[ICTCLD505 PC 4.1] - [ICTCLD505 PE 4] - [ICTCLD505 FS Writing]")
     ex.para(doc, "User documentation was produced so YAT ICT can operate the stack: prerequisites; how to deploy, "
-                 "update and delete the stack with parameters; the parameters and their meaning; the Outputs "
-                 "(the API endpoint); and how to roll back. It is included as Appendix B with the templates.")
+                 "update and delete both stacks (the provided data store, then the microservice) with parameters; "
+                 "the parameters and their meaning; the Outputs (the API endpoint); and how to roll back. It is "
+                 "included as Appendix B with the templates.")
     h3("7.2 Access and runbook references")
-    ex.para(doc, "Access is via the YAT AWS account roles; the operational runbook references the alarms (§4.5) "
-                 "and the redeploy procedure (§7.1).")
+    ex.para(doc, "Access is via the YAT AWS account roles; the operational runbook references the alarms (S4.5) "
+                 "and the redeploy procedure (S7.1).")
     h3("7.3 Known limitations and what's next")
     ex.bullets(doc, [
-        "Built in the AWS Academy lab with us-west-2 standing in for ap-south-1; production deploys to "
-        "ap-south-1 by changing the region parameter.",
-        "The LMS web-tier scaling (CloudFront / caching) is designed but not built here — a separate LMS "
-        "workstream.",
+        "Built in the AWS Academy lab; the deployment region is the lab's (advised for the assessment) and "
+        "ap-south-1 in production, set by the deploy target.",
+        "The LMS web-tier scaling (CloudFront / caching) is designed at AT1 but not built here - a separate "
+        "LMS workstream.",
     ])
     h3("7.4 Documentation filing")
     ex.para(doc, "The report, the templates and the evidence are filed in YAT ICT shared documentation under the "
@@ -307,68 +320,69 @@ def build(path):
     ex.uoc(doc, "[ICTCLD503 PC 4.2] confirm, seek and respond to feedback with required personnel")
     ex.etable(doc, ["Feedback received", "From", "Response", "Action"],
               [["Confirm the audit data stays in the India-region store", "Sam Walker (YAT ICT Manager)",
-                "Confirmed — the table is provisioned in the India region (us-west-2 in the lab); region is a parameter",
-                "Noted in §2 and §4.3"],
+                "Confirmed - the table is provisioned in the deployment region (the production target is the India region); region is the deploy target",
+                "Noted in S2 and S4.2"],
                ["Confirm events can't be lost under load", "Pat Lin (MTS Senior Consultant)",
-                "The SQS buffer queues spikes; demonstrated in §6.4", "Recorded in §6.4"]],
+                "The SQS buffer queues spikes; demonstrated in S6.4", "Recorded in S6.4"]],
               widths=[5.0, 3.0, 4.6, 2.8])
     h3("7.6 Sign-off")
-    ex.uoc(doc, "[ICTCLD503 PC 4.3] · [ICTCLD505 PC 4.2] · [ICTCLD505 FS Oral communication]")
+    ex.uoc(doc, "[ICTCLD503 PC 4.3] - [ICTCLD505 PC 4.2] - [ICTCLD505 FS Oral communication]")
     ex.etable(doc, ["Role", "Name", "Date", "Acceptance"],
               [["Prepared by", "MTS Consultant", "[date]", "Submitted"],
                ["Reviewed by", "Pat Lin (MTS Senior Consultant)", "[date]", "Approved for submission"],
                ["Approved by", "Sam Walker (YAT ICT Manager)", "[date]",
-                "Build accepted — microservice and IaC implemented, tested and documented; cleared for production deployment"]],
+                "Build accepted - microservice and IaC implemented, tested and documented; cleared for production deployment"]],
               widths=[4.0, 5.0, 2.5, 4.0])
 
     # 8 Knowledge Evidence Responses
     h1("8. Knowledge Evidence Responses")
-    ex.uoc(doc, "[ICTCLD505 KE 3–11] · [ICTCLD503 KE 1, 2, 5] · [ICTCLD505 KE 1, 2] (written contextual KE)")
-    h3("Q1 — Why infrastructure as code, not manual provisioning?")
+    ex.uoc(doc, "[ICTCLD505 KE 3-11] - [ICTCLD503 KE 1, 2, 5] - [ICTCLD505 KE 1, 2] (written contextual KE)")
+    h3("Q1 - Why infrastructure as code, not manual provisioning?")
     ex.para(doc, "[KE 3] In my build, IaC made the stack repeatable and reviewable, let me tear down and "
-                 "rebuild identically, and — most importantly for this design — parameterised the region so the "
-                 "same template deploys to the lab stand-in and to the production India region. Manual console "
-                 "provisioning would not be reproducible across regions or auditable.")
-    h3("Q2 — IaC services, template syntax, and tooling")
+                 "rebuild identically, and parameterised the environment so the same template deploys to "
+                 "different environments and regions (the region is set at deploy time). Manual console "
+                 "provisioning would not be reproducible or auditable.")
+    h3("Q2 - IaC services, template syntax, and tooling")
     ex.para(doc, "[KE 4, 5, 6] I used AWS CloudFormation (other options include Terraform and the AWS CDK). A "
                  "CloudFormation template declares Parameters, Resources and Outputs in YAML, with intrinsic "
-                 "functions such as !Ref and !GetAtt for dependencies. The tooling to execute it is the AWS CLI "
-                 "(cloudformation deploy / delete-stack) and the console.")
-    h3("Q3 — Parameterisation for reuse")
-    ex.para(doc, "[KE 8] My template exposes TargetRegion, EnvName and RetentionDays as parameters, so one "
-                 "template deploys dev and prod, and the lab region or the India region, without editing the "
-                 "body — the configuration is supplied at deploy time.")
-    h3("Q4 — Testing and debugging")
-    ex.para(doc, "[KE 7 / 503 KE 5] I debugged template errors from the CloudFormation stack events (a circular "
-                 "dependency, an invalid attribute) and microservice errors from the Lambda CloudWatch logs (an "
-                 "IAM AccessDenied and a payload-validation bug) — see the §6.6 log.")
-    h3("Q5 — Industry IaC practices and metrics")
+                 "functions such as !Ref and !Sub for values and dependencies. The tooling to execute it is the "
+                 "AWS CLI (cloudformation deploy / delete-stack) and the console.")
+    h3("Q3 - Parameterisation for reuse")
+    ex.para(doc, "[KE 8] My microservice template exposes EnvName and AuditTableName as parameters, so one "
+                 "template deploys dev and prod and connects to the provided data store without editing the "
+                 "body; the deployment region is supplied to the deploy command, so the same template targets "
+                 "the lab region or the production India region.")
+    h3("Q4 - Testing and debugging")
+    ex.para(doc, "[KE 7 / 503 KE 5] I debugged template errors from the CloudFormation stack events (the broken "
+                 "provided template's KeySchema/AttributeDefinitions mismatch) and microservice errors from the "
+                 "Lambda CloudWatch logs (an IAM AccessDenied and a payload-validation bug) - see the S6.6 log.")
+    h3("Q5 - Industry IaC practices and metrics")
     ex.para(doc, "[KE 9, 10, 11] Industry practice I applied: parameters over hard-coding, least-privilege "
                  "roles, consistent tagging, Outputs for integration values, and change sets to preview updates. "
                  "Stack status and drift detection are the standard signals for managing templates.")
-    h3("Q6 — Industry standards and standard products")
-    ex.para(doc, "[503 KE 1, 2 / 505 KE 1, 2] The build uses standard cloud-industry technologies — HTTPS/JSON "
+    h3("Q6 - Industry standards and standard products")
+    ex.para(doc, "[503 KE 1, 2 / 505 KE 1, 2] The build uses standard cloud-industry technologies - HTTPS/JSON "
                  "for the API, IAM for access, and the managed serverless and NoSQL services (Lambda, DynamoDB, "
                  "SQS, API Gateway). DynamoDB is the standard managed key-value store, appropriate for an "
                  "append-only audit log.")
 
     # Appendices
-    h1("Appendix A — Build evidence (screenshots)")
-    ex.para(doc, "Collected console screenshots referenced through §4–§6 (lab session, stack CREATE_COMPLETE, "
-                 "DynamoDB item, alarms, test request/response).")
-    h1("Appendix B — Infrastructure-as-code templates and user documentation")
-    ex.para(doc, "The authored template (audit-service.yaml) and the predefined templates operated, plus the "
-                 "IaC user documentation (deploy/update/delete with parameters).")
-    h1("Appendix C — Test and troubleshooting evidence")
-    ex.para(doc, "The functional, durability and alarm test evidence, and the troubleshooting log (§6.6).")
-    h1("Appendix D — Reflections")
+    h1("Appendix A - Build evidence (screenshots)")
+    ex.para(doc, "Collected console screenshots referenced through S4-S6 (lab session, the provided data-store "
+                 "stack at CREATE_COMPLETE, the DynamoDB item, the alarms, the test request/response).")
+    h1("Appendix B - Infrastructure-as-code templates and user documentation")
+    ex.para(doc, "The authored microservice template, the provided data-store template operated, and the "
+                 "infrastructure-as-code user documentation (deploy/update/delete both stacks with parameters).")
+    h1("Appendix C - Test and troubleshooting evidence")
+    ex.para(doc, "The functional, durability and alarm test evidence, and the troubleshooting log (S6.6).")
+    h1("Appendix D - Reflections")
     ex.para(doc, "Short reflections on what the student would do differently and what the build confirmed about "
                  "the AT1 design.")
 
     # Document control
     h1("Document control")
     ex.etable(doc, ["Field", "Value"],
-              [["Document version", "v1.0 — Deployment Report (DR Implementation)"],
+              [["Document version", "v1.0 - Deployment Report (Cloud Microservice & IaC Implementation)"],
                ["Author", "MTS Consultant"],
                ["Engagement", "YAT LMS Global Expansion & Disaster Recovery"],
                ["Implements", "LMS Global Expansion Solution Design (AT1)"],

@@ -59,6 +59,33 @@ harness, live-lab findings) goes in `claude-notes.md`.
 
 ---
 
+## Choosing the lab environment (per activity)
+
+There is **no single course-wide lab product.** Each activity or assessment uses the AWS Academy
+environment that best serves *its* learning outcome — chosen case by case. The two known
+environments trade off against each other, and neither does everything:
+
+| Environment | Gives you | Costs you | Fits |
+|---|---|---|---|
+| **Cloud Architecting Sandbox** | **Real regions** (Sydney `ap-southeast-2`, Mumbai `ap-south-1`) | **No usable IAM role** (no `LabRole`; IAM read-only) | Activities needing real geography or no custom IAM — e.g. the **CL1 AT3 baseline** (EC2 serving a page, no role) |
+| **Learner Lab** | **`LabRole`** — a broad pre-provisioned role you can pass to Lambda etc. | **Regions limited to `us-east-1` / `us-west-2`** (geography is simulated) | Activities needing a serverless execution role — e.g. the **CL2 AT2 microservice** (Lambda needs a role) |
+
+**Mandatory student-facing disclosure.** Because the environment changes per activity, every
+lab-pack README must state, for its activity:
+
+1. **which** environment to use;
+2. **why** that one was chosen (the capability it provides); and
+3. **what its limitations are** — and how the activity accommodates them (e.g. "regions are
+   simulated here, so us-west-2 stands in for India; the *mechanics* are what's assessed, not the
+   geography").
+
+Students may switch environments between activities — that is expected; the README removes the
+confusion by being explicit every time. *(The specific environment for each activity still
+depends on what Kangan provisions + a hands-on confirmation — e.g. the CL2 microservice's
+`LabRole` usability is an open `[VERIFY]`.)*
+
+---
+
 ## AWS Academy constraints — bake in every time
 
 These are the things a paper spec forgets and a live deploy enforces. (✔ = confirmed in the
