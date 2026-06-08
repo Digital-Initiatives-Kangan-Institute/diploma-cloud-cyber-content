@@ -62,13 +62,3 @@ Students work across **only three systems** all semester, inside one continuous 
 
 - **CL2 AT1 (DR plan)** plans against a **supplied website infrastructure design**. Supplying it is legitimate precisely because the website is **not** a CL3 *assessment* vehicle (only a CL3 *practice* vehicle) — so no CL3 deliverable is disclosed. This also removes any **timing dependency**: CL2 AT1 does not wait on CL3 producing a design.
 - CL2 DR-planning targets the **defined as-is website infrastructure** — a fixed snapshot, independent of any improvements students make during CL3 website practice.
-
-## 7. Consequence — CL2 assessment re-vehicling [TBD execution]
-
-This flow moves CL2's **assessment** vehicle from the LMS to the **website**, and makes the LMS CL2's **practice** vehicle. CL2's offshore-India / data-residency / audit-microservice / web-scale narrative and the AT1/AT2 instruments are currently authored against the LMS (`cluster-2-scenario.md §4`); they migrate to the website.
-
----
-
-## Changelog
-
-- **2026-06-08:** Initial scenario-flow document — system↔cluster usage matrix, no-leakage invariant, practice≠assessment rotation, familiarity benefit, CL2 re-vehicling consequence.

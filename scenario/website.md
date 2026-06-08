@@ -4,7 +4,7 @@
 
 **UoC references this document satisfies:** None directly — this is the spec for *how* the scenario content (which does satisfy UoC ACs) is delivered to students.
 
-**Status:** DRAFT (Claude v1, 2026-05-23). All implementation choices below are **TBD** pending Tim's confirmation.
+**Status:** Specification for the delivery website (built on Astro — see the `diploma-cloud-cyber-website` repo). Items marked **TBD** are open.
 
 ---
 
@@ -28,13 +28,6 @@ Every page on both zones carries the persistent simulated-environment disclosure
 > **Every intranet page is an in-world artefact.** Each page is something a real YAT staff member could plausibly land on while doing their job. Meta-scaffolding for the student / learner ("you are a consultant arriving at YAT…", "this assessment task asks you to…") lives in the assessment-brief documents (the AT `.docx` files), not on the intranet.
 
 When in doubt about a piece of content, the test is: *would a YAT staff member ever read this?* If no, it's meta — and belongs in the AT brief, not the intranet.
-
-The principle drove two reframes during the 2026-05-26 review:
-
-- What was originally drafted as a *project narrative* is reframed as a **Master Services Agreement (MSA)** between YAT and MTS Consulting — the in-world contract document any real organisation engaging a consultancy would have on file. The role brief (`internal-lms-migration-role-brief-S1-CL1-AT1.md`) stays as a separate operational working document, per option 2 in the 2026-05-26 decision.
-- What was originally drafted as *CBA cost inputs* is reframed as the **ICT cost baseline** the consultant draws on — same data, but presented as a YAT-authored cost reference rather than a brief written *to* the consultant.
-
-Both files are scheduled for content reshape; tracked in §9.
 
 ### 2.2 Public site sitemap
 
@@ -214,16 +207,14 @@ Other versions: S1-CL2-AT1 · S1-CL3-AT1
 
 Purpose: students who arrive via a direct link, search result, or browser history still know which version they have and can pivot to a sibling without going back to the index page.
 
-### 4.3 Why this approach (and what we rejected)
+### 4.3 Why this approach
 
-An earlier draft of this spec described a live state-selector menu at the top of every state-bearing page (clicking a state link swaps the page). A more elaborate alternative would have asked students at first visit "which assessment are you up to?" and re-rendered the whole site against that selection.
+The index-listing + passive-breadcrumb model (no global state machine):
 
-Both were rejected (2026-05-26, Tim) in favour of the index-listing + passive-breadcrumb approach above, because:
-
-- It **exposes YAT's evolution** as part of the learning rather than hiding it behind a state machine — students can see how the environment changed at each cluster boundary.
-- It avoids state-storage edge cases (localStorage / cookies / URL params), multi-tab inconsistency, and direct-link breakage that a global state model introduces.
-- It costs nothing to build beyond ordinary markdown links and a tiny template snippet for the breadcrumb.
-- Pages with only one version need no special handling — the index simply lists one link; the breadcrumb on the page says "current version".
+- **exposes YAT's evolution** as part of the learning — students can see how the environment changed at each cluster boundary;
+- avoids state-storage edge cases (localStorage / cookies / URL params), multi-tab inconsistency, and direct-link breakage;
+- costs nothing beyond ordinary markdown links and a tiny breadcrumb snippet;
+- needs no special handling for single-version pages — the index lists one link and the breadcrumb says "current version".
 
 ### 4.4 Initial scope
 
@@ -272,24 +263,7 @@ If a stable document later needs versioning (e.g. the org structure when YAT exp
 4. SSO page styling — match a specific real-world SSO (Entra / Okta) closely, or generic-looking.
 5. Cross-repo content sourcing — scenario `.md` files live in `diploma-cloud-cyber/scenario/`; the Astro site repo (`diploma-cloud-cyber-website`) needs them at build time. Options: git submodule, CI sync step, or local-dev path-mapping + CI copy.
 
-(Earlier open question on SSG choice — resolved 2026-05-26: Astro.)
+### 9.2 Pending content
 
-(Earlier open question on whether the intranet has a distinctly "internal" look — resolved 2026-05-26 by the brand pack: yes, neutral light-grey background and denser layout vs. the public site's warm cream. See `scenario/branding/brand-pack.md` §5.1.)
-
-### 9.2 Scheduled content reshapes
-
-These are approved design decisions awaiting authoring work, not open questions:
-
-1. **Reframe project narrative → Master Services Agreement (MSA).** Replace `public-cluster-project-narrative.md` with an MSA between YAT and MTS Consulting. Same scope-of-engagement information, structured as a contract (parties, scope, out-of-scope, deliverables, term, governance, acceptance, change control, signatures). Mounts at `/intranet/projects/lms-cloud-migration/master-services-agreement`. File likely renames `public-cluster-project-narrative.md` → `internal-master-services-agreement-S1-CL1.md` (rename TBD-confirm).
-2. **Reframe CBA cost inputs → ICT cost baseline.** Restructure `internal-cba-cost-inputs-S1-CL1-AT1.md` from "inputs for the consultant" framing into a YAT-authored cost baseline / FY26 budget extract that the consultant draws on. Same data, in-world voice. File likely renames `internal-cba-cost-inputs-S1-CL1-AT1.md` → `internal-ict-cost-baseline-S1-CL1-AT1.md` (rename TBD-confirm).
-3. **Author public-site stub pages.** `/`, `/study/*`, `/apply`, `/contact` content listed as TBD in §2.2.
-4. **Author intranet home + project landing page content.** `/intranet/`, `/intranet/projects/`, `/intranet/projects/lms-cloud-migration/` are all section / project landing pages without content yet.
-
----
-
-## Changelog
-
-- **2026-05-23:** Initial spec. Absorbed the previously-stubbed `public-mock-sso-signin.md` (which is removed) into §3 here.
-- **2026-05-26:** §4 reworked. Replaced the live state-selector menu approach with index-listing + passive "other versions" breadcrumb (per Tim). Rationale + rejected alternatives now captured in §4.3. Open question §9.6 (selector form factor) removed as no longer applicable.
-- **2026-05-26:** §2 reworked. Split into two-zone structure (public + intranet) with separate sitemap trees per Tim's framing. Added §2.1 in-world-only content principle. Public-site sitemap locked with stub-page placeholders. Intranet sitemap locked at top-level categories + the listed policy / reference files; ICT children, project sub-structure, and templates content marked as "worked through doc-by-doc". Added §2.4 extensibility patterns. §6 navigation bullets updated to reflect new sitemap. Two content reshapes scheduled (project narrative → MSA; CBA cost inputs → ICT cost baseline) — tracked in §9.2.
-- **2026-05-26:** SSG locked to **Astro** (§7). §9.1 SSG-choice question resolved; renumbered. Added new §9.1 question on cross-repo content sourcing (Astro site repo needs scenario `.md` files at build time).
+1. **Public-site stub pages.** `/`, `/study/*`, `/apply`, `/contact` content listed as TBD in §2.2.
+2. **Intranet home + project landing page content.** `/intranet/` and the project landing pages.
