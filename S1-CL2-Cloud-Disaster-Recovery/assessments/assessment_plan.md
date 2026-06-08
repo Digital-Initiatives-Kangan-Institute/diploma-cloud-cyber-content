@@ -6,13 +6,13 @@
 > - The four-topic taxonomy and the **two-AT** division.
 > - **AT1 is three parts** — **Part A Solution Design** (ICTCLD503 design), **Part B DR Plan** (ICTCLD501), **Part C presentation** covering both for approval. **AT2** is a single written **Deployment Report** (implement).
 > - **DR ≠ regulatory ≠ design — three separate concerns:** the *Disaster Recovery* plan (501) answers "what do we do if the system goes down"; the *Solution Design* (503) holds the web-scale architecture **and the microservice**; *data residency* is an **input constraint**, not a student deliverable. The microservice lives in the Solution Design (its regulatory purpose is *why* it exists), **never** in the DR plan.
-> - The scenario spine (offshore-India / LMS as the assessment vehicle; Accounting practice parked); the **light** India-residency slice; the two approval gates; the KE evidencing approach (written appendices in each document + verbal contextual Q&A at AT1's presentation).
+> - The scenario spine (offshore-India / **website** as the assessment vehicle; **LMS** as the practice vehicle); the **light** India-residency slice; the two approval gates; the KE evidencing approach (written appendices in each document + verbal contextual Q&A at AT1's presentation).
 >
 > **What is TBD** (my proposals, not yet approved — Rule 1/2): every group-level *assessment idea*; the 503 global-serving practice vehicle; project slugs; `501 KE 6` placement; and the two `[VERIFY]`s. All carry explicit TBD marks below.
 >
 > **Companion documents:**
 > - `consolidated_uoc.md` (cluster root) — every PC/FS/PE/KE/AC verbatim, in 13 groups under the 4 topics.
-> - `scenario/cluster-2-scenario.md` — the scenario design (offshore-India spine, residency drivers, microservice, AWS Academy simulation, decision log).
+> - `scenario/cluster-2-scenario-assessment.md` + `cluster-2-scenario-practice.md` — the scenario design (offshore-India spine, residency drivers, microservice, AWS Academy simulation); `scenario/scenario-flow.md` — the cross-cluster assessment/practice matrix.
 > - `S1-CL1-Cloud-Design-Build/assessments/assessment_plan.md` — the pilot-cluster plan this one parallels in shape.
 
 ---
@@ -54,13 +54,13 @@
 
 ## 2. Scenario
 
-**Settled** — see `scenario/cluster-2-scenario.md`. In brief: YAT enters an **offshore-India partnership (GIFT City)** that takes the LMS global, requiring it to (a) serve a global user base, (b) be region-recoverable, and (c) be provisioned as code — one event that drives all three units. The **LMS is the assessment vehicle**; the **Accounting/Ledgerline parallel is the practice vehicle and is parked**. Baseline: CL1 is fully implemented (HA LMS, single-region cross-AZ).
+**Settled** — see `scenario/cluster-2-scenario-assessment.md` (and `scenario-flow.md`). In brief: YAT enters an **offshore-India partnership (GIFT City)** that takes the **public website** global, requiring it to (a) serve a global user base, (b) be region-recoverable, and (c) be provisioned as code — one event that drives all three units. The **website is the assessment vehicle**; the **LMS is the practice vehicle** (the parallel `lms-global-expansion` engagement, taught as the worked example). Baseline: the website arrives **HA-hardened** (Multi-AZ, single-region cross-AZ) — the provided CL2 starting state.
 
-**Data residency is an *input constraint*, not a deliverable.** The **light** India slice (a bounded set of access logs/data in-region; the main DB stays in AU) is supplied to students as the `Data Residency & Sovereignty Requirements` document in the `lms-global-expansion` project. Students **design to it** — it shapes Part A's web-scale design (`503 PC 1.5`, global user base) and is *why* the audit-log microservice exists — and it is lightly respected in Part B's DR plan (recovery must not break residency). Students do **not** author a compliance plan; no UoC asks for one.
+**Data residency is an *input constraint*, not a deliverable.** The **light** India slice (a bounded set of access logs/data in-region; the main DB stays in AU) is supplied to students as the `Data Residency & Sovereignty Requirements` document in the `website-global-expansion` project. Students **design to it** — it shapes Part A's web-scale design (`503 PC 1.5`, global user base) and is *why* the audit-log microservice exists — and it is lightly respected in Part B's DR plan (recovery must not break residency). Students do **not** author a compliance plan; no UoC asks for one.
 
 **Scenario is not a topic** and is not itself assessed. It supplies the assessment inputs and the environment (AWS Academy labs).
 
-**Open scenario items that touch assessment (TBD — `cluster-2-scenario.md` §9):** the 503 global-serving practice vehicle (Ledgerline is bookkeeping and can't carry web-scale — a small separate practice web app is needed); project slugs; the two `[VERIFY]`s (Kangan's exact AWS Academy lab product; legal wording before student-facing docs).
+**Open scenario items that touch assessment (TBD):** project slugs; the two `[VERIFY]`s (Kangan's exact AWS Academy lab product; legal wording before student-facing docs). *(The 503 global-serving practice vehicle is resolved — the **LMS** is the web-scale practice system per the scenario-flow re-vehicling.)*
 
 ---
 
@@ -102,7 +102,7 @@
 - The **DR Plan template + AT1 DR-Plan assessor exemplar** (Part B) — pending the de-weave.
 - The **Solution Design** and **Business-Case-Presentation** document types from CL1 (for Part A and Part C).
 - The **CL1 AT pattern** as a structural model (Project Assessment template; multi-part AT; appendix-bearing report for AT2; contextual reflective KE; bidirectional UoC traceability).
-- The **scenario inputs** already on the intranet (the `lms-global-expansion` project documents, incl. the residency requirements).
+- The **scenario inputs** already on the intranet (the `website-global-expansion` project documents, incl. the residency requirements; the `lms-global-expansion` project is the parallel **practice** worked-example).
 
 **TBD:** if/when the 501/503 source assessments surface, re-audit AT1/AT2 for reusable practical tasks (especially 503's microservice/serverless lab steps and 501's risk-register/impact-analysis structure) before finalising.
 
@@ -116,7 +116,7 @@ Every group in `consolidated_uoc.md` mapped to where it is covered, and how. Thi
 |---|---|---|---|
 | **G1** — Cloud DR: requirements & impact analysis | 1 | **AT1 Part B** | DR requirements + impact-analysis sections of the DR plan: risk register, RTO/RPO determination, data volume/sensitivity, severity. `501 PC 1.1–1.3, 2.1–2.5`, `501 PE 2`, `501 KE 1/2/5`, `501 FS Planning & organising`. |
 | **G2** — Cloud DR: solutions & plan finalisation | 1 | **AT1 Part B** | The DR plan body: ≥3 major risk events, solution options + prioritisation, plan steps/timelines, RTO/RPO alignment. `501 PC 3.1–3.4, 4.1–4.3`, `501 PE 1/3`, `501 KE 3/4`. |
-| **G3** — Web-scale architecture design | 1 | **AT1 Part A** | Solution Design: scalable web-app architecture for the global LMS — elastic network/compute/storage, global reach (CloudFront), availability/security maintained, residency-driven placement. `503 PC 1.1–1.6`, `503 PE 1/5`, `503 KE 3/6`. |
+| **G3** — Web-scale architecture design | 1 | **AT1 Part A** | Solution Design: scalable web-app architecture for the global website — elastic network/compute/storage, global reach (CloudFront), availability/security maintained, residency-driven placement. `503 PC 1.1–1.6`, `503 PE 1/5`, `503 KE 3/6`. |
 | **G4a** — Microservices & serverless: design | 1 | **AT1 Part A** | Solution Design: the webhook-driven audit-log microservice — services, data transactions, supporting cloud services. `503 PC 2.1–2.3`, `503 PE 2`, `503 KE 4`. |
 | **G4b** — Microservices & serverless: implementation | 2 | **AT2** | Deploy/configure the Part A microservice on serverless services; functional test + troubleshoot. `503 PC 3.1–3.4`, `503 PE 3/4`, `503 KE 5`. |
 | **G5** — IaC: deploy & manage with templates | 2 | **AT2** | Deploy/configure/update/remove resources from predefined IaC templates + troubleshoot. `505 PC 1.1–1.4, 2.1–2.6`, `505 PE 1/3`, `505 KE 3/4/5/6/7/10/11`. |
@@ -159,13 +159,13 @@ Everything here is **new authoring** unless marked *built* (no reuse provenance 
 11. **`mappings/`** — the official per-unit Assessment Mapping `.docx` (501/503/505), generated as CL1's were (`scripts/populate_mapping_docs.py` pattern).
 12. **Cluster cover / instructions** — single front document presenting the engagement narrative + the two-AT / three-part structure.
 13. **Realign `consolidated_uoc.md`** — update its AT1 description from "Part A DR plan + appendices / Part B presentation" to the three-part shape (Part A Solution Design / Part B DR Plan / Part C presentation).
-14. **The 503 practice web app** + the parked Accounting practice — **TBD**, deferred (delivery, not assessment).
+14. **The 503 web-scale practice on the LMS** (`lms-global-expansion`, the practice vehicle) — delivery, not assessment; deferred.
 
 ---
 
 ## 7. Open questions / TBDs
 
-1. **503 global-serving practice vehicle** — Ledgerline (bookkeeping) can't carry web-scale; a small separate practice web app is needed behind Part A's web-scale design + AT2's build. Shape TBD.
+1. **503 global-serving practice vehicle** — **resolved:** the **LMS** (web-scale) is the practice vehicle; students practise the web-scale design/build on the `lms-global-expansion` engagement before assessing on the website. *(Resolved by the scenario-flow re-vehicling; no separate practice web app needed.)*
 2. **Source-assessment reuse** — if the 501/503 standalone assessments surface, re-audit AT1/AT2 for reusable practical tasks before finalising (§4).
 3. **AT1 working title + website label** — working title "Cloud Expansion: Design & DR Plan"; the website `s1-cl2-at1` state label currently reads "Disaster Recovery Plan" and may want broadening to reflect the design+plan scope. TBD.
 4. **The two `[VERIFY]`s** — Kangan's exact AWS Academy lab product; legal/residency wording before student-facing docs.
@@ -194,3 +194,4 @@ Not committed — natural sequencing only.
 - **2026-06-06:** Initial draft (v1). Built on the settled four-topic / two-AT structure and the offshore-India scenario spine. Coverage map across AT1 (501 + 503-design) and AT2 (503-build + 505 + monitoring). CL2 noted as author-fresh (505 greenfield; 501/503 source assessments not located → Step-3 reuse audit blocked). KE evidencing settled (written appendices + verbal contextual Q&A at AT1 presentation).
 - **2026-06-06 (restructure, v2):** Resolved DR ≠ regulatory ≠ design. **AT1 restructured to three parts** — Part A **Solution Design** (ICTCLD503 design, incl. the microservice), Part B **DR Plan** (ICTCLD501, pure), Part C **presentation** covering both (501 element 5, the approval gate). The microservice and its regulatory purpose move out of the DR plan into the Solution Design; **data residency is an input constraint, not a deliverable** (no compliance-plan artefact — no UoC requires one); the light India-residency slice confirmed. §1/§3/§5/§6/§8 rewritten; coverage map re-mapped to Part A/B/C + AT2 (all 23 KE, 12 PE re-checked). DR Plan exemplar flagged for de-weave; Solution Design (Part A) + presentation (Part C) exemplars added to the worklist. `consolidated_uoc.md`'s AT1 description noted for realignment.
 - **2026-06-07 (v3):** AT2 recast to **Cloud Microservice & IaC Implementation** — the student operates a provided data-store template and authors the microservice from provided code; the provided artefacts are supplied as assessment appendices (no separate lab pack); the lab environment is chosen per activity (TBA pending the lab-product `[VERIFY]`). `501 KE 6` confirmed in AT2 monitoring.
+- **2026-06-08 (v4 — re-vehicled):** **Assessment vehicle changed LMS → website; practice vehicle Accounting → LMS**, per the cross-cluster `scenario-flow.md` no-leakage decision (the website is assessed only in CL2; the LMS is the web-scale practice system). This **supersedes the v1–v3 "LMS as the assessment vehicle" framing** (Rule 4). Scenario/project references re-pointed (`lms-global-expansion` → `website-global-expansion`; `cluster-2-scenario.md` → `cluster-2-scenario-{assessment,practice}.md`); the 503 web-scale-practice TBD resolved (LMS). **Structure, AT shape, coverage map, and KE/PE distributions are unchanged — only the subject system's context changed.** The AT1/AT2 `.docx` instruments remain LMS-framed and are pending regeneration.

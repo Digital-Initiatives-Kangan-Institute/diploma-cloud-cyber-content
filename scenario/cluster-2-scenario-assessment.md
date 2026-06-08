@@ -8,7 +8,7 @@
 
 **Spine — the inciting event:** YAT announces a strategic partnership / offshore campus in India (anchored on GIFT City, Gujarat; a single primary partner). YAT's **public website** — its global front door for prospective students — must now serve a **global / offshore audience**, be **resilient across regions**, and be **provisioned repeatably**. One event motivates all three units on the website:
 
-- **ICTCLD503 (web-scale):** the website serves a genuine global user base (prospective students worldwide + the India cohort) — latency, CDN / edge, scale-out.
+- **ICTCLD503 (web-scale):** the website serves a genuine global user base of **anonymous, public** visitors (prospective students worldwide + the India cohort) — latency, CDN / edge, scale-out, plus the public-exposure concerns an anonymous front door brings (WAF, bot/DDoS, SEO). *(This anonymous-public character is the one deliberate contrast with the LMS practice vehicle, which serves an authenticated cohort — see `cluster-2-scenario-practice.md`. Otherwise the two engagements are kept similar.)*
 - **ICTCLD501 (DR):** as the enrolment front-door for the India campus, the website is business-critical across borders — DR, RTO/RPO and cross-border residency matter.
 - **ICTCLD505 (IaC):** stand up the same website stack in a second region, as code (region as a parameter).
 

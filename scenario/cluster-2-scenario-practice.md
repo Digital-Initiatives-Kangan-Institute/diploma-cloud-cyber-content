@@ -6,13 +6,13 @@
 
 ## 1. Engagement
 
-Students rehearse the CL2 skills — DR planning, web-scale design, the audit microservice, and IaC — on the **LMS**: the system they already know from CL1, and which is already cloud-hosted and highly available. The LMS is a credible **web-scale** practice vehicle because it plausibly carries a large student user base.
+Students rehearse the CL2 skills — DR planning, web-scale design, the audit microservice, and IaC — on the **LMS**: the system they already know from CL1, and which is already cloud-hosted and highly available. The LMS is a credible **web-scale** practice vehicle because it plausibly carries a large **authenticated** student user base.
 
 ## 2. Scenario deltas
 
 - **Web-scale-credible:** the LMS plausibly carries a large, peaky user base (assessment-window spikes), so global-serving / scale-out practice is realistic on it.
 - **Already cloud + HA:** practice starts from a known, hardened architecture, so effort goes into the CL2 skills (DR, web-scale, microservice, IaC) rather than learning the system.
-- **Practice ↔ assessment contrast — [TBD].** The LMS (practice) and the website (assessment) are both web / log systems, so a deliberate distinction is needed for students to transfer the skill rather than pattern-match a practised answer onto the assessment. Candidate axes: authenticated-cohort (LMS) vs anonymous-public-traffic (website) web-scale; or a distinct residency framing per system. **To settle with Tim.**
+- **Practice ↔ assessment contrast — authenticated vs anonymous.** The one deliberate distinction between practice and assessment: the LMS (practice) serves an **authenticated student cohort**, whereas the website (assessment) serves **anonymous public traffic** (prospective students worldwide). This difference is real and free, and it naturally pulls different web-scale concerns into the website design — CDN / edge caching, WAF and bot/DDoS mitigation, and SEO — that the logged-in LMS does not need. Students should let that shape the website answer rather than transposing the LMS one. **Beyond this natural axis the two engagements are deliberately kept similar — no other contrived differentiation.**
 
 ## 3. Vehicle state
 

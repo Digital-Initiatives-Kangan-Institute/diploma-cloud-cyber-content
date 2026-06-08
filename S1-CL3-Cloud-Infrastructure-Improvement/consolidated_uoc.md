@@ -1,6 +1,6 @@
 # S1-CL3 Cloud Infrastructure Improvement — Consolidated UoC
 
-> **STATUS: DRAFT.** Every assessable item (PC / FS / PE / KE / AC) from the two cluster units, quoted **verbatim** from the validated UoC transcriptions and tagged `[UNIT SECTION numbering]`. Items are organised under a **topic** structure that follows the engagement workflow (analyse → design/approve → deploy/test → finalise), with a **technical strand** (ICTCLD504) and a **leadership strand** (BSBXTW401) per phase. **The group-level *assessment ideas* are proposals — marked TBD per CLAUDE.md Rule 1.** The two-AT division is proposed (AT1 design/approve, AT2 build/finalise); see the forthcoming assessment plan for the full structure and coverage map.
+> **STATUS: DRAFT.** Every assessable item (PC / FS / PE / KE / AC) from the two cluster units, quoted **verbatim** from the validated UoC transcriptions and tagged `[UNIT SECTION numbering]`. Items are organised under a **topic** structure that follows the engagement workflow (analyse → design/approve → deploy/test → finalise), with a **technical strand** (ICTCLD504) and a **leadership strand** (BSBXTW401) per phase. **The group-level *assessment ideas* are proposals — marked TBD per CLAUDE.md Rule 1.** The cluster uses a **three-AT individual → group → individual** division (AT1 engagement setup / AT2 group improvement design & approval / AT3 individual implementation); see the assessment plan for the full structure and coverage map.
 
 **Cluster units**
 
@@ -27,21 +27,22 @@
 
 The cluster organises into **four workflow phases**, each with a **technical group** (504) and a **leadership group** (401), plus cross-cutting foundation skills and assessment conditions. The same phases structure both teaching and assessment.
 
-| Phase / Topic | Groups | Units | Assessment (proposed, TBD) |
+| Phase / Topic | Groups | Units | Assessment (AT — mode) |
 |---|---|---|---|
-| **1. Analyse & Plan** | G1 (analyse architecture), G2 (plan team outcomes) | 504, 401 | **AT1** |
-| **2. Design & Approve** | G3 (design/improve + present + sign-off), G4 (coordinate team) | 504, 401 | **AT1** |
-| **3. Deploy, Test & Support** | G5 (deploy/monitor/test), G6 (support team) | 504, 401 | **AT2** |
-| **4. Finalise & Review** | G7 (finalise improvements), G8 (monitor team performance) | 504, 401 | **AT2** |
+| **1. Analyse & Plan** | G1 (analyse architecture), G2 (plan team outcomes) | 504, 401 | **AT1** (individual) |
+| **2. Design & Approve** | G3 (design/improve + present + sign-off), G4 (coordinate team) | 504, 401 | **AT2** (group) — G4 also AT1 |
+| **3. Deploy, Test & Support** | G5 (deploy/monitor/test), G6 (support team) | 504, 401 | **AT3** (individual, G5) + **AT2** (group, G6) |
+| **4. Finalise & Review** | G7 (finalise improvements), G8 (monitor team performance) | 504, 401 | **AT3** (individual, G7) + **AT2** (group, G8) |
 | **Cross-cutting** | G9 (foundation skills), G10 (assessment conditions) | 504, 401 | both / environment |
 
-**Proposed AT deliverables (TBD — modelled on CL1/CL2):**
-- **AT1 — Analyse & Design the Improvement** *(504 el 1–2 + 401 el 1–2)* — analyse the current cloud architecture, design the improvements (with metrics + business goals), document & present for the deploy sign-off; lead the team's planning and coordination. Two approval-gated movements ending at `[ICTCLD504 PC 2.5]` (sign-off to deploy).
-- **AT2 — Deploy, Test & Finalise** *(504 el 3–4 + 401 el 3–4)* — deploy the approved improvements, monitor/test against the metrics, refine, finalise (as-deployed report + long-term strategy + sign-off); lead delivery and review team performance.
+**AT deliverables (three ATs — individual → group → individual; see the assessment plan §3):**
+- **AT1 — Engagement Setup** *(individual; 504 el 1 + 401 el 1)* — analyse the supplied baseline architecture (requirements & analysis) and author the team plan / Role Brief (objectives, performance expectations, accountability, task allocation).
+- **AT2 — Improvement Design & Approval** *(group; 504 el 2 + 401 el 2–4)* — the team designs the improved architecture (each student owns one dimension), leads meetings, supports and reviews the team, and presents for the **deploy sign-off** (`[ICTCLD504 PC 2.5]`).
+- **AT3 — Implementation** *(individual; 504 el 3–4)* — each student deploys, monitors and tests their owned dimension against the metrics, refines, documents the as-deployed result + long-term strategy, and obtains **final sign-off** (`[ICTCLD504 PC 4.3]`).
 
-**Two approval moments (UoC-faithful):** end of AT1 = deploy sign-off (`[ICTCLD504 PC 2.5]`); end of AT2 = final sign-off (`[ICTCLD504 PC 4.3]`).
+**Two approval moments (UoC-faithful):** end of **AT2** = deploy sign-off (`[ICTCLD504 PC 2.5]`); end of **AT3** = final sign-off (`[ICTCLD504 PC 4.3]`).
 
-**Vehicle (proposed, TBD):** a YAT **web system** (the website/portal) whose cloud infrastructure is improved — fits `[ICTCLD504 KE 6]` (object storage for static web sites) and the scenario arc (fully migrated by CL3).
+**Vehicle (per `scenario-flow.md`):** **Ledgerline** (the Accounting system), single-AZ cloud — the system whose cloud infrastructure is improved. CL3 **assesses on Ledgerline**; the **website is the practice vehicle**. *`[ICTCLD504 KE 6]` (object storage for static web sites) is evidenced as a **contextual knowledge question** (AT2) — the student contrasts Ledgerline with an object-storage-dependent system (e.g. a website) and explains how they would provision that storage if needed.*
 
 **Cross-cutting & delivery environment.** G9 (foundation skills) is co-evidenced inside both ATs' deliverables; G10 (assessment conditions) is provided by the scenario site + AWS Academy labs + the institutional assessor condition.
 
@@ -55,7 +56,7 @@ Understand the system and set up the team before designing changes.
 
 **Why grouped:** the opening of the improve-cycle — review the existing architecture, evaluate it and its business impact, weigh options against the business model, and set the improvement goals.
 
-**Assessment idea (TBD):** an architecture analysis of the supplied baseline (the website's current cloud infrastructure) — review, business-impact evaluation, options, and the security/reliability/performance/cost goals.
+**Assessment idea (TBD):** an architecture analysis of the supplied baseline (Ledgerline's current single-AZ cloud infrastructure) — review, business-impact evaluation, options, and the security/reliability/performance/cost goals.
 
 - 1.1 Identify and review business's cloud architecture design [ICTCLD504 PC 1.1]
 - 1.2 Evaluate cloud architecture and identify business impact of design decisions [ICTCLD504 PC 1.2]
@@ -85,7 +86,7 @@ Understand the system and set up the team before designing changes.
 
 ---
 
-# Topic 2 — Design & Approve → AT1
+# Topic 2 — Design & Approve → AT2 (G4 also AT1)
 
 Design the improvements, allocate the work, and get approval to deploy.
 
@@ -123,7 +124,7 @@ Design the improvements, allocate the work, and get approval to deploy.
 
 ---
 
-# Topic 3 — Deploy, Test & Support → AT2
+# Topic 3 — Deploy, Test & Support → AT3 (deploy/test) + AT2 (team support)
 
 Deploy the approved improvements, prove them, and support the team through delivery.
 
@@ -161,7 +162,7 @@ Deploy the approved improvements, prove them, and support the team through deliv
 
 ---
 
-# Topic 4 — Finalise & Review → AT2
+# Topic 4 — Finalise & Review → AT3 (finalise) + AT2 (team review)
 
 Close out the technical improvement and review team performance.
 

@@ -10,9 +10,9 @@
 > - **Team-leadership evidence:** each student **leads at least one team meeting** in AT2, captured by an **assessor observation checklist** (the primary performance evidence, incl. *managed a conflict*) + a **student reflection** appendix (secondary; carries the leadership KE). *How* the assessor stimulates a conflict is the assessor's conduct, out of the instrument's scope.
 > - **Heavy reuse:** the improve-loop + lab-pack from **CL1 AT3**; the Solution Design + Deployment Report templates, instrument generators and scenario world from **CL2**.
 >
-> **What is TBD** (Rule 1/2): the **vehicle** (a YAT web system / the website — leaning, but it is a cross-cluster decision shared with CL2 practice); group size; the delivery practice vehicle; the source-assessment reuse audit for 504/401; scenario specifics (project slug, role names). All carry explicit TBD marks.
+> **What is TBD** (Rule 1/2): group size; the source-assessment reuse audit for 504/401; scenario specifics (project slug, role names). *(Vehicle resolved: CL3 **assesses on Ledgerline**, **practises on the website**, per `scenario-flow.md`; `[ICTCLD504 KE 6]` resolved — see §2.)*
 >
-> **Companion documents:** `consolidated_uoc.md` (every PC/FS/PE/KE/AC in 10 groups under 4 phases); the forthcoming CL3 scenario; `S1-CL2-.../assessments/assessment_plan.md` (the cluster this most closely parallels).
+> **Companion documents:** `consolidated_uoc.md` (every PC/FS/PE/KE/AC in 10 groups under 4 phases); `scenario/cluster-3-scenario-{assessment,practice}.md` + `scenario/scenario-flow.md`; `S1-CL2-.../assessments/assessment_plan.md` (the cluster this most closely parallels).
 
 ---
 
@@ -35,13 +35,13 @@
 
 ## 2. Scenario
 
-**Reuse the YAT world** (proposed). By CL3 the ICT environment is **fully migrated** (per the scenario arc: on-prem in CL1 → migrated/expanded in CL2 → improved in CL3). The engagement: **improve a YAT web system's cloud infrastructure** for security, reliability, scalability and cost, with the student promoted to **MTS team lead** of the improvement team.
+**Reuse the YAT world.** By CL3 YAT's systems are in the cloud; **Ledgerline** (the Accounting system) sits at a **single-AZ baseline** (on-prem in CL1 → migrated to single-AZ cloud by the end of CL1 → improved in CL3). The engagement: **improve Ledgerline's cloud infrastructure** for security, reliability, scalability and cost, with the student promoted to **MTS team lead** of the improvement team.
 
-**Vehicle (TBD — leaning):** the **YAT website / web portal**. It fits `[ICTCLD504 KE 6]` (object storage for static web sites) and is the natural "already in the cloud, now improve it" system. **This is a cross-cluster decision** — the same web system is the candidate **CL2 practice** vehicle — so it is settled jointly with CL2, not in isolation.
+**Vehicle (per `scenario-flow.md`):** CL3 **assesses on Ledgerline** (single-AZ cloud — the "already in the cloud, now improve it" system) and **practises on the website** (students rehearse the improve-loop on the website before being assessed on Ledgerline). *(Forced by the no-leakage invariant: the website is assessed in CL2, so it cannot also be CL3's assessed system.)* **`[ICTCLD504 KE 6]`** (object storage for static web sites) is evidenced as a **contextual knowledge question** in AT2 — e.g. *"How does the accounting system differ from a system that needs to store objects such as images (for example, a website), and how would you provision that storage if it were needed?"* The student reasons by contrast from their own Ledgerline system; KE 6 is *knowledge*, so this evidences it cleanly without Ledgerline itself having to use static-web object storage.
 
 **The team:** a **real student group** (the MTS improvement team). AT1 evidences each student's planning individually; AT2 is where the group collaborates and each student leads.
 
-**Baseline:** the web system's **current cloud infrastructure** is supplied as a **baseline lab-pack** (the CL1 AT3 pattern, re-pointed at the website) — students analyse it, improve it, deploy and test the improvements.
+**Baseline:** Ledgerline's **current single-AZ cloud infrastructure** is supplied as a **baseline lab-pack** (the CL1 AT3 pattern, re-pointed at Ledgerline) — students analyse it, improve it, deploy and test the improvements.
 
 ---
 
@@ -72,16 +72,16 @@
 
 ## 4. Authoring basis / provenance
 
-**CL3 is the lightest cluster with the heaviest reuse.** The engagement workflow (analyse → design → approve → deploy → test → document → sign-off) is structurally CL1 AT3 + CL2, re-pointed at the website with a team-leadership overlay.
+**CL3 is the lightest cluster with the heaviest reuse.** The engagement workflow (analyse → design → approve → deploy → test → document → sign-off) is structurally CL1 AT3 + CL2, re-pointed at Ledgerline with a team-leadership overlay.
 
 **Reusable / already proven:**
-- **CL1 AT3** — the improve-an-existing-baseline shape + the **lab-pack standard** (`documentaion/lab-pack-standard.md`) for the supplied website baseline.
+- **CL1 AT3** — the improve-an-existing-baseline shape + the **lab-pack standard** (`documentaion/lab-pack-standard.md`) for the supplied Ledgerline baseline.
 - **CL2** — the **Solution Design** + **Deployment Report** templates and their generators; the Kangan **Project Assessment** instrument generators; the **scenario world** + intranet; the validators.
 
 **New authoring (the ~30% that is CL3-specific):**
 1. The **BSBXTW401 instruments** — the team plan / Role Brief template, the **led-meeting observation checklist**, the **reflection** appendix prompt, the performance-review template.
-2. The **website baseline lab-pack** (the current cloud infra to improve).
-3. The **website scenario** context (the improvement engagement, the team-lead role).
+2. The **Ledgerline baseline lab-pack** (the current single-AZ cloud infra to improve).
+3. The **Ledgerline scenario** context (the improvement engagement, the team-lead role).
 
 **TBD:** if standalone source assessments for ICTCLD504 / BSBXTW401 surface, audit them for reusable practical tasks before finalising.
 
@@ -129,22 +129,22 @@ Every group in `consolidated_uoc.md` (80 items) mapped to where it is covered.
 ### AT3 — Implementation
 9. **As-deployed Deployment Report exemplar** (504 el 3–4) — reuse the Deployment Report type.
 10. **AT3 Student + Assessor instruments** (individual).
-11. **Assessor operational artefacts** — the **website baseline lab-pack** (the current cloud infra), provided as appendices / lab artefacts.
+11. **Assessor operational artefacts** — the **Ledgerline baseline lab-pack** (the current single-AZ cloud infra), provided as appendices / lab artefacts.
 
 ### Cluster-level
 12. **`assessment_plan.md`** — this document.
 13. **`mappings/`** — per-unit Assessment Mapping `.docx` (504, 401).
-14. **Realign the scenario** (the website improvement engagement, the MTS team-lead role).
+14. **Realign the scenario** (the Ledgerline improvement engagement, the MTS team-lead role).
 
 ---
 
 ## 7. Open questions / TBDs
 
-1. **Vehicle** — the YAT website/web portal (leaning) as the system to improve; settled jointly with CL2 (shared practice/assessed vehicle). TBD.
+1. **Vehicle** — **resolved:** assess on **Ledgerline** (single-AZ cloud), practise on the **website**, per `scenario-flow.md` (no-leakage). `[ICTCLD504 KE 6]` (object storage for static web sites) **resolved** — evidenced as a contextual knowledge question contrasting Ledgerline with an object-storage-dependent system (see §2).
 2. **Team model specifics** — group size; how groups are formed; how each student's led meeting is scheduled/observed. TBD.
 3. **BSBXTW401 source assessment** — if a standalone source surfaces, audit for reusable team-leadership tasks. TBD.
 4. **504 / 401 verbatim transcription** — confirm the `_Complete_` `.md` are verbatim against the source `.docx` (Step-1 validation) before finalising instruments.
-5. **Delivery practice vehicle** — CL3 practice (teach/practice/assess) needs a system *other than* the assessed website; TBD (delivery, not assessment).
+5. **Delivery practice vehicle** — **resolved:** the **website** is the CL3 practice vehicle (assessment is on Ledgerline). Delivery sequencing still TBD (delivery, not assessment).
 6. **Pre-validation** — run the institutional Pre-Validation Tool over each AT before submission.
 
 ---
@@ -153,10 +153,10 @@ Every group in `consolidated_uoc.md` (80 items) mapped to where it is covered.
 
 Not committed — natural sequencing only.
 
-1. **Confirm the vehicle** (the website) jointly with the CL2 practice decision.
+1. **Vehicle confirmed** — assess on Ledgerline, practise on the website (per `scenario-flow.md`).
 2. **Author AT1** — the team plan / Role Brief template + exemplar and the requirements/analysis exemplar; derive the individual instruments.
 3. **Author AT2** — the Improvement Design exemplar (owned-dimension); the **observation checklist** + **reflection** + **performance review**; the approval presentation; derive the group instruments.
-4. **Author AT3** — the as-deployed Deployment Report exemplar; derive the individual instruments; build the **website baseline lab-pack**.
+4. **Author AT3** — the as-deployed Deployment Report exemplar; derive the individual instruments; build the **Ledgerline baseline lab-pack**.
 5. **Realign the scenario** + generate the `mappings/` docs; build a UoC-coverage validator; run the Pre-Validation Tool.
 
 ---
@@ -164,3 +164,4 @@ Not committed — natural sequencing only.
 ## Changelog
 
 - **2026-06-07:** Initial draft (v1). Built on the settled integrated design — *lead a team to improve a cloud system's infrastructure* — with the three-AT individual → group → individual rhythm (AT1 setup / AT2 group design / AT3 implement), the owned-dimension technical model, and the team-leadership evidence approach (led-meeting observation checklist + reflection + performance review). Coverage mapped across both units (all 80 items; 10 PE, 20 KE placed). Heavy reuse from CL1 AT3 (improve-loop + lab-pack) and CL2 (Solution Design + Deployment Report). Vehicle (website) and team-model specifics flagged TBD.
+- **2026-06-08 (v2 — re-vehicled):** **Vehicle resolved per `scenario-flow.md`: CL3 assesses on Ledgerline (single-AZ cloud), practises on the website.** (v1 had the website as the system to improve; the no-leakage invariant moves *assessment* to Ledgerline since the website is assessed in CL2, and makes the website CL3's *practice* vehicle.) All vehicle context re-pointed website→Ledgerline (engagement, baseline lab-pack, scenario). **Structure, AT rhythm, coverage map and KE/PE distributions unchanged — only the subject system changed.** `[ICTCLD504 KE 6]` resolved — evidenced as a contextual knowledge question contrasting Ledgerline with an object-storage-dependent system (e.g. a website).
