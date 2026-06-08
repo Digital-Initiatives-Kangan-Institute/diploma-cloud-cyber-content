@@ -18,7 +18,7 @@ This document records (a) how the systems map to clusters, (b) the rule that gua
 ## 2. The three systems
 
 - **LMS** — YAT's learning management system. Plausibly **large user base** (web-scale-credible). Migrated to the cloud and made highly available in CL1.
-- **Website** — YAT's web infrastructure as defined in the scenario (the cloud infrastructure behind YAT's public web presence). Plausibly **large user base** (web-scale-credible). **[VERIFY]** — confirm exactly where the as-is website infrastructure is documented in the scenario and its shape, before CL2 DR-planning and CL3 improvement work are authored against it. *(Distinct from the Astro site that delivers these scenario materials — that is the delivery platform, per `website.md`, not a scenario system.)*
+- **Website** — YAT's web infrastructure as defined in the scenario (the cloud infrastructure behind YAT's public web presence). Plausibly **large user base** (web-scale-credible).*(Distinct from the Astro site that delivers these scenario materials — that is the delivery platform, per `website.md`, not a scenario system.)*
 - **Ledgerline** — YAT's bookkeeping / general-ledger system, used by internal finance staff. **Small internal user base — not web-scale** (per `cluster-2-scenario.md §5`).
 
 ## 3. Usage matrix [AGREED]
@@ -66,9 +66,6 @@ Students work across **only three systems** all semester, inside one continuous 
 ## 7. Consequence — CL2 assessment re-vehicling [TBD execution]
 
 This flow moves CL2's **assessment** vehicle from the LMS to the **website**, and makes the LMS CL2's **practice** vehicle. CL2's offshore-India / data-residency / audit-microservice / web-scale narrative and the AT1/AT2 instruments are currently authored against the LMS (`cluster-2-scenario.md §4`); they migrate to the website.
-
-- **[TBD]** Execute the re-vehicling: update `cluster-2-scenario.md` and rework the CL2 AT1/AT2 instruments from the LMS to the website.
-- A public **website** is at least as credible a web-scale / global-user-base system as the LMS, so the web-scale narrative transfers cleanly, and the residency + audit-microservice story attaches to the website's access/activity logs the same way it did to the LMS.
 
 ---
 
