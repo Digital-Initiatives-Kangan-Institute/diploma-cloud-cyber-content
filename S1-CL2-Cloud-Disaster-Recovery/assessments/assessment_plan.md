@@ -122,14 +122,14 @@ Every group in `consolidated_uoc.md` mapped to where it is covered, and how. Thi
 | **G5** — IaC: deploy & manage with templates | 2 | **AT2** | Deploy/configure/update/remove resources from predefined IaC templates + troubleshoot. `505 PC 1.1–1.4, 2.1–2.6`, `505 PE 1/3`, `505 KE 3/4/5/6/7/10/11`. |
 | **G6** — IaC: author & parameterise own templates | 2 | **AT2** | Student-authored template provisioning related resources; update/redeploy; parameterise for reuse. `505 PC 3.1–3.7`, `505 PE 2`, `505 KE 8/9`. |
 | **G7** — Shared cloud foundations (standards, hw/sw/storage) | 2 | **AT2** | KE appendix / contextual questions co-evidencing the near-identical `503 KE 1/2` + `505 KE 1/2` once. |
-| **G8** — Metrics, monitoring, alerts & scaling alarms | 3 | **AT2** | Configure a metric + a scaling-relevant alarm (CloudWatch, e.g. queue depth) on the microservice during the build. `503 PC 4.1`, `501 KE 6`. |
+| **G8** — Metrics, monitoring, alerts & scaling alarms | 3 | **AT2** (+ AT1 Part B) | `503 PC 4.1` — configure a metric + a scaling-relevant alarm (CloudWatch, e.g. queue depth) on the microservice during the build (**AT2**). `501 KE 6` (monitor / create alerts) — evidenced as disaster-detection in the **DR Plan KE appendix (AT1 Part B)**. |
 | **G9** — Documentation & technical writing | 4 | **split** | `503 PC 1.7, 2.4` + `503 FS Writing` → **AT1 Part A** (architecture documented & justified — i.e. the Solution Design itself). `505 PC 4.1`, `505 PE 4` + `505 FS Writing` → **AT2** (IaC user documentation). |
 | **G10** — Finalisation: feedback, sign-off & lodgement | 4 | **split** | `501 PC 5.1–5.4` + `501 FS Oral communication` → **AT1 Part C** (presentation: walkthrough, feedback, lodgement, sign-off of A+B). `503 PC 4.2/4.3`, `505 PC 4.2` + `505 FS Oral communication` → **AT2** (build feedback + final sign-off). |
 | **G11** — FS: reading, self-management, problem solving | — | **both (implicit)** | Co-evidenced across both ATs' technical deliverables and troubleshooting; marking guides note where each is naturally evidenced rather than assessing it separately. |
 | **G12** — AC: required environment & resource access | — | **delivery env** | Provided by the scenario website + AWS Academy labs (vendor service provider, managed DB, serverless, pre-prepared code, IDE/CLI/SSH, reference data). Captured in the cluster delivery-environment spec, not as marked criteria. |
 | **G13** — AC: assessor requirements | — | **institutional** | Satisfied by the institution's assessor-qualification policy; one statement per AT cover sheet. |
 
-**KE distribution check.** AT1 Part A: `503 KE 3/4/6` (web-scale + microservice design). AT1 Part B: `501 KE 1/2/3/4/5` (DR). AT2: `501 KE 6`; `503 KE 1/2/5`; `505 KE 1–11`. All 23 KE placed.
+**KE distribution check.** AT1 Part A: `503 KE 3/4/6` (web-scale + microservice design). AT1 Part B: `501 KE 1/2/3/4/5/6` (DR — KE appendix; KE 6 = disaster detection/alerting). AT2: `503 KE 1/2/5`; `505 KE 1–11`. All 23 KE placed.
 
 **PE distribution check.** AT1 Part A: `503 PE 1/2/5`. AT1 Part B: `501 PE 1/2/3`. AT2: `503 PE 3/4`, `505 PE 1/2/3/4`. All 12 PE placed.
 
