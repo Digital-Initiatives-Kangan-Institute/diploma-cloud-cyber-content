@@ -12,7 +12,7 @@
 >
 > **What is TBD** (Rule 1/2): group size; the source-assessment reuse audit for 504/401; scenario specifics (project slug, role names). *(Vehicle resolved: CL3 **assesses on Ledgerline**, **practises on the website**, per `scenario-flow.md`; `[ICTCLD504 KE 6]` resolved — see §2.)*
 >
-> **Companion documents:** `consolidated_uoc.md` (every PC/FS/PE/KE/AC in 10 groups under 4 phases); `scenario/cluster-3-scenario-{assessment,practice}.md` + `scenario/scenario-flow.md`; `S1-CL2-.../assessments/assessment_plan.md` (the cluster this most closely parallels).
+> **Companion documents:** `consolidated_uoc.md` (every PC/FS/PE/KE/AC in 11 groups under 4 phases); `scenario/cluster-3-scenario-{assessment,practice}.md` + `scenario/scenario-flow.md`; `S1-CL2-.../assessments/assessment_plan.md` (the cluster this most closely parallels).
 
 ---
 
@@ -89,7 +89,7 @@
 
 ## 5. Group coverage map
 
-Every group in `consolidated_uoc.md` (80 items) mapped to where it is covered.
+Every group in `consolidated_uoc.md` (82 items) mapped to where it is covered.
 
 | Group | Phase | Where | Mode | How evidenced |
 |---|---|---|---|---|
@@ -102,13 +102,14 @@ Every group in `consolidated_uoc.md` (80 items) mapped to where it is covered.
 | **G7** — Finalise improvements (504 el 4) | 3 | **AT3** | individual | As-deployed report + long-term strategy + final sign-off. `504 PC 4.1–4.3`, `PE 5`. |
 | **G8** — Monitor team performance (401 el 4) | 2 | **AT2** | individual | Performance review of the workstream team. `401 PC 4.1–4.4`, `PE 3/4`. |
 | **G9** — Foundation skills | — | **all ATs (implicit)** | — | Co-evidenced across the deliverables, meetings and presentation; marking guides note where each is naturally evidenced. |
-| **G10** — Assessment conditions | — | **delivery env** | — | Provided by the scenario website + AWS Academy labs (cloud vendor, managed DB, console/CLI, IDE, SSH/RDP, requirements) + the simulated-environment condition + institutional assessor condition. |
+| **G10** — Assessment conditions: environment & resource access | — | **delivery env** | — | Provided by the scenario website + AWS Academy labs (cloud vendor, managed DB, console/CLI, IDE, SSH/RDP, requirements) + the simulated-environment condition. |
+| **G11** — Assessment conditions: assessor requirements | — | **institutional** | — | Satisfied by the institution's assessor-qualification policy; one statement per AT cover sheet. |
 
 **PE distribution check.** AT1: `504 PE 1` (assess), `504 PE 3`, `401 PE 1`. AT2: `504 PE 1` (improve), `401 PE 2/3/4/5`. AT3: `504 PE 2/4/5`. All 10 PE placed.
 
 **KE distribution check.** AT1: `504 KE 1/2/3`; `401 KE 1/2/9`. AT2: `504 KE 4/5/6/8/9`; `401 KE 3/4/5/6/7/8/10`. AT3: `504 KE 7/10`. All 20 KE placed.
 
-**Verification:** every group G1–G10 has a row; every PC, PE and KE is allocated; FS (G9) cross-cutting; AC (G10) is the environment. No item is unaddressed.
+**Verification:** every group G1–G11 has a row; every PC, PE and KE is allocated; FS (G9) cross-cutting; AC is the environment (G10) + the institutional assessor condition (G11). No item is unaddressed.
 
 ---
 
@@ -165,3 +166,4 @@ Not committed — natural sequencing only.
 
 - **2026-06-07:** Initial draft (v1). Built on the settled integrated design — *lead a team to improve a cloud system's infrastructure* — with the three-AT individual → group → individual rhythm (AT1 setup / AT2 group design / AT3 implement), the owned-dimension technical model, and the team-leadership evidence approach (led-meeting observation checklist + reflection + performance review). Coverage mapped across both units (all 80 items; 10 PE, 20 KE placed). Heavy reuse from CL1 AT3 (improve-loop + lab-pack) and CL2 (Solution Design + Deployment Report). Vehicle (website) and team-model specifics flagged TBD.
 - **2026-06-08 (v2 — re-vehicled):** **Vehicle resolved per `scenario-flow.md`: CL3 assesses on Ledgerline (single-AZ cloud), practises on the website.** (v1 had the website as the system to improve; the no-leakage invariant moves *assessment* to Ledgerline since the website is assessed in CL2, and makes the website CL3's *practice* vehicle.) All vehicle context re-pointed website→Ledgerline (engagement, baseline lab-pack, scenario). **Structure, AT rhythm, coverage map and KE/PE distributions unchanged — only the subject system changed.** `[ICTCLD504 KE 6]` resolved — evidenced as a contextual knowledge question contrasting Ledgerline with an object-storage-dependent system (e.g. a website).
+- **2026-06-11 (v3 — AC consistency):** Aligned the Assessment Conditions treatment with CL1/CL2. The trailing assessor-requirements clause in each unit is now tagged as that unit's last AC item (`[ICTCLD504 AC 8]`, `[BSBXTW401 AC 2]`) in `consolidated_uoc.md`, collected in a new **G11 — assessment conditions: assessor requirements** (mirroring CL2's G13). Item total **80 → 82** (AC 8 → 10). §5 coverage map splits **G10** (environment & resource access) from **G11** (assessor requirements); the companion-doc group count, the §5 item count, and the verification line are updated to match. **Structure, AT shape, and PE/KE distributions unchanged.** Revalidated: `validate_consolidated.py --assessor-ac` → 82/82 PASS.

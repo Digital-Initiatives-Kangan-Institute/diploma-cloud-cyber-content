@@ -15,9 +15,9 @@
 
 | Unit | PC | FS | PE | KE | AC | Total |
 |---|---|---|---|---|---|---|
-| ICTCLD504 | 18 | 5 | 5 | 10 | 7 | 45 |
-| BSBXTW401 | 16 | 3 | 5 | 10 | 1 | 35 |
-| **Total** | **34** | **8** | **10** | **20** | **8** | **80** |
+| ICTCLD504 | 18 | 5 | 5 | 10 | 8 | 46 |
+| BSBXTW401 | 16 | 3 | 5 | 10 | 2 | 36 |
+| **Total** | **34** | **8** | **10** | **20** | **10** | **82** |
 
 **Reference-tag format.** `[<UNIT> <SECTION> <numbering>]` — e.g. `[ICTCLD504 PC 1.1]`, `[ICTCLD504 FS Reading]`, `[BSBXTW401 PE 2]`, `[ICTCLD504 KE 4]`, `[BSBXTW401 AC 1]`. PCs keep their source numbering; FS uses the verbatim skill name; PE/KE/AC are numbered `1..N` in source order. KE items with nested sub-bullets are quoted as one item (parent + children) under the parent's tag.
 
@@ -33,7 +33,7 @@ The cluster organises into **four workflow phases**, each with a **technical gro
 | **2. Design & Approve** | G3 (design/improve + present + sign-off), G4 (coordinate team) | 504, 401 | **AT2** (group) — G4 also AT1 |
 | **3. Deploy, Test & Support** | G5 (deploy/monitor/test), G6 (support team) | 504, 401 | **AT3** (individual, G5) + **AT2** (group, G6) |
 | **4. Finalise & Review** | G7 (finalise improvements), G8 (monitor team performance) | 504, 401 | **AT3** (individual, G7) + **AT2** (group, G8) |
-| **Cross-cutting** | G9 (foundation skills), G10 (assessment conditions) | 504, 401 | both / environment |
+| **Cross-cutting** | G9 (foundation skills), G10 (environment & resource access), G11 (assessor requirements) | 504, 401 | both / environment / institutional |
 
 **AT deliverables (three ATs — individual → group → individual; see the assessment plan §3):**
 - **AT1 — Engagement Setup** *(individual; 504 el 1 + 401 el 1)* — analyse the supplied baseline architecture (requirements & analysis) and author the team plan / Role Brief (objectives, performance expectations, accountability, task allocation).
@@ -44,7 +44,7 @@ The cluster organises into **four workflow phases**, each with a **technical gro
 
 **Vehicle (per `scenario-flow.md`):** **Ledgerline** (the Accounting system), single-AZ cloud — the system whose cloud infrastructure is improved. CL3 **assesses on Ledgerline**; the **website is the practice vehicle**. *`[ICTCLD504 KE 6]` (object storage for static web sites) is evidenced as a **contextual knowledge question** (AT2) — the student contrasts Ledgerline with an object-storage-dependent system (e.g. a website) and explains how they would provision that storage if needed.*
 
-**Cross-cutting & delivery environment.** G9 (foundation skills) is co-evidenced inside both ATs' deliverables; G10 (assessment conditions) is provided by the scenario site + AWS Academy labs + the institutional assessor condition.
+**Cross-cutting & delivery environment.** G9 (foundation skills) is co-evidenced inside both ATs' deliverables; G10 (environment & resource access) is provided by the scenario site + AWS Academy labs; G11 (assessor requirements) is the institutional assessor condition.
 
 ---
 
@@ -225,3 +225,12 @@ ICTCLD504:
 
 BSBXTW401:
 - A safe working or simulated environment [BSBXTW401 AC 1]
+
+## Group 11 — Assessment conditions: assessor requirements
+
+**Why grouped:** the identical trailing Assessment Conditions clause in each unit — assessor competency/qualification requirements. Institutional boilerplate, common to both units.
+
+**Assessment idea (TBD):** satisfied by the institution's assessor-qualification policy; no AT artefact required.
+
+- Assessors of this unit must satisfy the requirements for assessors in applicable vocational education and training legislation, frameworks and/or standards. [ICTCLD504 AC 8]
+- Assessors of this unit must satisfy the assessor requirements in applicable vocational education and training legislation, frameworks and/or standards. [BSBXTW401 AC 2]
