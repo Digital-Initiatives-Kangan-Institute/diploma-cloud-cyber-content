@@ -1,5 +1,6 @@
 ---
 name: transcribe-uoc
+model: claude-haiku-4-5-20251001
 description: >-
   This skill should be used whenever an official unit-of-competency (UoC) Word document needs to
   be turned into a Markdown transcription — e.g. "transcribe ICTCLD504", "convert this UoC .docx

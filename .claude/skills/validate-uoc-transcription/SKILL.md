@@ -1,5 +1,6 @@
 ---
 name: validate-uoc-transcription
+model: claude-haiku-4-5-20251001
 description: >-
   This skill should be used whenever a unit-of-competency (UoC) transcription needs to be
   confirmed verbatim against its source Word document — e.g. "validate the CL3 transcriptions",
