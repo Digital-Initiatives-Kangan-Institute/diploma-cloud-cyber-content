@@ -216,7 +216,7 @@ BENCHMARK = [
                 "timelines, key features and service providers."),
         ("B13", "[ICTCLD501 PE 1] develop and evaluate a DR plan covering at least three major risk events; "
                 "[PE 3] document how the plan reaches RTO/RPO targets."),
-        ("B14", "[ICTCLD501 PC 4.3] document the DR plan according to business needs and requirements; [FS Writing]."),
+        ("B14", "[ICTCLD501 PC 4.3] document the DR plan according to business needs and requirements."),
         ("B15", "[ICTCLD501 KE 1] risk environments; [KE 2] data-analysis methodologies; [KE 3] DR techniques for "
                 "cloud; [KE 4] ISO 27001/27002/27031 standards; [KE 5] RTO/RPO standards and techniques; [KE 6] "
                 "techniques/methods to monitor and create alerts (disaster detection) — evidenced as written "
@@ -231,6 +231,15 @@ BENCHMARK = [
                "student's own design and plan choices (the written KE is the primary evidence in the A12 / B15 "
                "appendices; this is the verbal confirmation)."),
         ("C6", "[ICTCLD501 FS Oral communication] listening/questioning and industry language for the audience."),
+    ]),
+    ("Foundation Skills (co-evidenced — not separately assessed)", [
+        ("FS1", "[ICTCLD501 FS Reading] · [ICTCLD501 FS Self-management] · [ICTCLD501 FS Problem solving] · "
+                "[ICTCLD501 FS Planning and organising] — naturally evidenced through the DR requirements, "
+                "impact analysis and recovery-strategy work and its troubleshooting; the marking guide notes "
+                "where each is demonstrated rather than assessing it as a separate criterion."),
+        ("FS2", "[ICTCLD503 FS Reading] · [ICTCLD503 FS Self-management] · [ICTCLD503 FS Problem solving] — "
+                "naturally evidenced through the Solution Design work and its troubleshooting; noted, not "
+                "assessed separately."),
     ]),
 ]
 

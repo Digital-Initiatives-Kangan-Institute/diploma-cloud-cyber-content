@@ -165,6 +165,12 @@ BENCHMARK = [
         ("D13", "[ICTCLD505 FS Writing] prepares user documentation in a logical manner using required syntax "
                 "and language; [ICTCLD503 FS Writing]."),
     ]),
+    ("Foundation Skills (co-evidenced — not separately assessed)", [
+        ("FS1", "[ICTCLD505 FS Reading] · [ICTCLD505 FS Self-management] · [ICTCLD505 FS Problem solving] — "
+                "naturally evidenced through operating and authoring the IaC templates, building the "
+                "microservice and troubleshooting the deployment; the marking guide notes where each is "
+                "demonstrated rather than assessing it as a separate criterion."),
+    ]),
 ]
 
 STUDENT_INTRO = [
