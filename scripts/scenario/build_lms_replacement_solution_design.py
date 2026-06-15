@@ -8,17 +8,18 @@ NON-cloud deployment: cloud-only sections (load balancing, SPOF-removal, simulat
 marked "Not applicable"; §5 Implementation sequencing IS applicable (cutover from a live
 GrayBoard). Output to public/documents/ for printing to PDF.
 
-Usage:  python scripts/build_lms_replacement_solution_design.py [output.docx]
+Usage:  python scripts/scenario/build_lms_replacement_solution_design.py [output.docx]
 Default: ../diploma-cloud-cyber-website/public/documents/YAT-LMS-Replacement-Solution-Design.docx
 """
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
-from helpers.docx_body_text import add_bullet_list  # noqa: E402
-import build_bc_template as bc   # noqa: E402
-import build_s1_cl1_at1_bc_exemplar as ex   # noqa: E402
+from helpers.docx_body_text import add_body_paragraph, add_bullet_list  # noqa: E402
+from helpers.docx_tables import add_data_table  # noqa: E402
+from helpers.docx_styling import add_field, paragraph_bottom_rule, set_cell_borders, shade_cell  # noqa: E402
+from helpers.yat_brand import ADDRESS, CREAM, GREY, TEAL, TERRACOTTA  # noqa: E402
+from helpers.yat_docx_document import build_header_footer, configure_styles, wordmark  # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -30,31 +31,31 @@ def na(doc, reason):
     r = p.add_run(f"Not applicable — {reason}")
     r.bold = True
     r.font.size = Pt(10.5)
-    r.font.color.rgb = RGBColor.from_string(bc.TERRACOTTA)
+    r.font.color.rgb = RGBColor.from_string(TERRACOTTA)
     p.paragraph_format.space_after = Pt(6)
     return p
 
 
 def build(path):
     doc = Document()
-    bc.configure_styles(doc)
+    configure_styles(doc)
     sec = doc.sections[0]
     sec.page_height = Cm(29.7); sec.page_width = Cm(21.0)
     sec.top_margin = Cm(2.6); sec.bottom_margin = Cm(2.2)
     sec.left_margin = Cm(2.2); sec.right_margin = Cm(2.2)
     sec.header_distance = Cm(1.0); sec.footer_distance = Cm(1.0)
-    bc.build_header_footer(sec)
+    build_header_footer(sec)
 
     # ---- COVER ----
-    bc.wordmark(doc.add_paragraph())
-    ar = doc.add_paragraph().add_run(bc.ADDRESS)
-    ar.font.size = Pt(9); ar.font.color.rgb = RGBColor.from_string(bc.GREY)
-    bc.paragraph_bottom_rule(doc.add_paragraph(), bc.TEAL, sz=12)
+    wordmark(doc.add_paragraph())
+    ar = doc.add_paragraph().add_run(ADDRESS)
+    ar.font.size = Pt(9); ar.font.color.rgb = RGBColor.from_string(GREY)
+    paragraph_bottom_rule(doc.add_paragraph(), TEAL, sz=12)
     for _ in range(3):
         doc.add_paragraph()
     doc.add_paragraph(style="Title").add_run("Solution Design")
     sub = doc.add_paragraph().add_run("LMS Replacement — GrayBoard to DOODLE (on-premises)")
-    sub.font.size = Pt(15); sub.bold = True; sub.font.color.rgb = RGBColor.from_string(bc.TERRACOTTA)
+    sub.font.size = Pt(15); sub.bold = True; sub.font.color.rgb = RGBColor.from_string(TERRACOTTA)
     doc.add_paragraph()
     cover = [
         ("Engagement", "YAT LMS Replacement Project — Phase 1"),
@@ -69,24 +70,24 @@ def build(path):
     ct = doc.add_table(rows=0, cols=2)
     for k, v in cover:
         cells = ct.add_row().cells
-        bc.set_cell_borders(cells[0]); bc.set_cell_borders(cells[1]); bc.shade_cell(cells[0], bc.CREAM)
+        set_cell_borders(cells[0]); set_cell_borders(cells[1]); shade_cell(cells[0], CREAM)
         kr = cells[0].paragraphs[0].add_run(k); kr.bold = True; kr.font.size = Pt(10)
         cells[1].paragraphs[0].add_run(v).font.size = Pt(10)
         cells[0].width = Cm(4.5); cells[1].width = Cm(12.0)
 
     # ---- CONTENTS ----
-    doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
+    doc.add_section(WD_SECTION.NEW_PAGE); build_header_footer(doc.sections[-1])
     doc.add_paragraph("Contents", style="Heading 1")
-    bc.add_field(doc.add_paragraph(), 'TOC \\o "1-3" \\h \\z \\u',
+    add_field(doc.add_paragraph(), 'TOC \\o "1-3" \\h \\z \\u',
                  placeholder="Right-click and choose “Update Field” to build the table of contents.")
 
     # ---- BODY ----
-    doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
+    doc.add_section(WD_SECTION.NEW_PAGE); build_header_footer(doc.sections[-1])
     h1 = lambda t: doc.add_paragraph(t, style="Heading 1")
     h3 = lambda t: doc.add_paragraph(t, style="Heading 3")
 
     h1("1. Purpose and Scope")
-    ex.para(doc, "This document specifies the solution for replacing YAT's end-of-life GrayBoard LMS with "
+    add_body_paragraph(doc, "This document specifies the solution for replacing YAT's end-of-life GrayBoard LMS with "
                  "the DOODLE platform, deployed on-premises at the Cremorne campus. It translates the "
                  "board-approved recommendation from the LMS Replacement Business Case into an implementable "
                  "design covering the infrastructure, the DOODLE installation approach, the migration of "
@@ -113,7 +114,7 @@ def build(path):
         "ICT Environment Overview — the current campus environment the LMS sits within.",
     ])
     h3("2.2 Requirements the design must meet")
-    ex.etable(doc, ["Requirement", "Target / note"],
+    add_data_table(doc, ["Requirement", "Target / note"],
               [["Replacement platform", "A current, vendor-supported LMS — DOODLE (selected via market evaluation)"],
                ["Deployment", "On-premises at the Cremorne campus; Windows Server 2016 hosting standard"],
                ["Record preservation", "All GrayBoard student records migrated with full integrity (counts reconcile)"],
@@ -132,7 +133,7 @@ def build(path):
 
     h1("4. Architecture Design")
     h3("4.1 Assumptions and constraints")
-    ex.etable(doc, ["#", "Assumption / constraint", "Source"],
+    add_data_table(doc, ["#", "Assumption / constraint", "Source"],
               [["A1", "Deployed on-premises at the Cremorne campus (current operating model)", "Role Brief"],
                ["A2", "Windows Server 2016 application-hosting standard", "Replacement Requirements"],
                ["A3", "All GrayBoard student records must be preserved with integrity", "Standards for RTOs 2015"],
@@ -140,7 +141,7 @@ def build(path):
                ["A5", "Cutover confined to the December–January teaching break", "Replacement Requirements"]],
               widths=[1.0, 9.0, 6.0])
     h3("4.2 Deployment environment")
-    ex.para(doc, "The DOODLE server is deployed in the YAT Cremorne campus computer room — physically "
+    add_body_paragraph(doc, "The DOODLE server is deployed in the YAT Cremorne campus computer room — physically "
                  "secured, air-conditioned, UPS-protected — consistent with the existing ICT environment. "
                  "It sits in the staff network zone, with student-zone access to the LMS application "
                  "governed by Active Directory permissions.")
@@ -181,10 +182,10 @@ def build(path):
         "WCAG 2.1 Level AA conformance at the application layer (a DOODLE selection criterion).",
     ])
     h3("4.10 Monitoring")
-    ex.para(doc, "The existing YAT system-management and monitoring server tracks the DOODLE server's health "
+    add_body_paragraph(doc, "The existing YAT system-management and monitoring server tracks the DOODLE server's health "
                  "and runs the nightly backups; availability is tracked against the ≥ 99% target.")
     h3("4.11 Naming and asset conventions")
-    ex.para(doc, "The server and related assets are recorded in the YAT ICT asset register under the "
+    add_body_paragraph(doc, "The server and related assets are recorded in the YAT ICT asset register under the "
                  "standard naming and ownership conventions.")
     h3("4.12 Backup")
     add_bullet_list(doc, [
@@ -192,18 +193,18 @@ def build(path):
         "GrayBoard is retained (read-only) until acceptance, as the migration rollback position (see §5).",
     ])
     h3("4.13 Recovery objectives")
-    ex.para(doc, "Recovery is backup-based: nightly backups give an RPO of up to one day, with restore from "
+    add_body_paragraph(doc, "Recovery is backup-based: nightly backups give an RPO of up to one day, with restore from "
                  "the system-management server or offsite tape. The design targets ≥ 99% availability — a "
                  "step up from the degrading GrayBoard.")
     h3("4.14 Components requiring vertical scaling")
-    ex.para(doc, "The server is provisioned with headroom for growth; storage on the NAS is expandable. A "
+    add_body_paragraph(doc, "The server is provisioned with headroom for growth; storage on the NAS is expandable. A "
                  "future capacity increase is a server resource upgrade in a maintenance window.")
     h3("4.15 Single points of failure removed")
     na(doc, "this is a supported single-server replacement, not a high-availability design; resilience "
             "beyond the existing campus posture (redundant network, RAID, UPS) is out of scope — cloud HA "
             "is noted as a future consideration.")
     h3("4.16 Configuration decisions left to the implementer")
-    ex.etable(doc, ["#", "Decision", "Why left open"],
+    add_data_table(doc, ["#", "Decision", "Why left open"],
               [["C1", "Server specification (CPU / RAM / disk)", "Size against the GrayBoard performance baseline + peak load"],
                ["C2", "MySQL engine version", "Confirm against the DOODLE compatibility matrix"],
                ["C3", "Storage sizing (local + NAS)", "Compute from the migrated data footprint + growth"],
@@ -211,10 +212,10 @@ def build(path):
               widths=[1.0, 7.0, 8.0])
 
     h1("5. Implementation Sequencing")
-    ex.para(doc, "The replacement is a change to a live service — GrayBoard is in use until cutover — so the "
+    add_body_paragraph(doc, "The replacement is a change to a live service — GrayBoard is in use until cutover — so the "
                  "sequence and rollback matter. The work is confined to the December–January teaching break, "
                  "with GrayBoard retained read-only as the rollback position until acceptance.")
-    ex.etable(doc, ["#", "Step", "Impact", "Verification", "Rollback"],
+    add_data_table(doc, ["#", "Step", "Impact", "Verification", "Rollback"],
               [["1", "Provision and harden the server; install Windows Server 2016", "None (parallel)", "Server build checklist", "n/a"],
                ["2", "Install and configure DOODLE; wire AD / O365 / AVETMISS integrations", "None (parallel)", "Integration tests", "n/a"],
                ["3", "Migrate GrayBoard student records; reconcile counts + sample fidelity", "None (parallel)", "Record reconciliation", "Re-run migration"],
@@ -243,7 +244,7 @@ def build(path):
     ])
 
     h1("Document control")
-    ex.etable(doc, ["Field", "Value"],
+    add_data_table(doc, ["Field", "Value"],
               [["Document version", "v1.0 — Approved for implementation"],
                ["Authored by", "AccentLoitte Consulting, in consultation with YAT ICT"],
                ["Approved by", "Jamie O'Donnell (AccentLoitte) · Sam Walker (YAT ICT Manager)"],

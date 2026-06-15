@@ -15,17 +15,18 @@ supplied artefact (no UoC tags) — the branded Solution Design document.
 Output to the website documents folder for printing to PDF, then linked from the
 website-cloud-migration project's Cloud Architecture Baseline page.
 
-Usage:  python scripts/build_website_baseline_solution_design.py [output.docx]
+Usage:  python scripts/scenario/build_website_baseline_solution_design.py [output.docx]
 Default: ../diploma-cloud-cyber-website/public/documents/YAT-Website-Baseline-Solution-Design.docx
 """
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
-from helpers.docx_body_text import add_bullet_list  # noqa: E402
-import build_bc_template as bc   # noqa: E402
-import build_s1_cl1_at1_bc_exemplar as ex   # noqa: E402  (etable, para, bullets)
+from helpers.docx_body_text import add_body_paragraph, add_bullet_list  # noqa: E402
+from helpers.docx_tables import add_data_table  # noqa: E402
+from helpers.docx_styling import add_field, paragraph_bottom_rule, set_cell_borders, shade_cell  # noqa: E402
+from helpers.yat_brand import ADDRESS, CREAM, GREY, TEAL, TERRACOTTA  # noqa: E402
+from helpers.yat_docx_document import build_header_footer, configure_styles, wordmark  # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -37,7 +38,7 @@ def na(doc, reason):
     r = p.add_run(f"Not applicable — {reason}")
     r.bold = True
     r.font.size = Pt(10.5)
-    r.font.color.rgb = RGBColor.from_string(bc.TERRACOTTA)
+    r.font.color.rgb = RGBColor.from_string(TERRACOTTA)
     p.paragraph_format.space_after = Pt(6)
     return p
 
@@ -48,44 +49,44 @@ def diagram_placeholder(doc, caption, source):
     from docx.enum.text import WD_ALIGN_PARAGRAPH
     t = doc.add_table(rows=1, cols=1)
     cell = t.cell(0, 0)
-    bc.set_cell_borders(cell)
-    bc.shade_cell(cell, bc.CREAM)
+    set_cell_borders(cell)
+    shade_cell(cell, CREAM)
     cell.width = Cm(16.6)
     t.rows[0].height = Cm(9.5)
     t.rows[0].height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
     cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
     p = cell.paragraphs[0]; p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r = p.add_run("[ NETWORK TOPOLOGY DIAGRAM — PASTE HERE ]")
-    r.bold = True; r.font.size = Pt(11); r.font.color.rgb = RGBColor.from_string(bc.TERRACOTTA)
+    r.bold = True; r.font.size = Pt(11); r.font.color.rgb = RGBColor.from_string(TERRACOTTA)
     p2 = cell.add_paragraph(); p2.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r2 = p2.add_run(source)
-    r2.italic = True; r2.font.size = Pt(9); r2.font.color.rgb = RGBColor.from_string(bc.GREY)
+    r2.italic = True; r2.font.size = Pt(9); r2.font.color.rgb = RGBColor.from_string(GREY)
     cap = doc.add_paragraph(); cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
     cr = cap.add_run(caption)
-    cr.italic = True; cr.font.size = Pt(9); cr.font.color.rgb = RGBColor.from_string(bc.GREY)
+    cr.italic = True; cr.font.size = Pt(9); cr.font.color.rgb = RGBColor.from_string(GREY)
     return t
 
 
 def build(path):
     doc = Document()
-    bc.configure_styles(doc)
+    configure_styles(doc)
     sec = doc.sections[0]
     sec.page_height = Cm(29.7); sec.page_width = Cm(21.0)
     sec.top_margin = Cm(2.6); sec.bottom_margin = Cm(2.2)
     sec.left_margin = Cm(2.2); sec.right_margin = Cm(2.2)
     sec.header_distance = Cm(1.0); sec.footer_distance = Cm(1.0)
-    bc.build_header_footer(sec)
+    build_header_footer(sec)
 
     # ---- COVER ----
-    bc.wordmark(doc.add_paragraph())
-    ar = doc.add_paragraph().add_run(bc.ADDRESS)
-    ar.font.size = Pt(9); ar.font.color.rgb = RGBColor.from_string(bc.GREY)
-    bc.paragraph_bottom_rule(doc.add_paragraph(), bc.TEAL, sz=12)
+    wordmark(doc.add_paragraph())
+    ar = doc.add_paragraph().add_run(ADDRESS)
+    ar.font.size = Pt(9); ar.font.color.rgb = RGBColor.from_string(GREY)
+    paragraph_bottom_rule(doc.add_paragraph(), TEAL, sz=12)
     for _ in range(3):
         doc.add_paragraph()
     doc.add_paragraph(style="Title").add_run("Solution Design")
     sub = doc.add_paragraph().add_run("YAT Website Cloud Architecture — Baseline Design")
-    sub.font.size = Pt(15); sub.bold = True; sub.font.color.rgb = RGBColor.from_string(bc.TERRACOTTA)
+    sub.font.size = Pt(15); sub.bold = True; sub.font.color.rgb = RGBColor.from_string(TERRACOTTA)
     doc.add_paragraph()
     cover = [
         ("Engagement", "YAT Website Cloud Migration (2023) — YAT's first cloud project"),
@@ -99,24 +100,24 @@ def build(path):
     ct = doc.add_table(rows=0, cols=2)
     for k, v in cover:
         cells = ct.add_row().cells
-        bc.set_cell_borders(cells[0]); bc.set_cell_borders(cells[1]); bc.shade_cell(cells[0], bc.CREAM)
+        set_cell_borders(cells[0]); set_cell_borders(cells[1]); shade_cell(cells[0], CREAM)
         kr = cells[0].paragraphs[0].add_run(k); kr.bold = True; kr.font.size = Pt(10)
         cells[1].paragraphs[0].add_run(v).font.size = Pt(10)
         cells[0].width = Cm(4.5); cells[1].width = Cm(12.0)
 
     # ---- CONTENTS ----
-    doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
+    doc.add_section(WD_SECTION.NEW_PAGE); build_header_footer(doc.sections[-1])
     doc.add_paragraph("Contents", style="Heading 1")
-    bc.add_field(doc.add_paragraph(), 'TOC \\o "1-3" \\h \\z \\u',
+    add_field(doc.add_paragraph(), 'TOC \\o "1-3" \\h \\z \\u',
                  placeholder="Right-click and choose “Update Field” to build the table of contents.")
 
     # ---- BODY ----
-    doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
+    doc.add_section(WD_SECTION.NEW_PAGE); build_header_footer(doc.sections[-1])
     h1 = lambda t: doc.add_paragraph(t, style="Heading 1")
     h3 = lambda t: doc.add_paragraph(t, style="Heading 3")
 
     h1("1. Purpose and Scope")
-    ex.para(doc, "This document records the baseline AWS architecture MTS implemented for the YAT Website "
+    add_body_paragraph(doc, "This document records the baseline AWS architecture MTS implemented for the YAT Website "
                  "Cloud Migration — YAT's first move to the cloud. The website (marketing site, course "
                  "catalogue, and online enquiry / application intake) and its CMS were re-hosted from a single "
                  "on-premises web server onto a simple, cost-minimal cloud deployment in Sydney. The engagement "
@@ -152,7 +153,7 @@ def build(path):
         "ICT Environment Overview — the on-premises current state being migrated from.",
     ])
     h3("2.2 Requirements the design must meet")
-    ex.etable(doc, ["Requirement", "Target / note"],
+    add_data_table(doc, ["Requirement", "Target / note"],
               [["Region / data residency", "ap-southeast-2 (Sydney); enquiry/application PII within Australia (Privacy Act, APP 8)"],
                ["Application stack", "Preserved — existing PHP/MySQL CMS on a LAMP stack, migrated as-is"],
                ["Availability", "No formal SLA for the pilot; single-AZ acceptable (a known, accepted limitation)"],
@@ -163,7 +164,7 @@ def build(path):
               widths=[5.0, 11.0])
 
     h1("3. Review of the Existing (On-Premises) Architecture")
-    ex.para(doc, "Unlike a greenfield build, this engagement migrated a running system. The source was a single "
+    add_body_paragraph(doc, "Unlike a greenfield build, this engagement migrated a running system. The source was a single "
                  "on-premises web server at the Cremorne campus hosting the CMS (PHP/MySQL on a LAMP stack), its "
                  "MySQL database, and uploaded media on local disk, behind the campus internet connection. It was "
                  "a single point of failure with no redundancy, strained during the enrolment-enquiry peak, and "
@@ -173,7 +174,7 @@ def build(path):
 
     h1("4. Architecture Design")
     h3("4.1 Assumptions and constraints")
-    ex.etable(doc, ["#", "Assumption / constraint", "Source"],
+    add_data_table(doc, ["#", "Assumption / constraint", "Source"],
               [["A1", "Region must be ap-southeast-2 (Sydney) for data residency", "Migration Requirements; Privacy Policy"],
                ["A2", "CMS application stack preserved: PHP/MySQL on a LAMP stack, migrated as-is", "Engagement Role Brief"],
                ["A3", "Light load most of the year, with a Jan–Feb enrolment-enquiry peak", "Consultation Notes"],
@@ -182,11 +183,11 @@ def build(path):
                ["A6", "Baseline is NOT high-availability and has NO disaster recovery", "Scoping decision (accepted residual risk)"]],
               widths=[1.0, 9.0, 6.0])
     h3("4.2 AWS account and region")
-    ex.para(doc, "An AWS account scoped to the engagement, in region ap-southeast-2 (Sydney); no deployment "
+    add_body_paragraph(doc, "An AWS account scoped to the engagement, in region ap-southeast-2 (Sydney); no deployment "
                  "outside Australian regions. A single Availability Zone (ap-southeast-2a) hosts the entire "
                  "baseline — there is no second AZ.")
     h3("4.3 Identity and Access Management (IAM)")
-    ex.etable(doc, ["Group / role", "Purpose", "Indicative permissions"],
+    add_data_table(doc, ["Group / role", "Purpose", "Indicative permissions"],
               [["YAT-ICT-Admins", "YAT ICT day-to-day ops post-handover", "Console access to EC2/RDS/S3/CloudWatch; no IAM changes"],
                ["MTS-Consultants", "MTS during build + cutover", "Admin during build; removed at handover"],
                ["Website-Instance role", "EC2 instance profile for the website", "S3 read/write (backups); CloudWatch logs/metrics"]],
@@ -197,9 +198,9 @@ def build(path):
         "Configuration decision left to the implementer: the administrative SSH access path to the instance.",
     ])
     h3("4.4 Network topology")
-    ex.para(doc, "VPC 10.0.0.0/16, with DNS hostnames/resolution and VPC flow logs enabled. Single-AZ subnets "
+    add_body_paragraph(doc, "VPC 10.0.0.0/16, with DNS hostnames/resolution and VPC flow logs enabled. Single-AZ subnets "
                  "in ap-southeast-2a:")
-    ex.etable(doc, ["Subnet", "CIDR", "Tier", "Internet-facing?"],
+    add_data_table(doc, ["Subnet", "CIDR", "Tier", "Internet-facing?"],
               [["public-web-a", "10.0.1.0/24", "Website EC2 (CMS)", "Yes"],
                ["private-data-a", "10.0.21.0/24", "Database (RDS)", "No"]],
               widths=[4.0, 3.5, 5.5, 3.0])
@@ -230,7 +231,7 @@ def build(path):
         "Placed in private-data-a; not publicly accessible; 7-day automated backups; maintenance in an overnight window.",
     ])
     h3("4.8 Storage")
-    ex.etable(doc, ["Resource", "Type", "Purpose"],
+    add_data_table(doc, ["Resource", "Type", "Purpose"],
               [["EC2 root volume", "EBS gp3", "OS, CMS application, and uploaded media"],
                ["Backups bucket", "S3", "Nightly database dumps and media snapshots"]],
               widths=[4.0, 4.5, 7.5])
@@ -239,7 +240,7 @@ def build(path):
         "Media is served from the instance, not from object storage or a CDN — an accepted pilot simplification (and a candidate first improvement later).",
     ])
     h3("4.9 Security")
-    ex.etable(doc, ["Security group", "Inbound", "Outbound"],
+    add_data_table(doc, ["Security group", "Inbound", "Outbound"],
               [["sg-web", "HTTP:80 + HTTPS:443 from 0.0.0.0/0; SSH:22 from an admin source (implementer decision)", "MySQL:3306 to sg-db; HTTPS to AWS APIs / updates"],
                ["sg-db", "MySQL:3306 from sg-web only", "none"]],
               widths=[3.0, 8.0, 5.0])
@@ -250,9 +251,9 @@ def build(path):
         "Operates under the AWS Shared Responsibility Model — AWS secures the cloud; YAT/MTS secure the OS, application, IAM, data and access in the cloud.",
     ])
     h3("4.10 Monitoring (baseline)")
-    ex.para(doc, "Standard CloudWatch metrics for the EC2 instance and the RDS database, with a small set of "
+    add_body_paragraph(doc, "Standard CloudWatch metrics for the EC2 instance and the RDS database, with a small set of "
                  "baseline alarms:")
-    ex.etable(doc, ["Alarm", "Threshold"],
+    add_data_table(doc, ["Alarm", "Threshold"],
               [["EC2 instance status check failed", "Any failed check"],
                ["EC2 CPU high", "≥ 80% over 10 min"],
                ["RDS CPU high", "≥ 80% over 10 min"],
@@ -260,26 +261,26 @@ def build(path):
               widths=[8.0, 8.0])
     add_bullet_list(doc, ["Logging: web/CMS and RDS logs → CloudWatch Logs; VPC flow logs enabled. No cross-AZ or replica-lag alarms (there is no second AZ or replica)."])
     h3("4.11 Naming and tagging conventions")
-    ex.para(doc, "Naming pattern yat-web-<resource-type>-<env> (e.g. yat-web-ec2-prod). Mandatory tags:")
-    ex.etable(doc, ["Tag", "Value"],
+    add_body_paragraph(doc, "Naming pattern yat-web-<resource-type>-<env> (e.g. yat-web-ec2-prod). Mandatory tags:")
+    add_data_table(doc, ["Tag", "Value"],
               [["Project", "YAT-Website-Migration"], ["Environment", "Production"], ["Owner", "YAT-ICT"],
                ["ManagedBy", "MTS during build → YAT-ICT post-handover"],
                ["CostCentre", "YAT-Website"], ["DataClassification", "Internal; PII (enquiry/application data)"]],
               widths=[5.0, 11.0])
     h3("4.12 Backup")
-    ex.etable(doc, ["Resource", "Mechanism", "Retention"],
+    add_data_table(doc, ["Resource", "Mechanism", "Retention"],
               [["RDS database", "Automated daily backups + transaction logs", "7 days"],
                ["EC2 EBS volume", "Daily AMI/EBS snapshot (Data Lifecycle Manager)", "7 days"],
                ["Database / media", "Nightly dump + media snapshot to the S3 backups bucket", "Versioned"]],
               widths=[4.5, 7.5, 4.0])
     add_bullet_list(doc, ["Cross-Region backup copies are out of scope for the baseline — there is no disaster-recovery tier."])
     h3("4.13 Recovery objectives — baseline state")
-    ex.para(doc, "The baseline's recovery posture is backup-based and unmeasured: recovery means rebuilding the "
+    add_body_paragraph(doc, "The baseline's recovery posture is backup-based and unmeasured: recovery means rebuilding the "
                  "single instance and restoring from the most recent backup. No RTO or RPO was committed for the "
                  "pilot. There is no second-AZ or second-region fallback. This is the principal gap a future "
                  "engagement (and any disaster-recovery plan) would address.")
     h3("4.14 Single points of failure (known and accepted)")
-    ex.para(doc, "The baseline is single-AZ and single-instance by design. The following are known single points "
+    add_body_paragraph(doc, "The baseline is single-AZ and single-instance by design. The following are known single points "
                  "of failure, accepted as residual risk for the pilot and recorded for a future engagement:")
     add_bullet_list(doc, [
         "The single EC2 instance — its failure takes the whole website offline.",
@@ -288,7 +289,7 @@ def build(path):
         "Uploaded media on the instance's EBS volume — not redundant or offloaded.",
     ])
     h3("4.15 Configuration decisions left to the implementer")
-    ex.etable(doc, ["#", "Decision", "Why left open"],
+    add_data_table(doc, ["#", "Decision", "Why left open"],
               [["C1", "EC2 instance type", "Size against the website's light load + peak"],
                ["C2", "RDS instance class + storage size", "Size from the CMS data footprint + growth"],
                ["C3", "TLS certificate mechanism on the instance", "Implementer's operational preference"],
@@ -297,7 +298,7 @@ def build(path):
               widths=[1.0, 7.0, 8.0])
 
     h1("5. Implementation Sequencing")
-    ex.para(doc, "Because this migrated a live website, the build was sequenced around a cutover timed to avoid "
+    add_body_paragraph(doc, "Because this migrated a live website, the build was sequenced around a cutover timed to avoid "
                  "the enrolment-enquiry peak:")
     add_bullet_list(doc, [
         "Provision the foundation: account, VPC, single-AZ subnets, security groups, IAM.",
@@ -309,7 +310,7 @@ def build(path):
     ])
 
     h1("6. Verification Plan")
-    ex.para(doc, "The baseline was verified functionally: homepage and key pages load over HTTPS; the course "
+    add_body_paragraph(doc, "The baseline was verified functionally: homepage and key pages load over HTTPS; the course "
                  "catalogue renders; the enquiry/application form submits, emails Admissions, and forwards to the "
                  "student-admin intake; migrated content and submitted records reconcile against the source.")
     na(doc, "failure-simulation and availability verification do not apply to this baseline — there is no "
@@ -317,7 +318,7 @@ def build(path):
             "disaster-recovery engagement.")
 
     h1("7. Out of Scope")
-    ex.para(doc, "Stated explicitly — these are the deliberate gaps in the baseline, and the natural inputs to "
+    add_body_paragraph(doc, "Stated explicitly — these are the deliberate gaps in the baseline, and the natural inputs to "
                  "any future improvement or disaster-recovery work:")
     add_bullet_list(doc, [
         "Load balancer (ALB) and an Auto Scaling Group across multiple AZs.",
@@ -336,7 +337,7 @@ def build(path):
     ])
 
     h1("Document control")
-    ex.etable(doc, ["Field", "Value"],
+    add_data_table(doc, ["Field", "Value"],
               [["Document version", "v1.0 — As-built baseline"],
                ["Authored by", "MTS Consulting, in consultation with YAT ICT"],
                ["Approved by", "Pat Lin (MTS Senior Consultant) · Sam Walker (YAT ICT Manager)"],

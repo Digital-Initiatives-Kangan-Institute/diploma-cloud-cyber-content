@@ -10,17 +10,18 @@ marked "Not applicable" per the convention. In-world artefact (no UoC tags).
 
 Output to the website documents folder for printing to PDF, then wiring into the AT2/AT3 intranet states.
 
-Usage:  python scripts/build_accounting_solution_design.py [output.docx]
+Usage:  python scripts/scenario/build_accounting_solution_design.py [output.docx]
 Default: ../diploma-cloud-cyber-website/public/documents/YAT-Accounting-Baseline-Solution-Design.docx
 """
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
-from helpers.docx_body_text import add_bullet_list  # noqa: E402
-import build_bc_template as bc   # noqa: E402
-import build_s1_cl1_at1_bc_exemplar as ex   # noqa: E402  (etable, para, bullets)
+from helpers.docx_body_text import add_body_paragraph, add_bullet_list  # noqa: E402
+from helpers.docx_tables import add_data_table  # noqa: E402
+from helpers.docx_styling import add_field, paragraph_bottom_rule, set_cell_borders, shade_cell  # noqa: E402
+from helpers.yat_brand import ADDRESS, CREAM, GREY, TEAL, TERRACOTTA  # noqa: E402
+from helpers.yat_docx_document import build_header_footer, configure_styles, wordmark  # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -32,7 +33,7 @@ def na(doc, reason):
     r = p.add_run(f"Not applicable — {reason}")
     r.bold = True
     r.font.size = Pt(10.5)
-    r.font.color.rgb = RGBColor.from_string(bc.TERRACOTTA)
+    r.font.color.rgb = RGBColor.from_string(TERRACOTTA)
     p.paragraph_format.space_after = Pt(6)
     return p
 
@@ -43,44 +44,44 @@ def diagram_placeholder(doc, caption, source):
     from docx.enum.text import WD_ALIGN_PARAGRAPH
     t = doc.add_table(rows=1, cols=1)
     cell = t.cell(0, 0)
-    bc.set_cell_borders(cell)
-    bc.shade_cell(cell, bc.CREAM)
+    set_cell_borders(cell)
+    shade_cell(cell, CREAM)
     cell.width = Cm(16.6)
     t.rows[0].height = Cm(9.5)
     t.rows[0].height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
     cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
     p = cell.paragraphs[0]; p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r = p.add_run("[ NETWORK TOPOLOGY DIAGRAM — PASTE HERE ]")
-    r.bold = True; r.font.size = Pt(11); r.font.color.rgb = RGBColor.from_string(bc.TERRACOTTA)
+    r.bold = True; r.font.size = Pt(11); r.font.color.rgb = RGBColor.from_string(TERRACOTTA)
     p2 = cell.add_paragraph(); p2.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r2 = p2.add_run(source)
-    r2.italic = True; r2.font.size = Pt(9); r2.font.color.rgb = RGBColor.from_string(bc.GREY)
+    r2.italic = True; r2.font.size = Pt(9); r2.font.color.rgb = RGBColor.from_string(GREY)
     cap = doc.add_paragraph(); cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
     cr = cap.add_run(caption)
-    cr.italic = True; cr.font.size = Pt(9); cr.font.color.rgb = RGBColor.from_string(bc.GREY)
+    cr.italic = True; cr.font.size = Pt(9); cr.font.color.rgb = RGBColor.from_string(GREY)
     return t
 
 
 def build(path):
     doc = Document()
-    bc.configure_styles(doc)
+    configure_styles(doc)
     sec = doc.sections[0]
     sec.page_height = Cm(29.7); sec.page_width = Cm(21.0)
     sec.top_margin = Cm(2.6); sec.bottom_margin = Cm(2.2)
     sec.left_margin = Cm(2.2); sec.right_margin = Cm(2.2)
     sec.header_distance = Cm(1.0); sec.footer_distance = Cm(1.0)
-    bc.build_header_footer(sec)
+    build_header_footer(sec)
 
     # ---- COVER ----
-    bc.wordmark(doc.add_paragraph())
-    ar = doc.add_paragraph().add_run(bc.ADDRESS)
-    ar.font.size = Pt(9); ar.font.color.rgb = RGBColor.from_string(bc.GREY)
-    bc.paragraph_bottom_rule(doc.add_paragraph(), bc.TEAL, sz=12)
+    wordmark(doc.add_paragraph())
+    ar = doc.add_paragraph().add_run(ADDRESS)
+    ar.font.size = Pt(9); ar.font.color.rgb = RGBColor.from_string(GREY)
+    paragraph_bottom_rule(doc.add_paragraph(), TEAL, sz=12)
     for _ in range(3):
         doc.add_paragraph()
     doc.add_paragraph(style="Title").add_run("Solution Design")
     sub = doc.add_paragraph().add_run("YAT Accounting System Cloud Architecture — Baseline Design")
-    sub.font.size = Pt(15); sub.bold = True; sub.font.color.rgb = RGBColor.from_string(bc.TERRACOTTA)
+    sub.font.size = Pt(15); sub.bold = True; sub.font.color.rgb = RGBColor.from_string(TERRACOTTA)
     doc.add_paragraph()
     cover = [
         ("Engagement", "YAT Accounting System Cloud Migration — Foundation Build"),
@@ -94,24 +95,24 @@ def build(path):
     ct = doc.add_table(rows=0, cols=2)
     for k, v in cover:
         cells = ct.add_row().cells
-        bc.set_cell_borders(cells[0]); bc.set_cell_borders(cells[1]); bc.shade_cell(cells[0], bc.CREAM)
+        set_cell_borders(cells[0]); set_cell_borders(cells[1]); shade_cell(cells[0], CREAM)
         kr = cells[0].paragraphs[0].add_run(k); kr.bold = True; kr.font.size = Pt(10)
         cells[1].paragraphs[0].add_run(v).font.size = Pt(10)
         cells[0].width = Cm(4.5); cells[1].width = Cm(12.0)
 
     # ---- CONTENTS ----
-    doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
+    doc.add_section(WD_SECTION.NEW_PAGE); build_header_footer(doc.sections[-1])
     doc.add_paragraph("Contents", style="Heading 1")
-    bc.add_field(doc.add_paragraph(), 'TOC \\o "1-3" \\h \\z \\u',
+    add_field(doc.add_paragraph(), 'TOC \\o "1-3" \\h \\z \\u',
                  placeholder="Right-click and choose “Update Field” to build the table of contents.")
 
     # ---- BODY ----
-    doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
+    doc.add_section(WD_SECTION.NEW_PAGE); build_header_footer(doc.sections[-1])
     h1 = lambda t: doc.add_paragraph(t, style="Heading 1")
     h3 = lambda t: doc.add_paragraph(t, style="Heading 3")
 
     h1("1. Purpose and Scope")
-    ex.para(doc, "This document specifies the baseline AWS architecture MTS will implement as the foundation "
+    add_body_paragraph(doc, "This document specifies the baseline AWS architecture MTS will implement as the foundation "
                  "build phase of the YAT Accounting System cloud migration. It translates the approved "
                  "direction into a concrete, implementable design for the Ledgerline finance and office-"
                  "administration system. The design stops at “infrastructure ready for application "
@@ -147,7 +148,7 @@ def build(path):
         "Engagement Role Brief and Consultation Notes — engagement scope; OS, application and database preservation.",
     ])
     h3("2.2 Requirements the design must meet")
-    ex.etable(doc, ["Requirement", "Target / note"],
+    add_data_table(doc, ["Requirement", "Target / note"],
               [["Region / data residency", "ap-southeast-2 (Sydney); financial records + staff/debtor PII within Australia (Privacy Act APP 8; financial-records retention)"],
                ["Application stack", "Preserved — Windows Server 2016 · Microsoft SQL Server (Standard) · Ledgerline"],
                ["Concurrent users", "15–25 typical; 45–55 peak at month-end close and EOFY; idle out of hours"],
@@ -167,7 +168,7 @@ def build(path):
 
     h1("4. Architecture Design")
     h3("4.1 Assumptions and constraints")
-    ex.etable(doc, ["#", "Assumption / constraint", "Source"],
+    add_data_table(doc, ["#", "Assumption / constraint", "Source"],
               [["A1", "Region must be ap-southeast-2 (Sydney) for financial-records data residency", "Migration Requirements; Privacy Policy"],
                ["A2", "Application stack preserved: Windows Server 2016, Microsoft SQL Server, Ledgerline", "Migration Requirements; Role Brief"],
                ["A3", "Data footprint ~22 GB SQL Server data, +~5 GB/year, plus scanned attachments", "Application Spec; Server Specs"],
@@ -177,12 +178,12 @@ def build(path):
                ["A7", "Baseline is NOT high-availability; Multi-AZ resilience deferred to the HA design", "Scoping decision"]],
               widths=[1.0, 9.5, 5.5])
     h3("4.2 AWS account and region")
-    ex.para(doc, "An AWS account scoped to the migration engagement, provisioned by YAT and shared with MTS "
+    add_body_paragraph(doc, "An AWS account scoped to the migration engagement, provisioned by YAT and shared with MTS "
                  "for the build. Region ap-southeast-2 (Sydney); no deployment outside Australian regions, to "
                  "satisfy financial-records residency. Availability Zone ap-southeast-2a for the baseline; the "
                  "follow-on HA design introduces a second AZ.")
     h3("4.3 Identity and Access Management (IAM)")
-    ex.etable(doc, ["Group", "Purpose", "Indicative permissions"],
+    add_data_table(doc, ["Group", "Purpose", "Indicative permissions"],
               [["YAT-ICT-Admins", "YAT ICT day-to-day ops post-handover", "Read-only on infra; full CloudWatch/RDS/EC2 console; no IAM changes"],
                ["MTS-Consultants", "MTS during build + support", "Full admin during build; reduced post-handover"],
                ["Application-Service", "EC2 instance role for Ledgerline", "RDS read/write; S3 read/write (attachments); CloudWatch logs"],
@@ -194,10 +195,10 @@ def build(path):
         "Configuration decision left to the implementer: the MTS-Consultants permission boundary during build vs after handover.",
     ])
     h3("4.4 Network topology")
-    ex.para(doc, "VPC 10.0.0.0/16 (room to expand), with DNS hostnames/resolution and VPC flow logs enabled. "
+    add_body_paragraph(doc, "VPC 10.0.0.0/16 (room to expand), with DNS hostnames/resolution and VPC flow logs enabled. "
                  "This is an internal, staff-only service — there is no public internet ingress to the "
                  "application. Single-AZ subnets in ap-southeast-2a:")
-    ex.etable(doc, ["Subnet", "CIDR", "Tier", "Internet-facing?"],
+    add_data_table(doc, ["Subnet", "CIDR", "Tier", "Internet-facing?"],
               [["public-egress-a", "10.0.1.0/24", "NAT gateway only (outbound patching)", "Egress only"],
                ["private-app-a", "10.0.11.0/24", "Application / Ledgerline EC2 + internal ALB", "No"],
                ["private-data-a", "10.0.21.0/24", "Database (RDS for SQL Server)", "No"]],
@@ -234,7 +235,7 @@ def build(path):
         "Schema and data migration are YAT ICT's responsibility, not MTS's — MTS provisions an empty instance.",
     ])
     h3("4.8 Storage")
-    ex.etable(doc, ["Resource", "Type", "Purpose"],
+    add_data_table(doc, ["Resource", "Type", "Purpose"],
               [["EC2 root volume", "EBS gp3 80 GB", "OS and Ledgerline application install"],
                ["EC2 data volume", "EBS gp3 (sized by implementer)", "Ledgerline application data, report staging"],
                ["Documents bucket", "S3", "Scanned invoices / purchase orders / supporting documents; lifecycle to Glacier for 7-year financial retention"],
@@ -242,7 +243,7 @@ def build(path):
               widths=[4.0, 4.5, 7.5])
     add_bullet_list(doc, ["Both buckets: block all public access; SSE-S3 (or SSE-KMS) encryption; versioning enabled; access logging to a log bucket; Object Lock considered for the 7-year financial-records hold."])
     h3("4.9 Security")
-    ex.etable(doc, ["Security group", "Inbound", "Outbound"],
+    add_data_table(doc, ["Security group", "Inbound", "Outbound"],
               [["sg-alb", "HTTPS:443 from the campus VPN / staff CIDR only", "HTTPS to sg-app"],
                ["sg-app", "from sg-alb; RDP:3389 from MTS bastion (design left to implementer)", "SQL:1433 to sg-db; HTTPS via NAT; LDAPS to campus AD; SMTP to O365; SFTP to payroll bureau; banking endpoints"],
                ["sg-db", "SQL Server:1433 from sg-app only", "none"]],
@@ -253,9 +254,9 @@ def build(path):
         "Operates under the AWS Shared Responsibility Model — AWS secures the cloud; YAT/MTS secure the OS, application, IAM, data and access in the cloud.",
     ])
     h3("4.10 Monitoring (baseline)")
-    ex.para(doc, "Standard CloudWatch metrics for EC2, RDS, ALB and Auto Scaling. Baseline alarms (HA-tuned "
+    add_body_paragraph(doc, "Standard CloudWatch metrics for EC2, RDS, ALB and Auto Scaling. Baseline alarms (HA-tuned "
                  "alarms come in the follow-on HA design):")
-    ex.etable(doc, ["Alarm", "Threshold"],
+    add_data_table(doc, ["Alarm", "Threshold"],
               [["EC2 CPU high", "≥ 80% over 10 min"],
                ["RDS CPU high", "≥ 80% over 10 min"],
                ["RDS free storage low", "< 15%"],
@@ -264,36 +265,36 @@ def build(path):
               widths=[8.0, 8.0])
     add_bullet_list(doc, ["Logging: VPC flow logs and RDS logs → CloudWatch Logs; ALB access logs → S3; EC2 OS logs via the CloudWatch Agent. Financial-audit-relevant logs retained to meet the 7-year obligation."])
     h3("4.11 Naming and tagging conventions")
-    ex.para(doc, "Naming pattern yat-acct-<resource-type>-<env>-<az-or-purpose> (e.g. yat-acct-alb-prod). Mandatory tags:")
-    ex.etable(doc, ["Tag", "Value"],
+    add_body_paragraph(doc, "Naming pattern yat-acct-<resource-type>-<env>-<az-or-purpose> (e.g. yat-acct-alb-prod). Mandatory tags:")
+    add_data_table(doc, ["Tag", "Value"],
               [["Project", "YAT-Accounting-Migration"], ["Environment", "Production"], ["Owner", "YAT-ICT"],
                ["ManagedBy", "MTS-Migration during build → YAT-ICT post-handover"],
                ["CostCentre", "YAT-Accounting"], ["DataClassification", "Financial / Confidential (PII)"]],
               widths=[5.0, 11.0])
     h3("4.12 Backup")
-    ex.etable(doc, ["Resource", "Mechanism", "Retention"],
+    add_data_table(doc, ["Resource", "Mechanism", "Retention"],
               [["RDS database", "Automated daily backups + transaction-log backups (point-in-time recovery)", "Sized to RPO ≤ 1 h; long-term financial copies retained ≥ 7 years"],
                ["EC2 EBS volumes", "Daily AMI snapshot (Data Lifecycle Manager)", "14 days"],
                ["Documents (S3)", "Versioning + lifecycle to Glacier", "≥ 7 years (financial-records obligation)"]],
               widths=[4.0, 7.0, 5.0])
     add_bullet_list(doc, ["Cross-Region backup copies are out of scope for the baseline — addressed in the follow-on HA design."])
     h3("4.13 Recovery objectives — baseline state")
-    ex.para(doc, "The baseline meets RPO ≤ 1 hour through RDS automated + transaction-log backups (point-in-"
+    add_body_paragraph(doc, "The baseline meets RPO ≤ 1 hour through RDS automated + transaction-log backups (point-in-"
                  "time recovery), and supports RTO ≤ 1 business day via a single-AZ restore. The single AZ and "
                  "the single RDS instance remain known single points of failure: tolerable for a business-"
                  "hours service in the short term, but resilience against an AZ failure is the objective of the "
                  "follow-on HA design.")
     h3("4.14 Components requiring vertical scaling")
-    ex.para(doc, "RDS instance-class changes require a modify-and-apply (a brief interruption, taken in the "
+    add_body_paragraph(doc, "RDS instance-class changes require a modify-and-apply (a brief interruption, taken in the "
                  "maintenance window, outside business hours); EBS volumes support online resize with no downtime.")
     h3("4.15 Single points of failure removed")
     na(doc, "this baseline is single-AZ by design; the single RDS instance and the single AZ are known "
             "single points of failure, deliberately deferred to the follow-on HA design.")
     h3("4.16 Configuration decisions left to the implementer")
-    ex.para(doc, "The design is opinionated where it matters and silent where the implementer must show "
+    add_body_paragraph(doc, "The design is opinionated where it matters and silent where the implementer must show "
                  "judgement. Each decision below is to be made and evidenced in the Deployment Report, "
                  "justified against the Ledgerline workload.")
-    ex.etable(doc, ["#", "Decision", "Why left open"],
+    add_data_table(doc, ["#", "Decision", "Why left open"],
               [["C1", "EC2 instance type (general-purpose family)", "Size against the Ledgerline workload (15–25 typical / 45–55 month-end peak)"],
                ["C2", "RDS for SQL Server instance class", "Size against the SQL Server workload (read-heavy at month-end)"],
                ["C3", "SQL Server licensing model — licence-included vs BYOL", "Material cost decision under the cloud operating model"],
@@ -314,7 +315,7 @@ def build(path):
             "Deployment Report's testing section.")
 
     h1("7. Out of Scope")
-    ex.para(doc, "Stated explicitly so the implementer knows what not to build (these are the deliberate "
+    add_body_paragraph(doc, "Stated explicitly so the implementer knows what not to build (these are the deliberate "
                  "inputs to the follow-on HA design):")
     add_bullet_list(doc, [
         "Multi-AZ SQL Server; cross-AZ subnets (private-app-b, private-data-b); ASG capacity ≥ 2 across AZs.",
@@ -331,7 +332,7 @@ def build(path):
     ])
 
     h1("Document control")
-    ex.etable(doc, ["Field", "Value"],
+    add_data_table(doc, ["Field", "Value"],
               [["Document version", "v1.0 — Approved for implementation"],
                ["Authored by", "MTS Senior Architecture Team, in consultation with YAT ICT"],
                ["Approved by", "Pat Lin (MTS Senior Consultant) · Sam Walker (YAT ICT Manager)"],
