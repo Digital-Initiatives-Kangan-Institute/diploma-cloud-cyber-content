@@ -117,3 +117,21 @@ def clear_table_rows(table, keep):
     """Remove all rows after the first ``keep`` rows."""
     for row in table.rows[keep:]:
         row._element.getparent().remove(row._element)
+
+
+def add_section_row(table, text):
+    """Add a 2-column row: bold section label in col 0, empty col 1. Returns the row."""
+    row = table.add_row()
+    set_cell_content(row.cells[0], text)
+    for r in row.cells[0].paragraphs[0].runs:
+        r.bold = True
+    set_cell_content(row.cells[1], "")
+    return row
+
+
+def add_criterion_row(table, text):
+    """Add a 2-column marking row: criterion in col 0, 'Yes / No' check in col 1. Returns the row."""
+    row = table.add_row()
+    set_cell_content(row.cells[0], text)
+    set_cell_content(row.cells[1], "Yes        No")
+    return row

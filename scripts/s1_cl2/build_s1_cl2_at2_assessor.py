@@ -20,7 +20,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import build_s1_cl2_at1_assessor as a1  # noqa: E402  (shared helpers: set_cell, instr_row, etc.)
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_code import add_code_block  # noqa: E402
+from helpers.docx_tables import add_criterion_row, add_section_row, clear_table_rows, find_instruction_row, set_cell_content  # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.shared import Pt  # noqa: E402
@@ -399,45 +401,34 @@ def handler(event, context=None):
 HANDLER_LINES = HANDLER_SRC.splitlines()
 
 
-def code_block(doc, lines):
-    """Render a monospaced code/listing block, one paragraph per line."""
-    for ln in lines:
-        p = doc.add_paragraph()
-        p.paragraph_format.space_after = Pt(0)
-        p.paragraph_format.space_before = Pt(0)
-        r = p.add_run(ln if ln else " ")
-        r.font.name = "Consolas"
-        r.font.size = Pt(8.5)
-
-
 def build(path):
     doc = Document(TEMPLATE)
 
     # ---- Details ----
     t = doc.tables[0]
-    a1.set_cell(t.rows[1].cells[1], DETAILS["qualification"])
-    a1.set_cell(t.rows[2].cells[1], DETAILS["units"])
-    a1.set_cell(t.rows[3].cells[1], DETAILS["task_title"])
-    a1.set_cell(t.rows[4].cells[1], DETAILS["task_number"])
+    set_cell_content(t.rows[1].cells[1], DETAILS["qualification"])
+    set_cell_content(t.rows[2].cells[1], DETAILS["units"])
+    set_cell_content(t.rows[3].cells[1], DETAILS["task_title"])
+    set_cell_content(t.rows[4].cells[1], DETAILS["task_number"])
 
     # ---- Instructions ----
     ti = doc.tables[1]
-    a1.set_cell(a1.instr_row(ti, "Assessment overview"), OVERVIEW)
-    a1.set_cell(a1.instr_row(ti, "Task"), TASKS)
-    a1.set_cell(a1.instr_row(ti, "Resources required"), RESOURCES)
-    a1.set_cell(a1.instr_row(ti, "Assessment criteria"), CRITERIA_STATEMENT)
+    set_cell_content(find_instruction_row(ti, "Assessment overview"), OVERVIEW)
+    set_cell_content(find_instruction_row(ti, "Task"), TASKS)
+    set_cell_content(find_instruction_row(ti, "Resources required"), RESOURCES)
+    set_cell_content(find_instruction_row(ti, "Assessment criteria"), CRITERIA_STATEMENT)
     cond = ti.add_row()
-    a1.set_cell(cond.cells[0], "Assessment Conditions & Setup Requirements")
+    set_cell_content(cond.cells[0], "Assessment Conditions & Setup Requirements")
     for r in cond.cells[0].paragraphs[0].runs:
         r.bold = True
-    a1.set_cell(cond.cells[1], CONDITIONS)
+    set_cell_content(cond.cells[1], CONDITIONS)
 
     # ---- Marking guide ----
     tm = doc.tables[2]
-    a1.clear_table_rows(tm, 2)
-    a1.add_section_row(tm, "Deployment Report")
+    clear_table_rows(tm, 2)
+    add_section_row(tm, "Deployment Report")
     for c in CRITERIA:
-        a1.add_criterion_row(tm, c)
+        add_criterion_row(tm, c)
 
     # ---- Instructions to Student ----
     doc.add_paragraph("Instructions to Student", style="Heading 1")
@@ -460,18 +451,18 @@ def build(path):
     # ---- Appendix A: provided data-store template ----
     for text, style in APPENDIX_A:
         doc.add_paragraph(text, style=style)
-    code_block(doc, DATASTORE_YAML)
+    add_code_block(doc, DATASTORE_YAML)
     for text, style in APPENDIX_A_AFTER:
         doc.add_paragraph(text, style=style)
-    code_block(doc, DATASTORE_OPS)
+    add_code_block(doc, DATASTORE_OPS)
 
     # ---- Appendix B: provided microservice code + contract ----
     for text, style in APPENDIX_B_INTRO:
         doc.add_paragraph(text, style=style)
-    code_block(doc, HANDLER_LINES)
+    add_code_block(doc, HANDLER_LINES)
     for text, style in APPENDIX_B_MID:
         doc.add_paragraph(text, style=style)
-    code_block(doc, CONTRACT_LINES)
+    add_code_block(doc, CONTRACT_LINES)
     for text, style in APPENDIX_B_USE:
         doc.add_paragraph(text, style=style)
 

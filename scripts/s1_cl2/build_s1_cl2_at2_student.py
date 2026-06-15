@@ -16,8 +16,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import build_s1_cl2_at1_assessor as a1   # noqa: E402  shared cell/table helpers
 import build_s1_cl2_at2_assessor as a2   # noqa: E402  shared AT2 content (single source of truth)
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_tables import add_criterion_row, add_section_row, clear_table_rows, find_instruction_row, set_cell_content  # noqa: E402
+from helpers.docx_code import add_code_block  # noqa: E402
 
 from docx import Document  # noqa: E402
 
@@ -29,24 +31,24 @@ def build(path):
 
     # ---- Details (student name / ID / assessor name+email left blank) ----
     t = doc.tables[0]
-    a1.set_cell(t.rows[2].cells[1], a2.DETAILS["qualification"])
-    a1.set_cell(t.rows[3].cells[1], a2.DETAILS["units"])
-    a1.set_cell(t.rows[4].cells[1], a2.DETAILS["task_title"])
-    a1.set_cell(t.rows[5].cells[1], a2.DETAILS["task_number"])
+    set_cell_content(t.rows[2].cells[1], a2.DETAILS["qualification"])
+    set_cell_content(t.rows[3].cells[1], a2.DETAILS["units"])
+    set_cell_content(t.rows[4].cells[1], a2.DETAILS["task_title"])
+    set_cell_content(t.rows[5].cells[1], a2.DETAILS["task_number"])
 
     # ---- Student instructions ----
     ti = doc.tables[1]
-    a1.set_cell(a1.instr_row(ti, "Assessment overview"), a2.OVERVIEW)
-    a1.set_cell(a1.instr_row(ti, "Task"), a2.TASKS)
-    a1.set_cell(a1.instr_row(ti, "Resources required"), a2.RESOURCES)
-    a1.set_cell(a1.instr_row(ti, "Assessment criteria"), a2.CRITERIA_STATEMENT)
+    set_cell_content(find_instruction_row(ti, "Assessment overview"), a2.OVERVIEW)
+    set_cell_content(find_instruction_row(ti, "Task"), a2.TASKS)
+    set_cell_content(find_instruction_row(ti, "Resources required"), a2.RESOURCES)
+    set_cell_content(find_instruction_row(ti, "Assessment criteria"), a2.CRITERIA_STATEMENT)
 
     # ---- Assessment criteria (no UoC / benchmark) ----
     tm = doc.tables[2]
-    a1.clear_table_rows(tm, 2)
-    a1.add_section_row(tm, "Deployment Report")
+    clear_table_rows(tm, 2)
+    add_section_row(tm, "Deployment Report")
     for c in a2.CRITERIA:
-        a1.add_criterion_row(tm, c)
+        add_criterion_row(tm, c)
 
     # ---- Detailed task instructions (no marking benchmark) ----
     doc.add_paragraph("Instructions to Student", style="Heading 1")
@@ -56,18 +58,18 @@ def build(path):
     # ---- Appendix A: provided data-store template (students operate this) ----
     for text, style in a2.APPENDIX_A:
         doc.add_paragraph(text, style=style)
-    a2.code_block(doc, a2.DATASTORE_YAML)
+    add_code_block(doc, a2.DATASTORE_YAML)
     for text, style in a2.APPENDIX_A_AFTER:
         doc.add_paragraph(text, style=style)
-    a2.code_block(doc, a2.DATASTORE_OPS)
+    add_code_block(doc, a2.DATASTORE_OPS)
 
     # ---- Appendix B: provided microservice code + contract (students build with this) ----
     for text, style in a2.APPENDIX_B_INTRO:
         doc.add_paragraph(text, style=style)
-    a2.code_block(doc, a2.HANDLER_LINES)
+    add_code_block(doc, a2.HANDLER_LINES)
     for text, style in a2.APPENDIX_B_MID:
         doc.add_paragraph(text, style=style)
-    a2.code_block(doc, a2.CONTRACT_LINES)
+    add_code_block(doc, a2.CONTRACT_LINES)
     for text, style in a2.APPENDIX_B_USE:
         doc.add_paragraph(text, style=style)
 

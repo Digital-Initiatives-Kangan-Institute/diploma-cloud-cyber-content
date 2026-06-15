@@ -13,8 +13,24 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH  # noqa: E402
 
 from helpers.docx_tables import (  # noqa: E402
     add_template_table, add_data_table, set_cell_content, find_instruction_row, clear_table_rows,
+    add_section_row, add_criterion_row,
 )
 from helpers.yat_brand import GREY  # noqa: E402
+
+
+def test_add_section_row_bolds_label_and_blanks_col1():
+    t = Document().add_table(rows=1, cols=2)
+    row = add_section_row(t, "Part A")
+    assert row.cells[0].text == "Part A"
+    assert row.cells[0].paragraphs[0].runs[0].bold is True
+    assert row.cells[1].text == ""
+
+
+def test_add_criterion_row_sets_yes_no():
+    t = Document().add_table(rows=1, cols=2)
+    row = add_criterion_row(t, "Meets PC 1.1")
+    assert row.cells[0].text == "Meets PC 1.1"
+    assert "Yes" in row.cells[1].text and "No" in row.cells[1].text
 
 
 def test_template_table_shape_and_placeholder_styling():

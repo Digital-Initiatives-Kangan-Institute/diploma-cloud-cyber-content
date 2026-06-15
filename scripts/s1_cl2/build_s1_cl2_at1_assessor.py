@@ -37,52 +37,8 @@ TEMPLATE = "templates/Project Assessment - Assessor.docx"
 
 # ---------- cell / table helpers (preserve template styles) ----------
 
-def set_cell(cell, lines):
-    """Replace a cell's content with one paragraph per line, keeping the cell's style."""
-    if isinstance(lines, str):
-        lines = [lines]
-    for p in cell.paragraphs[1:]:
-        p._element.getparent().remove(p._element)
-    first = cell.paragraphs[0]
-    for r in list(first.runs):
-        r._element.getparent().remove(r._element)
-    first.add_run(lines[0])
-    style = first.style
-    for line in lines[1:]:
-        np = cell.add_paragraph()
-        np.style = style
-        np.add_run(line)
-
-
-def instr_row(table, label):
-    """Return the col-1 cell of the instructions row whose col-0 starts with `label`."""
-    for row in table.rows:
-        if row.cells[0].text.strip().lower().startswith(label.lower()):
-            return row.cells[1]
-    raise KeyError(label)
-
-
-def clear_table_rows(table, keep):
-    """Remove all rows after the first `keep` rows."""
-    for row in table.rows[keep:]:
-        row._element.getparent().remove(row._element)
-
-
-def add_section_row(table, text):
-    row = table.add_row()
-    set_cell(row.cells[0], text)
-    # bold the section label
-    for r in row.cells[0].paragraphs[0].runs:
-        r.bold = True
-    set_cell(row.cells[1], "")
-    return row
-
-
-def add_criterion_row(table, text):
-    row = table.add_row()
-    set_cell(row.cells[0], text)
-    set_cell(row.cells[1], "Yes        No")
-    return row
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_tables import add_criterion_row, add_section_row, clear_table_rows, find_instruction_row, set_cell_content  # noqa: E402
 
 
 # ---------- content ----------
@@ -384,23 +340,23 @@ def build(path):
 
     # ---- Table 0: Details ----
     t_details = doc.tables[0]
-    set_cell(t_details.rows[1].cells[1], DETAILS["qualification"])
-    set_cell(t_details.rows[2].cells[1], DETAILS["units"])
-    set_cell(t_details.rows[3].cells[1], DETAILS["task_title"])
-    set_cell(t_details.rows[4].cells[1], DETAILS["task_number"])
+    set_cell_content(t_details.rows[1].cells[1], DETAILS["qualification"])
+    set_cell_content(t_details.rows[2].cells[1], DETAILS["units"])
+    set_cell_content(t_details.rows[3].cells[1], DETAILS["task_title"])
+    set_cell_content(t_details.rows[4].cells[1], DETAILS["task_number"])
 
     # ---- Table 1: Teacher/Assessor instructions ----
     t_instr = doc.tables[1]
-    set_cell(instr_row(t_instr, "Assessment overview"), OVERVIEW)
-    set_cell(instr_row(t_instr, "Task"), TASKS)
-    set_cell(instr_row(t_instr, "Resources required"), RESOURCES)
-    set_cell(instr_row(t_instr, "Assessment criteria"), CRITERIA_STATEMENT)
+    set_cell_content(find_instruction_row(t_instr, "Assessment overview"), OVERVIEW)
+    set_cell_content(find_instruction_row(t_instr, "Task"), TASKS)
+    set_cell_content(find_instruction_row(t_instr, "Resources required"), RESOURCES)
+    set_cell_content(find_instruction_row(t_instr, "Assessment criteria"), CRITERIA_STATEMENT)
     # add a Conditions row at the end (as CL1 did), matching the table style
     cond_row = t_instr.add_row()
-    set_cell(cond_row.cells[0], "Assessment Conditions & Setup Requirements")
+    set_cell_content(cond_row.cells[0], "Assessment Conditions & Setup Requirements")
     for r in cond_row.cells[0].paragraphs[0].runs:
         r.bold = True
-    set_cell(cond_row.cells[1], CONDITIONS)
+    set_cell_content(cond_row.cells[1], CONDITIONS)
 
     # ---- Table 2: Marking Guide ----
     t_mark = doc.tables[2]

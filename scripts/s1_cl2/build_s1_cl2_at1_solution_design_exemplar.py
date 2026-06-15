@@ -29,11 +29,13 @@ Default: S1-CL2-Cloud-Disaster-Recovery/assessments/AT1/AT1-exemplar-solution-de
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
-from helpers.docx_body_text import add_bullet_list  # noqa: E402
-import build_bc_template as bc  # noqa: E402  (shared branding helpers + palette)
-import build_s1_cl1_at1_bc_exemplar as ex  # noqa: E402  (uoc, para, bullets, etable)
+from helpers.docx_body_text import add_body_paragraph, add_bullet_list  # noqa: E402
+from helpers.docx_tables import add_data_table  # noqa: E402
+from helpers.uoc_tags import add_uoc_evidence_tag  # noqa: E402
+from helpers.docx_styling import add_field, paragraph_bottom_rule, set_cell_borders, shade_cell  # noqa: E402
+from helpers.yat_brand import ADDRESS, CREAM, GREY, TEAL, TERRACOTTA  # noqa: E402
+from helpers.yat_docx_document import build_header_footer, configure_styles, wordmark  # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -42,26 +44,26 @@ from docx.shared import Pt, Cm, RGBColor  # noqa: E402
 
 def build(path):
     doc = Document()
-    bc.configure_styles(doc)
+    configure_styles(doc)
     sec = doc.sections[0]
     sec.page_height = Cm(29.7); sec.page_width = Cm(21.0)
     sec.top_margin = Cm(2.6); sec.bottom_margin = Cm(2.2)
     sec.left_margin = Cm(2.2); sec.right_margin = Cm(2.2)
     sec.header_distance = Cm(1.0); sec.footer_distance = Cm(1.0)
-    bc.build_header_footer(sec)
+    build_header_footer(sec)
 
     # ---- COVER ----
-    bc.wordmark(doc.add_paragraph())
-    ar = doc.add_paragraph().add_run(bc.ADDRESS)
-    ar.font.size = Pt(9); ar.font.color.rgb = RGBColor.from_string(bc.GREY)
-    bc.paragraph_bottom_rule(doc.add_paragraph(), bc.TEAL, sz=12)
+    wordmark(doc.add_paragraph())
+    ar = doc.add_paragraph().add_run(ADDRESS)
+    ar.font.size = Pt(9); ar.font.color.rgb = RGBColor.from_string(GREY)
+    paragraph_bottom_rule(doc.add_paragraph(), TEAL, sz=12)
     for _ in range(3):
         doc.add_paragraph()
     doc.add_paragraph(style="Title").add_run("Solution Design")
     sub = doc.add_paragraph().add_run("YAT Website Global Expansion — Solution Design")
-    sub.font.size = Pt(15); sub.bold = True; sub.font.color.rgb = RGBColor.from_string(bc.TERRACOTTA)
+    sub.font.size = Pt(15); sub.bold = True; sub.font.color.rgb = RGBColor.from_string(TERRACOTTA)
     note = doc.add_paragraph().add_run("Assessor exemplar — internal marking reference (not for distribution to students)")
-    note.italic = True; note.font.size = Pt(10); note.font.color.rgb = RGBColor.from_string(bc.GREY)
+    note.italic = True; note.font.size = Pt(10); note.font.color.rgb = RGBColor.from_string(GREY)
     doc.add_paragraph()
     cover = [
         ("Engagement", "YAT Website Global Expansion & Disaster Recovery"),
@@ -77,26 +79,26 @@ def build(path):
     ct = doc.add_table(rows=0, cols=2)
     for k, v in cover:
         cells = ct.add_row().cells
-        bc.set_cell_borders(cells[0]); bc.set_cell_borders(cells[1]); bc.shade_cell(cells[0], bc.CREAM)
+        set_cell_borders(cells[0]); set_cell_borders(cells[1]); shade_cell(cells[0], CREAM)
         kr = cells[0].paragraphs[0].add_run(k); kr.bold = True; kr.font.size = Pt(10)
         cells[1].paragraphs[0].add_run(v).font.size = Pt(10)
         cells[0].width = Cm(4.5); cells[1].width = Cm(12.0)
 
     # ---- CONTENTS ----
-    doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
+    doc.add_section(WD_SECTION.NEW_PAGE); build_header_footer(doc.sections[-1])
     doc.add_paragraph("Contents", style="Heading 1")
-    bc.add_field(doc.add_paragraph(), 'TOC \\o "1-3" \\h \\z \\u',
+    add_field(doc.add_paragraph(), 'TOC \\o "1-3" \\h \\z \\u',
                  placeholder="Right-click and choose “Update Field” to build the table of contents.")
 
     # ---- BODY ----
-    doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
+    doc.add_section(WD_SECTION.NEW_PAGE); build_header_footer(doc.sections[-1])
     h1 = lambda t: doc.add_paragraph(t, style="Heading 1")
     h3 = lambda t: doc.add_paragraph(t, style="Heading 3")
 
     # 1 Purpose and Scope
     h1("1. Purpose and Scope")
-    ex.uoc(doc, "[ICTCLD503 PC 1.1] determine and confirm cloud web-scaling needs")
-    ex.para(doc, "This Solution Design sets out the architecture changes that prepare the YAT public website to "
+    add_uoc_evidence_tag(doc, "[ICTCLD503 PC 1.1] determine and confirm cloud web-scaling needs")
+    add_body_paragraph(doc, "This Solution Design sets out the architecture changes that prepare the YAT public website to "
                  "serve the new India-campus market alongside its existing Australian audience. The website is "
                  "YAT's public, unauthenticated shopfront — its users are anonymous visitors arriving from the "
                  "open internet and from search engines. Two changes are required: (1) scale the website to "
@@ -104,7 +106,7 @@ def build(path):
                  "(2) add a microservice that records India-cohort access events to a store held in India, "
                  "meeting the data-residency requirements. This design is the basis for the Phase 2 "
                  "implementation (the Deployment Report) and for the companion Disaster Recovery Plan.")
-    ex.para(doc, "In scope: the web-tier scaling design (edge delivery, caching, public-traffic protection) and "
+    add_body_paragraph(doc, "In scope: the web-tier scaling design (edge delivery, caching, public-traffic protection) and "
                  "the audit-log microservice design. Out of scope: disaster recovery (the companion DR Plan), "
                  "the build and its evidence (the Phase 2 Deployment Report), and the legal determination of "
                  "the residency obligations (owned by YAT compliance — this design treats them as fixed "
@@ -113,15 +115,15 @@ def build(path):
     # 2 Design Inputs and Requirements
     h1("2. Design Inputs and Requirements")
     h3("2.1 Inputs")
-    ex.uoc(doc, "[ICTCLD503 PC 1.1] confirm web-scaling needs according to business needs")
-    ex.para(doc, "This design is built from the Functional & Non-Functional Requirements, the Data Residency & "
+    add_uoc_evidence_tag(doc, "[ICTCLD503 PC 1.1] confirm web-scaling needs according to business needs")
+    add_body_paragraph(doc, "This design is built from the Functional & Non-Functional Requirements, the Data Residency & "
                  "Sovereignty Requirements, the Website Specification, and the existing HA-Hardened Solution "
                  "Design (the baseline). The partnership opens the website to a large new market of anonymous "
                  "prospective students far from the Sydney region, so the website must serve that audience with "
                  "acceptable latency, absorb a higher and spikier public read load, stay discoverable in search, "
                  "and preserve its availability and security under greater public exposure.")
     h3("2.2 Requirements the design must meet")
-    ex.etable(doc, ["Ref", "Requirement", "Source"],
+    add_data_table(doc, ["Ref", "Requirement", "Source"],
               [["R1", "Serve a global, anonymous public audience (AU + India) with acceptable latency", "Functional & Non-Functional Requirements"],
                ["R2", "Scale network, compute and storage as utilisation increases", "Functional & Non-Functional Requirements"],
                ["R3", "Maintain availability (>= 99.9%) and security through the changes", "Requirements / Baseline Design"],
@@ -132,13 +134,13 @@ def build(path):
 
     # 3 Review of the Existing Architecture
     h1("3. Review of the Existing Architecture")
-    ex.uoc(doc, "[ICTCLD503 PC 1.2] review architecture for web application according to business needs")
-    ex.para(doc, "The current architecture (HA-Hardened Solution Design) is a single-region, multi-AZ "
+    add_uoc_evidence_tag(doc, "[ICTCLD503 PC 1.2] review architecture for web application according to business needs")
+    add_body_paragraph(doc, "The current architecture (HA-Hardened Solution Design) is a single-region, multi-AZ "
                  "deployment in ap-southeast-2 (Sydney): an Application Load Balancer across two Availability "
                  "Zones, an Auto Scaling group of EC2 instances running the LAMP / CMS stack, a Multi-AZ RDS "
                  "database, and Amazon S3 for media. It is highly available within the region but was sized for "
                  "an Australian audience served entirely from Sydney.")
-    ex.para(doc, "Reviewed layer by layer against R1–R4, four gaps drive this design:")
+    add_body_paragraph(doc, "Reviewed layer by layer against R1–R4, four gaps drive this design:")
     add_bullet_list(doc, [
         "Edge / global delivery — anonymous India visitors are served entirely from Sydney; there is no CDN, "
         "so static and cacheable content travels the full distance on every request, hurting latency (R1).",
@@ -150,13 +152,13 @@ def build(path):
         "Logging residency — all access logging currently lands in Sydney; there is no mechanism to keep "
         "India-cohort access logs in India (R5).",
     ])
-    ex.para(doc, "The compute and load-balancing tiers scale adequately and are retained largely unchanged; the "
+    add_body_paragraph(doc, "The compute and load-balancing tiers scale adequately and are retained largely unchanged; the "
                  "gaps are at the edge, the data read path, public-traffic protection, and logging residency — "
                  "addressed in §5 and §6.")
 
     # 4 Architecture Design
     h1("4. Architecture Design")
-    ex.uoc(doc, "[ICTCLD503 PC 1.4] design architecture changes using cloud services (overview) · [ICTCLD503 PC 1.5] scale for a global user base")
+    add_uoc_evidence_tag(doc, "[ICTCLD503 PC 1.4] design architecture changes using cloud services (overview) · [ICTCLD503 PC 1.5] scale for a global user base")
     h3("4.1 Assumptions and constraints")
     add_bullet_list(doc, [
         "The baseline is fully implemented: the website runs highly available in ap-southeast-2 (multi-AZ ALB / ASG / RDS, media on S3).",
@@ -165,13 +167,13 @@ def build(path):
         "may remain in Australia (the light residency slice).",
     ])
     h3("4.2 AWS accounts and regions")
-    ex.para(doc, "ap-southeast-2 (Sydney) remains the primary application and data region. ap-south-1 (Mumbai) "
+    add_body_paragraph(doc, "ap-southeast-2 (Sydney) remains the primary application and data region. ap-south-1 (Mumbai) "
                  "is introduced for one purpose only — to hold the India-cohort audit log (the residency slice, "
                  "§6). Global, anonymous visitors are reached through edge delivery (§5.3), not by replicating "
                  "the application into other regions. The main website database stays in Sydney; only the access "
                  "logs are residency-bound.")
     h3("4.3 Design relative to the baseline")
-    ex.para(doc, "The baseline's IAM, VPC / network, compute (ALB + Auto Scaling group), database (Multi-AZ "
+    add_body_paragraph(doc, "The baseline's IAM, VPC / network, compute (ALB + Auto Scaling group), database (Multi-AZ "
                  "RDS) and S3 media storage are retained. This design adds: a global edge / caching layer with "
                  "edge security in front of the website (§5), a read / session cache (§5), and the audit-log "
                  "microservice in India (§6). Infrastructure layers not described here are unchanged from the "
@@ -179,17 +181,17 @@ def build(path):
 
     # 5 Web-scale Design
     h1("5. Web-scale Design")
-    ex.uoc(doc, "[ICTCLD503 PC 1.3, 1.4, 1.5, 1.6, 1.7] · [ICTCLD503 PE 1, 5]")
+    add_uoc_evidence_tag(doc, "[ICTCLD503 PC 1.3, 1.4, 1.5, 1.6, 1.7] · [ICTCLD503 PE 1, 5]")
     h3("5.1 Web-scaling needs")
-    ex.para(doc, "The drivers (PC 1.1, 1.3): a large new audience of anonymous public visitors, geographically "
+    add_body_paragraph(doc, "The drivers (PC 1.1, 1.3): a large new audience of anonymous public visitors, geographically "
                  "distant from Sydney, with a read-heavy and spiky demand profile (marketing campaigns, the "
                  "enrolment-enquiry period). The design must scale network, compute and storage elastically "
                  "(R2) and serve the global, anonymous base with acceptable latency (R1) while preserving "
                  "availability and security under greater public exposure (R3, R4).")
     h3("5.2 Scaling by layer")
-    ex.para(doc, "Services selected to scale the website (PC 1.3) and how each layer scales as utilisation "
+    add_body_paragraph(doc, "Services selected to scale the website (PC 1.3) and how each layer scales as utilisation "
                  "increases (PC 1.4):")
-    ex.etable(doc, ["Layer", "Service", "How it scales"],
+    add_data_table(doc, ["Layer", "Service", "How it scales"],
               [["Edge / network", "CloudFront CDN + Route 53 latency routing",
                 "Serves cached / static content from edge locations worldwide; India visitors hit the nearest edge, not Sydney"],
                ["Compute", "ALB + EC2 Auto Scaling (retained)",
@@ -202,7 +204,7 @@ def build(path):
                 "Vertical scaling, with a read replica as future headroom (not required at launch)"]],
               widths=[3.4, 5.0, 7.6])
     h3("5.3 Global delivery and discoverability")
-    ex.para(doc, "A global, anonymous audience is served (PC 1.5) by pushing content to the edge with "
+    add_body_paragraph(doc, "A global, anonymous audience is served (PC 1.5) by pushing content to the edge with "
                  "CloudFront and routing visitors to the lowest-latency entry point with Route 53. The website "
                  "is read-heavy and highly cacheable — marketing pages, the course catalogue, media — so the "
                  "dominant share of traffic is served from the nearest edge and India visitors get acceptable "
@@ -211,8 +213,8 @@ def build(path):
                  "preserves clean, crawlable URLs and fast first-byte times so the site stays discoverable by "
                  "search engines (R4).")
     h3("5.4 Web-scale component choices")
-    ex.para(doc, "Each web-scale component is chosen where it fits:")
-    ex.etable(doc, ["Choice", "Decision", "Why"],
+    add_body_paragraph(doc, "Each web-scale component is chosen where it fits:")
+    add_data_table(doc, ["Choice", "Decision", "Why"],
               [["SQL vs NoSQL", "SQL (RDS) for website content / enquiry data; NoSQL (DynamoDB) for the audit log",
                 "Relational integrity for the CMS and enquiry / application records; append-only high-write key-value for logs (§6)"],
                ["Monolith vs microservice", "Keep the website (CMS) a monolith; split the audit function into a microservice",
@@ -223,38 +225,38 @@ def build(path):
                 "Edge delivery for global, anonymous latency; in-memory caching for read scale"]],
               widths=[3.6, 5.8, 6.6])
     h3("5.5 Availability and security maintained")
-    ex.para(doc, "Availability is preserved (PC 1.6) — the multi-AZ ALB / ASG / RDS design is unchanged, and "
+    add_body_paragraph(doc, "Availability is preserved (PC 1.6) — the multi-AZ ALB / ASG / RDS design is unchanged, and "
                  "CloudFront and ElastiCache are themselves resilient managed services. Security is preserved "
                  "and strengthened for the wider public exposure (R4): TLS end-to-end; AWS WAF at the "
                  "CloudFront edge for the OWASP-class web exploits; AWS Shield and WAF rate-based and bot rules "
                  "to blunt scraping, credential-stuffing of the public application form, and denial-of-service; "
                  "and the origin locked to accept only CloudFront traffic. There is no change to the IAM or "
                  "data-at-rest posture. The design was reviewed against R1–R4 and meets them.")
-    ex.para(doc, "This is one architecture that scales networking, compute and storage for the multi-tier "
+    add_body_paragraph(doc, "This is one architecture that scales networking, compute and storage for the multi-tier "
                  "website (PE 1) using established web-scaling principles — edge offload, horizontal compute "
                  "scaling, read caching (PE 5) — and the rationale for each change is recorded above, "
                  "satisfying the requirement to document and justify the architecture changes (PC 1.7).")
 
     # 6 Microservice and Serverless Design
     h1("6. Microservice and Serverless Design")
-    ex.uoc(doc, "[ICTCLD503 PC 2.1, 2.2, 2.3, 2.4] · [ICTCLD503 PE 2]")
+    add_uoc_evidence_tag(doc, "[ICTCLD503 PC 2.1, 2.2, 2.3, 2.4] · [ICTCLD503 PE 2]")
     h3("6.1 Microservices and data transactions")
-    ex.para(doc, "One microservice is introduced (PC 2.1) — the Access-Log Service. Its single responsibility "
+    add_body_paragraph(doc, "One microservice is introduced (PC 2.1) — the Access-Log Service. Its single responsibility "
                  "is to record India-cohort access events durably and in-region. The data transaction: on each "
                  "relevant website event (page view, enquiry / application submission) for an India-cohort "
                  "visitor, the website emits an event and the service persists one append-only audit record. It "
                  "never reads back into the website and holds no other state — highly cohesive and loosely "
                  "coupled.")
     h3("6.2 Supporting cloud services")
-    ex.para(doc, "The service is serverless and event-driven, hosted in ap-south-1 (India) (PC 2.2):")
-    ex.etable(doc, ["Concern", "Service", "Why"],
+    add_body_paragraph(doc, "The service is serverless and event-driven, hosted in ap-south-1 (India) (PC 2.2):")
+    add_data_table(doc, ["Concern", "Service", "Why"],
               [["Ingress / API", "API Gateway (regional, ap-south-1)", "Receives the website event webhook over HTTPS"],
                ["Messaging / queuing", "SQS queue", "Buffers events so a spike or downstream slowness never blocks or loses one"],
                ["Compute", "AWS Lambda", "Serverless; scales to zero and to spikes, with no servers to manage"],
                ["Persistent storage", "DynamoDB (ap-south-1)", "Append-only NoSQL audit log, kept in India (R5 / CERT-In >= 180 days)"]],
               widths=[3.6, 5.0, 7.4])
     h3("6.3 Microservice architecture")
-    ex.para(doc, "Flow (PC 2.3): website event webhook → API Gateway (ap-south-1) → SQS → Lambda → DynamoDB "
+    add_body_paragraph(doc, "Flow (PC 2.3): website event webhook → API Gateway (ap-south-1) → SQS → Lambda → DynamoDB "
                  "(ap-south-1). The website is the event producer and knows only the webhook contract; "
                  "everything behind it can change independently. The design is highly cohesive and loosely "
                  "coupled (the service does one thing; the website integrates only through the contract); it "
@@ -262,20 +264,20 @@ def build(path):
                  "parts with API, messaging and queuing services (API Gateway + SQS). Because the store is in "
                  "ap-south-1, the access logs are resident in India by construction.")
     h3("6.4 Interface / integration contract")
-    ex.para(doc, "The contract the website calls is the single coupling point (PC 2.4): POST /events with a "
+    add_body_paragraph(doc, "The contract the website calls is the single coupling point (PC 2.4): POST /events with a "
                  "JSON body { event_id, occurred_at, user_ref, cohort, event_type, source_ip }, authenticated "
                  "with a signing key. Defining it here lets the website and the service evolve independently. "
                  "The contract is deliberately generic — any event producer that meets it can use the same "
                  "service unchanged, only the payload differing.")
-    ex.para(doc, "This is one microservice architecture for a simple application (PE 2), designed on serverless "
+    add_body_paragraph(doc, "This is one microservice architecture for a simple application (PE 2), designed on serverless "
                  "cloud services, with each choice justified above — satisfying the requirement to document and "
                  "justify the microservice design (PC 2.4).")
 
     # 7 Implementation Sequencing
     h1("7. Implementation Sequencing")
-    ex.para(doc, "The changes are applied in an order that holds availability throughout; the build and its "
+    add_body_paragraph(doc, "The changes are applied in an order that holds availability throughout; the build and its "
                  "evidence are the Phase 2 Deployment Report.")
-    ex.etable(doc, ["#", "Change", "Expected impact"],
+    add_data_table(doc, ["#", "Change", "Expected impact"],
               [["1", "Stand up the audit-log microservice in ap-south-1 (API Gateway → SQS → Lambda → DynamoDB) and point the website webhook at it", "None — additive"],
                ["2", "Introduce ElastiCache and move the session / read path onto it", "None — cache warms transparently"],
                ["3", "Put CloudFront + WAF / Shield in front of the ALB and switch Route 53 to the distribution", "None — origin unchanged; cutover at DNS"],
@@ -284,7 +286,7 @@ def build(path):
 
     # 8 Simulation and Verification Plan
     h1("8. Simulation and Verification Plan")
-    ex.para(doc, "How the design will be shown to work; the evidence is produced in Phase 2.")
+    add_body_paragraph(doc, "How the design will be shown to work; the evidence is produced in Phase 2.")
     h3("8.1 Web-scale verification")
     add_bullet_list(doc, [
         "A load test ramps anonymous concurrent visitors to the projected global peak; the Auto Scaling group "
@@ -323,13 +325,13 @@ def build(path):
 
     # 11 Review and Approval
     h1("11. Review and Approval")
-    ex.uoc(doc, "[ICTCLD503 PC 1.6] review design as required")
-    ex.para(doc, "Before submission the design was reviewed internally against R1–R4 and the requirements, and "
+    add_uoc_evidence_tag(doc, "[ICTCLD503 PC 1.6] review design as required")
+    add_body_paragraph(doc, "Before submission the design was reviewed internally against R1–R4 and the requirements, and "
                  "by the MTS Senior Consultant. Stakeholder approval of the design is obtained at the AT1 "
                  "design-walkthrough presentation, together with the companion DR Plan (Part C); the sign-off "
                  "below records that approval.")
     h3("11.1 Review feedback and author response")
-    ex.etable(doc, ["#", "Review feedback", "Author response", "Resulting change"],
+    add_data_table(doc, ["#", "Review feedback", "Author response", "Resulting change"],
               [["1", "Confirm anonymous India visitors are served without replicating data into India",
                 "Edge delivery (CloudFront) serves the global base; only the access logs sit in India",
                 "Clarified in §4.2 and §5.3"],
@@ -342,23 +344,23 @@ def build(path):
               widths=[0.8, 5.4, 5.4, 4.0])
 
     h3("11.2 Sign-off")
-    ex.etable(doc, ["Role", "Name", "Decision", "Date"],
+    add_data_table(doc, ["Role", "Name", "Decision", "Date"],
               [["Prepared by", "MTS Consultant", "Submitted", "[date]"],
                ["Reviewed by", "Pat Lin (MTS Senior Consultant)", "Approved for submission", "[date]"],
                ["Approved by", "Sam Walker (YAT ICT Manager)", "Approved at design walkthrough — cleared to implement", "[date]"]],
               widths=[3.6, 5.0, 5.4, 2.0])
 
     # Appendix A — Knowledge Evidence (the Part A "A12" deliverable: written contextual responses)
-    doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
+    doc.add_section(WD_SECTION.NEW_PAGE); build_header_footer(doc.sections[-1])
     h1("Appendix A — Knowledge Evidence")
-    ex.para(doc, "Written contextual responses for ICTCLD503 (design knowledge) — the mandatory "
+    add_body_paragraph(doc, "Written contextual responses for ICTCLD503 (design knowledge) — the mandatory "
                  "knowledge-evidence location for Part A. Each question asks the candidate to reason about "
                  "their own design; the answers below are the model responses (assessor reference).")
 
     def ke_qa(tag, question, answer):
-        ex.uoc(doc, tag)
+        add_uoc_evidence_tag(doc, tag)
         qp = doc.add_paragraph(); qr = qp.add_run(question); qr.bold = True; qr.font.size = Pt(10.5)
-        ex.para(doc, answer)
+        add_body_paragraph(doc, answer)
 
     ke_qa("[ICTCLD503 KE 3] — functions, benefits and differences of web-scale cloud components "
           "(SQL/NoSQL, monolith/microservice, compute models, CDN/in-memory stores)",
@@ -404,7 +406,7 @@ def build(path):
 
     # Document control
     h1("Document control")
-    ex.etable(doc, ["Field", "Value"],
+    add_data_table(doc, ["Field", "Value"],
               [["Document version", "v1.0 — Solution Design"],
                ["Author", "MTS Consultant"],
                ["Engagement", "YAT Website Global Expansion & Disaster Recovery"],
