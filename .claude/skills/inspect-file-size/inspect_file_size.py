@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-"""Inspect a .pptx (or any Office/zip file) and report what's driving its size.
+"""Inspect a file (.pptx/.docx/.xlsx or any zip) and report what's driving its size.
 
-A deck-hygiene check to run BEFORE committing a Topic deck: if the deck is large,
-this shows where the bytes are so you can optimise (compress images, drop an
-embedded video, remove dragged-in masters) and keep tracked decks small enough
-for plain git. It is format-agnostic — it flags whatever the big objects are,
-not any one image type.
+A size/bloat check to run BEFORE committing a large file to git: if the file is big,
+this shows where the bytes are so you can optimise (compress images, drop an embedded
+video, remove dragged-in slide masters) and keep the repo small. It is format-agnostic —
+it flags whatever the big objects are, not any one type.
 
 Usage:
-    python scripts/inspect_deck.py <path-to.pptx> [--top N] [--warn-mb 25]
+    python inspect_file_size.py <path> [--top N] [--warn-mb 25]
 
-Exit code 1 if the deck exceeds --warn-mb (handy for a pre-commit gate).
+Exit code 1 if the file exceeds --warn-mb (handy for a pre-commit gate).
 """
 import argparse
 import os
@@ -25,19 +24,19 @@ def human(n):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("deck", help="path to the .pptx (or .docx/.xlsx/any zip)")
+    ap.add_argument("path", help="path to the file (.pptx/.docx/.xlsx or any zip)")
     ap.add_argument("--top", type=int, default=15, help="how many largest entries to list (default 15)")
-    ap.add_argument("--warn-mb", type=float, default=25.0, help="warn if the deck on disk exceeds this many MB (default 25)")
+    ap.add_argument("--warn-mb", type=float, default=25.0, help="warn if the file on disk exceeds this many MB (default 25)")
     args = ap.parse_args()
 
-    if not os.path.isfile(args.deck):
-        sys.exit(f"Not a file: {args.deck}")
+    if not os.path.isfile(args.path):
+        sys.exit(f"Not a file: {args.path}")
 
-    on_disk = os.path.getsize(args.deck)
+    on_disk = os.path.getsize(args.path)
     try:
-        z = zipfile.ZipFile(args.deck)
+        z = zipfile.ZipFile(args.path)
     except zipfile.BadZipFile:
-        sys.exit(f"Not a zip/Office file: {args.deck}")
+        sys.exit(f"Not a zip/Office file: {args.path}")
 
     infos = z.infolist()
     total = sum(i.file_size for i in infos)
@@ -64,11 +63,11 @@ def main():
     big = args.warn_mb * 1e6
     print()
     if on_disk > big:
-        print(f"WARNING: deck is {human(on_disk)} -- over the {args.warn_mb:.0f} MB guideline.")
-        print("   Optimise before committing: PowerPoint > Compress Pictures (whole deck,")
-        print("   150 ppi, delete cropped areas), or drop the offending object above; then re-run.")
+        print(f"WARNING: file is {human(on_disk)} -- over the {args.warn_mb:.0f} MB guideline.")
+        print("   Optimise before committing: e.g. for slides, PowerPoint > Compress Pictures")
+        print("   (whole file, 150 ppi, delete cropped areas), or drop the offending object above; then re-run.")
         sys.exit(1)
-    print(f"OK: deck is {human(on_disk)} -- within the {args.warn_mb:.0f} MB guideline.")
+    print(f"OK: file is {human(on_disk)} -- within the {args.warn_mb:.0f} MB guideline.")
 
 
 if __name__ == "__main__":

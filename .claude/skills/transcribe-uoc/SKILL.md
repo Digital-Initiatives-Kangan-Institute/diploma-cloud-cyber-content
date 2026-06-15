@@ -39,6 +39,9 @@ skill instead.
 
 ## Workflow
 
+> **Python interpreter:** run the commands below with whatever Python 3 launcher your system has —
+> `python3`, `python`, or `py -3` (on Windows, `python3` may be the Microsoft Store alias).
+
 Two steps, both deterministic. The second is mandatory — a transcription is not done until it
 validates.
 

@@ -7,7 +7,7 @@ that match no item). This is the capstone to per-AT traceability: that proves ea
 are sound; this proves the ATs collectively leave nothing out.
 
 ## Prerequisites
-- `python3` on PATH — **standard library only** (no venv, no `pip install`).
+- A **Python 3 interpreter** on PATH (`python3`, or `python` / `py -3` on Windows) — standard library only (no venv, no `pip install`).
 - Shared script in `.claude/skills/scripts/`: **`validate_cluster_coverage.py`** (reuses the
   traceability helpers).
 - A cluster directory containing **`consolidated_uoc.md`** and an **`assessments/`** tree with

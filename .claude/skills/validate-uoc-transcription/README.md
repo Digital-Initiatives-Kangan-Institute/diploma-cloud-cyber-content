@@ -8,7 +8,7 @@ standalone form of the gate `transcribe-uoc` runs, and it makes self-marking hon
 agent both wrote and is checking the `.md`. It only checks; it does **not** create transcriptions.
 
 ## Prerequisites
-- `python3` on PATH — **standard library only** (no venv, no `pip install`).
+- A **Python 3 interpreter** on PATH (`python3`, or `python` / `py -3` on Windows) — standard library only (no venv, no `pip install`).
 - Shared script in `.claude/skills/scripts/`: **`validate_uoc.py`**.
 - One or more **`<docx> <md>` pairs** (default layout: `.md` under `units_of_competency/`, `.docx`
   under `units_of_competency/original/`, same basename — but pairing is positional, so any paths work).

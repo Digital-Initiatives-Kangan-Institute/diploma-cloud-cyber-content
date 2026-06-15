@@ -48,6 +48,9 @@ to a new course's file layout.
 
 ## How to run it
 
+> **Python interpreter:** run the command below with whatever Python 3 launcher your system has —
+> `python3`, `python`, or `py -3` (on Windows, `python3` may be the Microsoft Store alias).
+
 The validator takes one or more `<docx> <md>` **pairs**. Run from the repo root:
 
 ```bash

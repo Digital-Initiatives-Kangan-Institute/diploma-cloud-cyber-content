@@ -8,7 +8,7 @@ from raw units to the assessment plan. The grouping is always a **DRAFT proposal
 locked decision (project Rule 1).
 
 ## Prerequisites
-- `python3` on PATH — **Python standard library only** (no venv, no `pip install`).
+- A **Python 3 interpreter** on PATH (`python3`, or `python` / `py -3` on Windows) — standard library only (no venv, no `pip install`).
 - Shared scripts in `.claude/skills/scripts/`: **`inventory_uoc.py`**, **`validate_consolidated.py`**.
 - The cluster's unit transcriptions must already exist and be **validated verbatim**
   (see `transcribe-uoc` / `validate-uoc-transcription`).

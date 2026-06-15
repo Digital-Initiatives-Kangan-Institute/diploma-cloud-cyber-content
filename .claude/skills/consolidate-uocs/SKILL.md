@@ -29,6 +29,9 @@ the course owner to react to — never recorded as decided** (see the project's 
 
 ## Workflow
 
+> **Python interpreter:** run the commands below with whatever Python 3 launcher your system has —
+> `python3`, `python`, or `py -3` (on Windows, `python3` may be the Microsoft Store alias).
+
 ### 1. Extract the faithful item inventory (script)
 
 ```bash

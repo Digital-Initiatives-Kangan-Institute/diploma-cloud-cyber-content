@@ -7,7 +7,7 @@ transcription (`.md`), by lifting content straight from the Word XML (never rety
 exactly — no paraphrasing, omission, or "tidying".
 
 ## Prerequisites
-- `python3` on PATH — **standard library only** (no venv, no `pip install`).
+- A **Python 3 interpreter** on PATH (`python3`, or `python` / `py -3` on Windows) — standard library only (no venv, no `pip install`).
 - Shared scripts in `.claude/skills/scripts/`: **`transcribe_uoc.py`** and **`validate_uoc.py`**.
 - A source `.docx`, by convention under `<cluster>/units_of_competency/original/`.
 

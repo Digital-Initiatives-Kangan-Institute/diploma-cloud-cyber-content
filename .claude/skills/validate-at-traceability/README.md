@@ -8,7 +8,7 @@ coverage** — that the AT evidences the items it was allocated. It checks *refe
 quality of the criteria.
 
 ## Prerequisites
-- `python3` on PATH — **standard library only** (no venv, no `pip install`).
+- A **Python 3 interpreter** on PATH (`python3`, or `python` / `py -3` on Windows) — standard library only (no venv, no `pip install`).
 - Shared script in `.claude/skills/scripts/`: **`validate_at_traceability.py`** (reuses the bundled
   `docx_to_text` extractor).
 - The AT **assessor instrument** (`.docx` or `.md`) containing a Marking Benchmark /

@@ -8,7 +8,7 @@ existing consolidation can be re-checked anytime. It checks **tag coverage, not 
 **not** build or group a consolidation.
 
 ## Prerequisites
-- `python3` on PATH — **standard library only** (no venv, no `pip install`).
+- A **Python 3 interpreter** on PATH (`python3`, or `python` / `py -3` on Windows) — standard library only (no venv, no `pip install`).
 - Shared script in `.claude/skills/scripts/`: **`validate_consolidated.py`**.
 - The cluster's **`consolidated_uoc.md`** and each **source unit `.md`**.
 

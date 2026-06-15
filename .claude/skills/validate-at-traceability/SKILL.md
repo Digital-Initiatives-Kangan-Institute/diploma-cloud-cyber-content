@@ -48,6 +48,9 @@ item set built from the cluster's `consolidated_uoc.md`. Internals are in
 
 ## How to run it
 
+> **Python interpreter:** run the command below with whatever Python 3 launcher your system has —
+> `python3`, `python`, or `py -3` (on Windows, `python3` may be the Microsoft Store alias).
+
 ```bash
 python3 .claude/skills/scripts/validate_at_traceability.py \
   --at <cluster>/assessments/AT<n>/<AT>-Assessor.docx \
