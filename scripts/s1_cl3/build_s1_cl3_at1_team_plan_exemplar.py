@@ -21,11 +21,13 @@ Default: S1-CL3-Cloud-Infrastructure-Improvement/assessments/AT1/AT1-exemplar-te
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
-from helpers.docx_body_text import add_bullet_list  # noqa: E402
-import build_bc_template as bc   # noqa: E402  (branding palette + styles + header/footer)
-import build_bc_exemplar as ex   # noqa: E402  (uoc / para / bullets / etable helpers)
+from helpers.docx_body_text import add_body_paragraph, add_bullet_list  # noqa: E402
+from helpers.docx_tables import add_data_table  # noqa: E402
+from helpers.uoc_tags import add_uoc_evidence_tag  # noqa: E402
+from helpers.docx_styling import add_field, paragraph_bottom_rule, set_cell_borders, shade_cell  # noqa: E402
+from helpers.yat_brand import ADDRESS, CREAM, GREY, TEAL, TERRACOTTA  # noqa: E402
+from helpers.yat_docx_document import build_header_footer, configure_styles, wordmark  # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -35,28 +37,28 @@ from docx.shared import Pt, Cm, RGBColor  # noqa: E402
 
 def build(path):
     doc = Document()
-    bc.configure_styles(doc)
+    configure_styles(doc)
 
     sec = doc.sections[0]
     sec.page_height = Cm(29.7); sec.page_width = Cm(21.0)
     sec.top_margin = Cm(2.6); sec.bottom_margin = Cm(2.2)
     sec.left_margin = Cm(2.2); sec.right_margin = Cm(2.2)
     sec.header_distance = Cm(1.0); sec.footer_distance = Cm(1.0)
-    bc.build_header_footer(sec)
+    build_header_footer(sec)
 
     # ---- COVER ----
-    bc.wordmark(doc.add_paragraph())
-    ar = doc.add_paragraph().add_run(bc.ADDRESS)
-    ar.font.size = Pt(9); ar.font.color.rgb = RGBColor.from_string(bc.GREY)
-    bc.paragraph_bottom_rule(doc.add_paragraph(), bc.TEAL, sz=12)
+    wordmark(doc.add_paragraph())
+    ar = doc.add_paragraph().add_run(ADDRESS)
+    ar.font.size = Pt(9); ar.font.color.rgb = RGBColor.from_string(GREY)
+    paragraph_bottom_rule(doc.add_paragraph(), TEAL, sz=12)
     for _ in range(3):
         doc.add_paragraph()
     doc.add_paragraph(style="Title").add_run("Team Plan")
     sub = doc.add_paragraph().add_run("Ledgerline Cloud Infrastructure Improvement")
-    sub.font.size = Pt(15); sub.font.color.rgb = RGBColor.from_string(bc.TERRACOTTA); sub.bold = True
+    sub.font.size = Pt(15); sub.font.color.rgb = RGBColor.from_string(TERRACOTTA); sub.bold = True
     note = doc.add_paragraph().add_run(
         "Assessor exemplar — internal marking reference (not for distribution to students)")
-    note.italic = True; note.font.size = Pt(10); note.font.color.rgb = RGBColor.from_string(bc.GREY)
+    note.italic = True; note.font.size = Pt(10); note.font.color.rgb = RGBColor.from_string(GREY)
     doc.add_paragraph()
 
     cover = [
@@ -70,48 +72,48 @@ def build(path):
     ct = doc.add_table(rows=0, cols=2)
     for k, v in cover:
         cells = ct.add_row().cells
-        bc.set_cell_borders(cells[0]); bc.set_cell_borders(cells[1]); bc.shade_cell(cells[0], bc.CREAM)
+        set_cell_borders(cells[0]); set_cell_borders(cells[1]); shade_cell(cells[0], CREAM)
         kr = cells[0].paragraphs[0].add_run(k); kr.bold = True; kr.font.size = Pt(10)
         cells[1].paragraphs[0].add_run(v).font.size = Pt(10)
         cells[0].width = Cm(4.5); cells[1].width = Cm(12.0)
 
     # ---- CONTENTS ----
-    doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
+    doc.add_section(WD_SECTION.NEW_PAGE); build_header_footer(doc.sections[-1])
     doc.add_paragraph("Contents", style="Heading 1")
-    bc.add_field(doc.add_paragraph(), 'TOC \\o "1-3" \\h \\z \\u',
+    add_field(doc.add_paragraph(), 'TOC \\o "1-3" \\h \\z \\u',
                  placeholder="Right-click and choose “Update Field” to build the table of contents.")
 
     # ---- BODY ----
-    doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
+    doc.add_section(WD_SECTION.NEW_PAGE); build_header_footer(doc.sections[-1])
     h1 = lambda t: doc.add_paragraph(t, style="Heading 1")
     h2 = lambda t: doc.add_paragraph(t, style="Heading 2")
 
     h1("1. Purpose and team objectives")
-    ex.uoc(doc, "[BSBXTW401 PC 1.1]")
-    ex.para(doc, "MP Tech Solutions (MTS) has been engaged by YAT College to improve the cloud "
+    add_uoc_evidence_tag(doc, "[BSBXTW401 PC 1.1]")
+    add_body_paragraph(doc, "MP Tech Solutions (MTS) has been engaged by YAT College to improve the cloud "
                  "infrastructure of its Ledgerline (Accounting) system, following YAT's India-campus "
                  "partnership. This Team Plan sets out how our improvement team will work to deliver the "
                  "engagement. It is the team lead's plan; the team-lead role rotates, and each member "
                  "leads at least one working session.")
-    ex.para(doc, "Common objective. Deliver one integrated improvement to Ledgerline's cloud "
+    add_body_paragraph(doc, "Common objective. Deliver one integrated improvement to Ledgerline's cloud "
                  "infrastructure — confirmed stable, reliable, fit for purpose, and compliant with the "
                  "Indian regulatory requirements — proposed to YAT in an approved business case (AT2) and "
                  "implemented and signed off (AT3), within YAT's budget and Change Management Procedure.")
-    ex.para(doc, "Responsibilities. Each member owns one improvement dimension (security, reliability, "
+    add_body_paragraph(doc, "Responsibilities. Each member owns one improvement dimension (security, reliability, "
                  "scalability, cost) through the analysis, the design and the implementation, and "
                  "contributes their dimension to the team's single integrated architecture. The team lead "
                  "coordinates, chairs the working session in their rotation, and is the point of contact "
                  "with the MTS Senior Consultant (Pat Lin) and the YAT ICT Manager (Sam Walker).")
-    ex.para(doc, "Required outcomes. Two outcomes gate the engagement: the deploy sign-off on the "
+    add_body_paragraph(doc, "Required outcomes. Two outcomes gate the engagement: the deploy sign-off on the "
                  "Improvement Business Case at the end of AT2, and the final sign-off on the implemented "
                  "improvements at the end of AT3.")
 
     h1("2. Team structure and dimension ownership")
-    ex.uoc(doc, "[BSBXTW401 PC 1.1] (responsibilities)")
-    ex.para(doc, "The team is four members, each owning one improvement dimension so that the team's "
+    add_uoc_evidence_tag(doc, "[BSBXTW401 PC 1.1] (responsibilities)")
+    add_body_paragraph(doc, "The team is four members, each owning one improvement dimension so that the team's "
                  "integrated architecture addresses all four. The team-lead role rotates across the "
                  "working sessions.")
-    ex.etable(doc, ["Member", "Dimension owned", "Focus of the dimension"],
+    add_data_table(doc, ["Member", "Dimension owned", "Focus of the dimension"],
               [["Maya N. (lead, this phase)", "Security",
                 "IAM, encryption, network/security layers, and the controls that meet the Indian "
                 "regulatory requirements (log residency, breach-reporting readiness)."],
@@ -125,11 +127,11 @@ def build(path):
               widths=[4.2, 3.0, 8.3])
 
     h1("3. Performance expectations")
-    ex.uoc(doc, "[BSBXTW401 PC 1.2]")
-    ex.para(doc, "Each member's expected outcomes, goals and behaviours, set in line with the team "
+    add_uoc_evidence_tag(doc, "[BSBXTW401 PC 1.2]")
+    add_body_paragraph(doc, "Each member's expected outcomes, goals and behaviours, set in line with the team "
                  "objective and YAT's policies (the Change Management Procedure, the Security and Incident "
                  "Response Policy, and the Privacy / Data Handling Policy).")
-    ex.etable(doc, ["Member (dimension)", "Expected outcomes", "Goals", "Expected behaviours"],
+    add_data_table(doc, ["Member (dimension)", "Expected outcomes", "Goals", "Expected behaviours"],
               [["Maya N. (Security)",
                 "A security/compliance improvement design and as-built record for the owned dimension.",
                 "Close the compliance gaps identified in analysis; meet the security goals proportionately.",
@@ -149,8 +151,8 @@ def build(path):
               widths=[3.4, 4.0, 4.0, 4.1])
 
     h1("4. Accountability strategies")
-    ex.uoc(doc, "[BSBXTW401 PC 1.3]")
-    ex.para(doc, "Members are held accountable for their roles and responsibilities through:")
+    add_uoc_evidence_tag(doc, "[BSBXTW401 PC 1.3]")
+    add_body_paragraph(doc, "Members are held accountable for their roles and responsibilities through:")
     add_bullet_list(doc, [
         "Owned-dimension deliverables — each member is named against their dimension's analysis "
         "contribution, design and as-built record, so the work is individually attributable.",
@@ -165,11 +167,11 @@ def build(path):
     ])
 
     h1("5. Task allocation")
-    ex.uoc(doc, "[BSBXTW401 PC 2.2] · [BSBXTW401 PE 1]")
-    ex.para(doc, "The improvement work is allocated by dimension, with the instruction each member needs "
+    add_uoc_evidence_tag(doc, "[BSBXTW401 PC 2.2] · [BSBXTW401 PE 1]")
+    add_body_paragraph(doc, "The improvement work is allocated by dimension, with the instruction each member needs "
                  "and an allowance for the contingencies in §6. Each member carries their dimension across "
                  "all three phases.")
-    ex.etable(doc, ["Member", "Allocated tasks (AT1 → AT2 → AT3)", "Instruction / notes"],
+    add_data_table(doc, ["Member", "Allocated tasks (AT1 → AT2 → AT3)", "Instruction / notes"],
               [["Maya N. (Security)",
                 "Contribute the security & compliance findings to the analysis; design the security "
                 "improvement and the controls that meet the Indian Regulatory Requirements; implement, "
@@ -192,10 +194,10 @@ def build(path):
               widths=[3.0, 7.5, 5.0])
 
     h1("6. Contingency planning")
-    ex.uoc(doc, "[BSBXTW401 PC 1.4]")
-    ex.para(doc, "The contingencies most likely to impact a small four-person team on a time-boxed "
+    add_uoc_evidence_tag(doc, "[BSBXTW401 PC 1.4]")
+    add_body_paragraph(doc, "The contingencies most likely to impact a small four-person team on a time-boxed "
                  "engagement, and the plan for each.")
-    ex.etable(doc, ["Contingency", "Likelihood", "Plan"],
+    add_data_table(doc, ["Contingency", "Likelihood", "Plan"],
               [["Unplanned leave or absence of a member",
                 "Medium",
                 "Cross-brief at each working session so no dimension is a single point of failure; the "
@@ -216,8 +218,8 @@ def build(path):
               widths=[5.0, 2.3, 8.2])
 
     h1("7. Team operating norms")
-    ex.uoc(doc, "[BSBXTW401 FS Get the work done]")
-    ex.para(doc, "The team works through a series of rotating-chair working meetings, each chaired by a "
+    add_uoc_evidence_tag(doc, "[BSBXTW401 FS Get the work done]")
+    add_body_paragraph(doc, "The team works through a series of rotating-chair working meetings, each chaired by a "
                  "different member. Decisions are minuted against an owner and a due date. Production-"
                  "affecting work follows YAT's Change Management Procedure and avoids the monthly "
                  "accounting close and end-of-financial-year periods. Communication with YAT runs through "
@@ -225,10 +227,10 @@ def build(path):
                  "supervision and escalation point.")
 
     # ---- KNOWLEDGE EVIDENCE ----
-    doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
+    doc.add_section(WD_SECTION.NEW_PAGE); build_header_footer(doc.sections[-1])
     h1("Appendix — Knowledge Evidence")
-    ex.para(doc, "Underlying knowledge as applied to this team and this engagement.")
-    ex.etable(doc, ["Question", "Response"],
+    add_body_paragraph(doc, "Underlying knowledge as applied to this team and this engagement.")
+    add_data_table(doc, ["Question", "Response"],
               [["Which organisational requirements (workplace policies, codes of conduct, organisational "
                 "reputation and culture) shape how the team must operate, and how does the plan reflect "
                 "them? [BSBXTW401 KE 1]",
@@ -254,7 +256,7 @@ def build(path):
 
     # ---- SIGN-OFF ----
     h1("Sign-off")
-    ex.etable(doc, ["Role", "Name", "Date", "Signature"],
+    add_data_table(doc, ["Role", "Name", "Date", "Signature"],
               [["Prepared by (team lead)", "Maya N. (MTS improvement team)", "", ""],
                ["Reviewed by", "Pat Lin (MTS Senior Consultant)", "", ""],
                ["Noted by", "Sam Walker (YAT ICT Manager)", "", ""]],
