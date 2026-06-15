@@ -1,6 +1,6 @@
 # S1-CL2 Cloud Disaster Recovery — Cluster Assessment Plan
 
-> **STATUS: COMPLETE (authoring + coverage), 2026-06-15.** All instruments, exemplars and `mappings/` are built and website-framed; the cluster-coverage validator passes **105/105**. What remains before institutional sign-off is **external only** — the colleague **Pre-Validation** meeting and the **legal/residency `[VERIFY]`** wording before student-facing release. Don't reopen for authoring. This plan turns the cluster's settled design (topic taxonomy, two-AT division, AT1's three-part shape, the scenario spine) into the spec the AT instruments are built from, and carries the coverage proof that every UoC item lands in an assessment.
+> **STATUS: COMPLETE (authoring + coverage), 2026-06-15.** All instruments, exemplars and `mappings/` are built and website-framed; the cluster-coverage validator passes **105/105**. What remains before institutional sign-off is **external only** — the colleague **Pre-Validation** meeting. Don't reopen for authoring. This plan turns the cluster's settled design (topic taxonomy, two-AT division, AT1's three-part shape, the scenario spine) into the spec the AT instruments are built from, and carries the coverage proof that every UoC item lands in an assessment.
 >
 > **What is settled** (discussed and approved with Tim, 2026-06-06):
 > - The four-topic taxonomy and the **two-AT** division.
@@ -8,7 +8,7 @@
 > - **DR ≠ regulatory ≠ design — three separate concerns:** the *Disaster Recovery* plan (501) answers "what do we do if the system goes down"; the *Solution Design* (503) holds the web-scale architecture **and the microservice**; *data residency* is an **input constraint**, not a student deliverable. The microservice lives in the Solution Design (its regulatory purpose is *why* it exists), **never** in the DR plan.
 > - The scenario spine (offshore-India / **website** as the assessment vehicle; **LMS** as the practice vehicle); the **light** India-residency slice; the two approval gates; the KE evidencing approach (written appendices in each document + verbal contextual Q&A at AT1's presentation).
 >
-> **Remaining (external gates only):** the colleague **Pre-Validation** meeting and the **legal/residency `[VERIFY]`** wording before student-facing release; minor — the AT1 working title / website label may broaden. See §7.
+> **Remaining (external gates only):** the colleague **Pre-Validation** meeting; minor — the AT1 working title / website label may broaden. See §7.
 >
 > **Companion documents:**
 > - `consolidated_uoc.md` (cluster root) — every PC/FS/PE/KE/AC verbatim, in 13 groups under the 4 topics.
@@ -60,7 +60,7 @@
 
 **Scenario is not a topic** and is not itself assessed. It supplies the assessment inputs and the environment (AWS Academy labs).
 
-**Open scenario items that touch assessment:** project slugs; the legal/residency `[VERIFY]` (wording reviewed before student-facing docs). *(The lab product is confirmed — Kangan provisions **both** AWS Academy products, so each activity uses whichever fits; see docs/lab-pack-standard.md. The 503 global-serving practice vehicle is the **LMS** per the scenario-flow re-vehicling.)*
+**Open scenario items that touch assessment:** project slugs. *(Residency/legal wording is accepted as-is — LLM-grounded Indian-law framing, fit for purpose for an imaginary pre-university case study; no legal review engaged. The lab product is confirmed — Kangan provisions **both** AWS Academy products, so each activity uses whichever fits; see docs/lab-pack-standard.md. The 503 global-serving practice vehicle is the **LMS** per the scenario-flow re-vehicling.)*
 
 ---
 
@@ -139,8 +139,9 @@ Every group in `consolidated_uoc.md` mapped to where it is covered, and how. Thi
 ## 7. Open questions / TBDs
 
 1. **AT1 working title + website label** — working title "Cloud Expansion: Design & DR Plan"; the website `s1-cl2-at1` state label currently reads "Disaster Recovery Plan" and may want broadening to reflect the design+plan scope. TBD.
-2. **Legal/residency `[VERIFY]`** — India / DPDP / CERT-In wording reviewed before student-facing release. *(The lab-product `[VERIFY]` is closed — Kangan provisions both AWS Academy products.)*
-3. **Pre-validation** — run the institutional Pre-Validation Tool over each AT before submission (as CL1 §7).
+2. **Pre-validation** — run the institutional Pre-Validation Tool over each AT before submission (as CL1 §7).
+
+*(Resolved: both `[VERIFY]`s are closed — the lab product is confirmed (Kangan provisions both AWS Academy products); the India residency/legal wording is accepted as-is, being LLM-grounded framing fit for an imaginary pre-university case study, with no legal review engaged.)*
 
 *Resolved 2026-06-06: (a) DR ≠ regulatory ≠ design — DR Plan is pure 501, the microservice sits in the Solution Design, residency is an input constraint; (b) AT1 is three parts (A Solution Design / B DR Plan / C presentation), AT2 is the Deployment Report; (c) KE — written appendices in each document + verbal contextual Q&A at AT1 Part C; (d) the light India-residency slice. See §1/§3.*
 
@@ -152,4 +153,4 @@ Every group in `consolidated_uoc.md` mapped to where it is covered, and how. Thi
 - **2026-06-06 (restructure, v2):** Resolved DR ≠ regulatory ≠ design. **AT1 restructured to three parts** — Part A **Solution Design** (ICTCLD503 design, incl. the microservice), Part B **DR Plan** (ICTCLD501, pure), Part C **presentation** covering both (501 element 5, the approval gate). The microservice and its regulatory purpose move out of the DR plan into the Solution Design; **data residency is an input constraint, not a deliverable** (no compliance-plan artefact — no UoC requires one); the light India-residency slice confirmed. §1/§3/§5/§6/§8 rewritten; coverage map re-mapped to Part A/B/C + AT2 (all 23 KE, 12 PE re-checked). DR Plan exemplar flagged for de-weave; Solution Design (Part A) + presentation (Part C) exemplars added to the worklist. `consolidated_uoc.md`'s AT1 description noted for realignment.
 - **2026-06-07 (v3):** AT2 recast to **Cloud Microservice & IaC Implementation** — the student operates a provided data-store template and authors the microservice from provided code; the provided artefacts are supplied as assessment appendices (no separate lab pack); the lab environment is chosen per activity (TBA pending the lab-product `[VERIFY]`). `501 KE 6` confirmed in AT2 monitoring.
 - **2026-06-08 (v4 — re-vehicled):** **Assessment vehicle changed LMS → website; practice vehicle Accounting → LMS**, per the cross-cluster `scenario-flow.md` no-leakage decision (the website is assessed only in CL2; the LMS is the web-scale practice system). This **supersedes the v1–v3 "LMS as the assessment vehicle" framing** (Rule 4). Scenario/project references re-pointed (`lms-global-expansion` → `website-global-expansion`; `cluster-2-scenario.md` → `cluster-2-scenario-{assessment,practice}.md`); the 503 web-scale-practice TBD resolved (LMS). **Structure, AT shape, coverage map, and KE/PE distributions are unchanged — only the subject system's context changed.**
-- **2026-06-15 (v5):** AT1 and AT2 instruments (assessor + student) and exemplars built and website-framed (no residual LMS framing). Foundation-Skills co-evidencing completed and the cluster-coverage validator passes **105/105 (100%)**. `mappings/` Assessment Mapping docs (501/503/505) generated; `consolidated_uoc.md` carries the three-part AT1 shape. Authoring and coverage are complete; remaining before sign-off are external gates only: institutional Pre-Validation and the legal/residency `[VERIFY]`. Lab product confirmed — Kangan provisions both AWS Academy products. (The 501/503 source assessments are not needed — recoverable scenario/artefacts already recovered; see §4.)
+- **2026-06-15 (v5):** AT1 and AT2 instruments (assessor + student) and exemplars built and website-framed (no residual LMS framing). Foundation-Skills co-evidencing completed and the cluster-coverage validator passes **105/105 (100%)**. `mappings/` Assessment Mapping docs (501/503/505) generated; `consolidated_uoc.md` carries the three-part AT1 shape. Authoring and coverage are complete; remaining before sign-off is the institutional Pre-Validation meeting only. Both `[VERIFY]`s closed: lab product confirmed (Kangan provisions both AWS Academy products); residency/legal wording accepted as-is (LLM-grounded, fit for an imaginary scenario — no legal review). (The 501/503 source assessments are not needed — recoverable scenario/artefacts already recovered; see §4.)
