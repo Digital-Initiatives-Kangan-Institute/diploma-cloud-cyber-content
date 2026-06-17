@@ -108,12 +108,15 @@ PART_A = [
     "cost, scalability headroom, the compliance position).",
     "D2 — Options and confirmed decisions: identifies architectural options and patterns, assesses "
     "their benefits and differences against the current business needs, and confirms the design "
-    "decisions.",
+    "decisions — including recognising that a Multi-AZ database is not available for Ledgerline (the "
+    "discovered Multi-AZ limitation) and ruling it out with a cost-versus-benefit justification.",
     "D3 — Goals and metrics: sets measurable security, reliability, scalability and cost goals and "
     "confirms the performance metrics the design is measured against.",
     "D4 — Improvement design: improves compute, storage, database and network across all four "
-    "optimisation concerns into one integrated architecture (Multi-AZ reliability, elastic-on-demand "
-    "scalability, in-place security hardening, proportionate cost optimisation).",
+    "optimisation concerns into one integrated architecture (application-tier Multi-AZ plus database "
+    "backup/restore and cross-Region DR for reliability — the database itself cannot be Multi-AZ, a "
+    "Ledgerline constraint; elastic-on-demand scalability; in-place security hardening; proportionate "
+    "cost optimisation).",
     "D5 — Regulatory compliance: assesses the infrastructure against the Indian Regulatory "
     "Requirements and includes the infrastructure changes that close the gaps (the light India "
     "residency slice — CERT-In logs and books-of-account retrievability).",
@@ -126,6 +129,17 @@ PART_A = [
 ]
 
 PART_B = [
+    "ASSESSOR FOCUS — common error to probe. The database tier CANNOT be made Multi-AZ: Ledgerline is "
+    "vendor-certified single-instance only (the Multi-AZ database limitation discovered during the cloud "
+    "migration — see the current-state ICT records and the Cloud Migration Technical Finding). A candidate "
+    "who proposes a Multi-AZ or mirrored database has missed this constraint — probe it directly in "
+    "questioning: did they find the discovered-limitation record, and did they weigh the only real route to "
+    "database failover (replacing the accounting product — new licence, full data migration, staff retraining "
+    "and change management, and the delivery risk) against accepting backup/restore plus cross-Region DR? "
+    "Proposing a Multi-AZ database without recognising the constraint and making that cost-versus-benefit case "
+    "is inadequate research and analysis — reflect it in D1, D2 and D4. NOTE: application-tier Multi-AZ (an "
+    "Auto Scaling group across AZs behind the internal ALB) is correct and expected — do not penalise it; "
+    "only the database is constrained.",
     "D8 — Design presentation: presents the proposed architecture for review to the required "
     "personnel using appropriate industry language, and responds to questions to confirm the design.",
     "D9 — Sign-off: obtains sign-off to proceed to deployment from the required personnel.",
