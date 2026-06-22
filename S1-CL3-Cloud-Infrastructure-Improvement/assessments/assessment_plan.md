@@ -1,173 +1,207 @@
 # S1-CL3 Cloud Infrastructure Improvement — Cluster Assessment Plan
 
-> **STATUS: DRAFT.** Turns the cluster's settled design into the spec the AT instruments are built from, with the coverage proof that every UoC item lands in an assessment.
+> **STATUS: DRAFT.** Turns the cluster's settled design into the spec the AT instruments are built from,
+> with the coverage proof that every UoC item lands in an assessment. Conforms to the assessment-plan
+> format standard (`docs/assessment-plan-format.md`).
 >
-> **What is settled** (the AT model was reasoned out from the two units' requirements and approved with Tim, 2026-06-16):
-> - The cluster is one integrated engagement — **a team improves a cloud system's infrastructure** — combining **ICTCLD504** (the technical improve-cycle, individual) and **BSBXTW401** (leading the team, group).
-> - **The seam between individual and group work is the *YAML write*, not the technical deliverable.** Of the three jobs — design / write the IaC / deploy — **design must be individual** (504 el 1–2) and **deploy must be individual** (504 el 3), but **writing the CloudFormation is NOT assessed by 504** (that is ICTCLD505, done in CL2). So the write is the one job free to be divided — and dividing it **by component** is what gives BSBXTW401 its authentic, individually-accountable team work (allocate by expertise, coordinate the integration, monitor each member, manage conflict) **without touching any individual 504 evidence.**
-> - **No business case.** Neither UoC requires one, and a business case would precede the design, not follow it. The 504 approval gate is the **AT1 design presentation** (PC 2.4/2.5); the cost-versus-benefit justification rides inside the Solution Design (cost is one of the four design concerns).
-> - **Three ATs:** **AT1 (individual) Design** (`504 el 1–2`) · **AT2 (group) Team Implementation** (`401 el 1–4`, the divided write) · **AT3 (individual) Implement** (`504 el 3–4`, deploy + operate the whole system).
-> - **Improvement across all four optimisation concerns** — security, reliability, scalability, cost — is required *per candidate* in the **design** (`504 PC 1.6 / 2.3`) and demonstrated *per candidate* on the deployed **whole system** in AT3 (`504 PC 3.3`). **Scalability = the ability to scale on demand (elastic capacity, demonstrable by a controlled test), not a forecast of load growth** — consistent with IR-2 (design to scale = sound engineering; over-provisioning = the gold-plating IR-2 forbids).
-> - **Reliability improvement = application-tier Multi-AZ + database backup/restore + cross-Region DR** (proportionate for a depended-on business-hours finance system). The **database is not Multi-AZ** — Ledgerline is a legacy app, vendor-certified single-instance only (the Multi-AZ database limitation discovered during the cloud migration); the only route to DB failover would be replacing the accounting product, rejected on cost-benefit (IR-2/IR-6). The design is provisioned as **parameterised CloudFormation**; a **light India residency slice** (CERT-In logs + Companies-Act books-of-account only) satisfies IR-3 with the main system staying in Sydney (DPDP permits).
-> - **The agreed "to be" design is provided.** AT1 each student designs individually (assessed); the engagement then adopts a single **agreed improvement Solution Design** (provided), which is the spec AT2 encodes into IaC and AT3 deploys. A known-good **reference combined template** is held by the assessor so a broken team integration can never block an individual's AT3 deploy/operate evidence.
+> **Scenario binding:** maps to the **Semester-1 YAT** scenario — the scenario plan (to be written) is the
+> cross-cluster source the `SR-*` below are validated against; current scenario sources are
+> `scenario/scenario-flow.md` + `scenario/cluster-3-scenario-{assessment,practice}.md`.
 >
-> **What is TBD:** `[TBD — needs discussion: the component breakdown of Ledgerline]` — confirm the ~4 IaC modules (candidate: **network / compute / database / storage**) that are the AT2 write-allocation units (one per team member, teams of four). With the write divided (not the demonstration), each module need only be a sensible, separable IaC unit — it no longer has to independently carry all four concerns, since AT3 demonstrates the whole system.
->
-> **Companion documents:** `consolidated_uoc.md` (every PC/FS/PE/KE/AC in 11 groups under 4 phases); `scenario/cluster-3-scenario-{assessment,practice}.md` + `scenario/scenario-flow.md`; `S1-CL2-.../assessments/assessment_plan.md` (the cluster this most closely parallels).
+> **What is settled** (AT model reasoned from the two units' requirements, approved 2026-06-16):
+> - One integrated engagement — **a team improves a cloud system's infrastructure** — combining
+>   **ICTCLD504** (the technical improve-cycle, individual) and **BSBXTW401** (leading the team, group).
+> - **The seam between individual and group work is the *YAML write*, not the technical deliverable.** Of
+>   design / write the IaC / deploy, **design (504 el 1–2) and deploy (504 el 3) are individual**, while
+>   **writing the CloudFormation is not 504-assessed** (it is ICTCLD505, done in CL2). So the write is the
+>   one job free to divide — dividing it **by component** gives BSBXTW401 its individually-accountable team
+>   work without touching any individual 504 evidence.
+> - **Three ATs:** **AT1 (individual) Design** (`504 el 1–2`) · **AT2 (group) Team Implementation**
+>   (`401 el 1–4`, the divided write) · **AT3 (individual) Implement** (`504 el 3–4`).
+> - **No business case** (neither UoC requires one; the 504 approval gate is the AT1 design presentation;
+>   cost-benefit rides inside the Solution Design).
+> - **Reliability = application-tier Multi-AZ + DB backup/restore + cross-Region DR; the database is NOT
+>   Multi-AZ** (Ledgerline is vendor-certified single-instance — the discovered Multi-AZ DB limitation,
+>   TF-03). Scalability = elastic-capacity-on-demand (demonstrable, not forecast). Parameterised
+>   CloudFormation; a light India residency slice (CERT-In + Companies-Act).
 
 ---
 
 ## 1. Integration approach
 
-**Goal (as CL1/CL2):** one integrated cluster assessment that reads as a single engagement on one system, not two units stapled together.
+One integrated cluster assessment that reads as a single engagement on one system. **Shape:** *design the
+improvement (individual) → plan and build it as a team (group) → deploy and operate it (individual)*, all on
+Ledgerline. The units meet without colliding because they are evidenced on **different jobs**: 504 owns the
+**design** (AT1) and **deploy-and-operate** (AT3), both individual; 401 owns the **team write** (AT2), the
+only job free to divide. It is CL1 AT3's improve-loop widened (security + reliability + scalability + cost)
+and run by a team.
 
-**Shape:** *design the improvement (individual) → plan and build it as a team (group) → deploy and operate it (individual)*, all on Ledgerline. The two units meet without colliding because they are evidenced on **different jobs**: 504 owns the **design** (AT1) and the **deploy-and-operate** (AT3), both individual; 401 owns the **team write** (AT2), the only job that divides cleanly and is free to divide (the write is a 505 skill, not a 504 one). It is **CL1 AT3's improve-loop widened** (security + reliability + scalability + cost) and **run by a team**.
+**Approval moments (UoC-faithful):** AT1 Part B = design sign-off, *obtain sign off to proceed*
+(`[ICTCLD504 PC 2.5]`, individual); AT2 Part B = team validates the combined template (a project gate, not a
+504 PC); AT3 = final sign-off (`[ICTCLD504 PC 4.3]`, individual).
 
-**The thread:**
-- **AT1 (individual) — Design.** Each student analyses the Ledgerline baseline and designs the whole improvement (all four concerns), then presents it for review and sign-off. Full individual `504 el 1–2`.
-- **AT2 (group) — Team Implementation.** The team plans the work, then writes the CloudFormation for the **agreed** design — **divided by component**, integrated into one deployable template — across individually-led working meetings. The full `401` leadership cycle (plan → coordinate → support → monitor) rides on this divided, individually-accountable work. *(The write itself is not 504-assessed.)*
-- **AT3 (individual) — Implement.** Each student deploys the combined template in their own lab and demonstrates/tests/refines/documents the **whole** improved system, then obtains final sign-off. Full individual `504 el 3–4`.
-
-**Approval moments (UoC-faithful):** **AT1 Part B** = design sign-off, *obtain sign off to proceed* (`[ICTCLD504 PC 2.5]`, individual); **AT2 Part B** = team validates the combined template (a project/quality gate, not a 504 PC); **AT3** = final sign-off (`[ICTCLD504 PC 4.3]`, individual).
-
-**Knowledge evidence — contextual, on the student's own work:** technical KE rides the AT1 design and the AT3 deployment documents; leadership KE (conflict, teamwork challenges) rides the AT2 reflection. No abstract recall.
+**Knowledge evidence — contextual, on the student's own work:** technical KE rides the AT1 design + the AT3
+deployment documents; leadership KE rides the AT2 reflection. No abstract recall.
 
 ---
 
 ## 2. Scenario
 
-**Reuse the YAT world.** By CL3 YAT's systems are in the cloud; **Ledgerline** (the Accounting system) sits at a **single-AZ baseline** (on-prem in CL1 → migrated to single-AZ cloud → improved in CL3). The engagement is **triggered by YAT's India-campus partnership**: MTS is engaged to confirm Ledgerline's cloud infrastructure is **stable, reliable, fit for purpose, and compliant with the applicable Indian regulatory requirements**, and to **improve it** across security, reliability, scalability and cost. The student team designs the improvement, builds it as code, and deploys it. The improvement is **open** — its shape follows the analysis, proportionate to an internal business-hours finance system (IR-2).
+**Reuse the YAT world.** By CL3, **Ledgerline** (the Accounting system) sits at a **single-AZ cloud
+baseline** (on-prem in CL1 → migrated → improved in CL3). The engagement is triggered by YAT's India-campus
+partnership: MTS is engaged to confirm Ledgerline is stable, reliable, fit for purpose and compliant with
+the applicable Indian regulatory requirements, and to improve it across the four concerns. The student team
+designs the improvement, builds it as code, and deploys it. The improvement is **open** — its shape follows
+the analysis, proportionate to an internal business-hours finance system (IR-2).
 
-**Provided framing (not the answer).** The *Ledgerline Cloud Infrastructure Improvement* project supplies the engagement framing — Master Services Agreement, Engagement Role Brief, Improvement Requirements (IR-1…7), ICT Manager Consultation Notes, and Indian Regulatory Requirements. Each student's **analysis, compliance assessment and improvement design** (AT1) are student-authored. The engagement then adopts a single **agreed improvement Solution Design** (provided), which AT2 encodes into IaC and AT3 deploys. The legal interpretation is owned by YAT Compliance; the team designs and builds the infrastructure to the requirements.
+**Provided framing (not the answer):** the engagement framing (MSA, Role Brief, Improvement Requirements
+IR-1…7, ICT Manager Consultation Notes, Indian Regulatory Requirements) is supplied; each student's
+analysis, compliance assessment and improvement design (AT1) are student-authored. The engagement then
+adopts a single **agreed improvement Solution Design** (provided), which AT2 encodes into IaC and AT3
+deploys.
 
-**Vehicle (per `scenario-flow.md`):** CL3 **assesses on Ledgerline** (single-AZ cloud) and **practises on the website**. *(No-leakage: the website is assessed in CL2.)* **`[ICTCLD504 KE 6]`** (object storage for static web sites) is evidenced as a **contextual knowledge question** in the AT1 design — contrasting Ledgerline with an object-storage-dependent system.
-
-**The team:** a **student group of four** (the MTS improvement team) — **one IaC component each** for the AT2 write. AT1 is each student's individual design; AT3 is each student's individual deploy-and-operate of the whole.
-
-**Baseline:** Ledgerline's single-AZ cloud infrastructure (`s1-cl3-at1` state — the Accounting Baseline Solution Design + cloud ICT records) — internal-only (Site-to-Site VPN), ~60 users, business-hours, EC2+ASG (single-AZ) / internal ALB / RDS for SQL Server (single-AZ) / S3 / VPC. Supplied as a deployable baseline lab-pack.
-
----
-
-## 3. Cluster assessment structure
-
-| Component | Working title | Mode | Format | Unit focus |
-|---|---|---|---|---|
-| **AT1** | Design | **Individual** | **A** Solution Design (analyse + design the whole improvement) · **B** design presentation + sign-off | **ICTCLD504** el 1 + el 2 |
-| **AT2** | Team Implementation | **Group** | **A** project/team plan + task allocation · **B** execution — write the agreed design's CloudFormation (divided by component, integrated), individually-led meetings, team sign-off gate | **BSBXTW401** el 1–4 |
-| **AT3** | Implement | **Individual** | Deploy the combined template + demonstrate/test/refine/document the **whole system** + final sign-off | **ICTCLD504** el 3 + el 4 |
-
-**AT1 — Design (individual).**
-- **Part A — Solution Design.** Analyse the baseline (review, evaluate, business impact, **compliance assessment** against the Indian Regulatory Requirements, options, confirmed decisions, the security/reliability/scalability/cost goals + metrics — `504 el 1`), then design the whole improvement across all four concerns, documented and justified incl. the cost-versus-benefit case (`504 el 2.1–2.3`). Reuses the CL2 **Solution Design** type — its *Review of the Existing Architecture* section carries the analysis.
-- **Part B — Design presentation.** Present the proposed architecture for review, field questions, and obtain sign-off to proceed. → `[504 PC 2.4, 2.5]`, `[FS Oral communication]`. An observed individual oral event.
-
-**AT2 — Team Implementation (group).**
-- **Part A — Plan.** The team plan (common objectives, per-member performance expectations, accountability, contingencies) and the project/implementation plan, **allocating one IaC component to each member** by expertise. → `[BSBXTW401 el 1]`, `[el 2.2]`, `[PE 1]`.
-- **Part B — Execution.** The team writes the CloudFormation for the **agreed** design — each member authors their allocated component, integrated into one deployable template — across **individually-led working meetings**. The lead coordinates, facilitates collaboration, coaches/supports, monitors each member against the plan, and **manages a conflict** (the assessor records the observation checklist for each chair); the team validates the combined template at a sign-off gate. → `[BSBXTW401 el 2–4]`, `[PE 2–5]`, `[FS Interact with others]`. *(The CloudFormation authoring is the team-work vehicle; it is **not** assessed against ICTCLD504 — that is ICTCLD505, evidenced in CL2.)*
-
-**AT3 — Implement (individual).** Each student deploys the combined (agreed, validated) template in their own lab, monitors/measures it against the metrics and goals, **tests and demonstrates security, reliability, scalability and cost** on the deployed whole system, applies short-term refinements from the results, documents the **as-deployed** result + a **long-term improvement strategy**, and obtains **final sign-off**. → `[504 el 3–4]`, `[PE 2/4/5]`. *(A known-good reference combined template is available as a fallback so a team integration failure cannot block this individual evidence.)*
-
-**Template basis:** AT1 reuses the **Solution Design** type (CL2). AT3 reuses the **Deployment Report** type (CL2). **New** = the AT2 **project/team plan** + **CloudFormation write** deliverable spec, the **led-meeting observation checklist**, and the **reflection** prompt. No new "Architecture Analysis" type (the analysis is the Solution Design's review section); no business case.
+**Vehicle (per `scenario-flow.md`):** assess on **Ledgerline** (single-AZ cloud), practise on the
+**website** (no-leakage: the website is assessed in CL2). The testable scenario needs are the `SR-*` in §3 +
+the register in §6.
 
 ---
 
-## 4. Authoring basis / provenance
+## 3. Assessment structure
 
-**CL3 is the lightest cluster with the heaviest reuse.** The technical workflow (analyse → design → deploy → test → document → sign-off) is structurally CL1 AT3 + CL2, re-pointed at Ledgerline with a team-leadership overlay on the IaC write.
-
-**Reusable / already proven:**
-- **CL1 AT3** — the improve-an-existing-baseline shape + the **lab-pack standard** (docs/lab-pack-standard.md) for the supplied Ledgerline baseline and the deployable improved template.
-- **CL2** — the **Solution Design** (AT1) + **Deployment Report** (AT3) templates/generators; the Kangan **Project Assessment** instrument generators; the **scenario world** + intranet; the validators. Students already learned IaC authoring in CL2 (505), so the AT2 write reuses an existing skill (it is not re-assessed).
-
-**New authoring (the CL3-specific part):**
-1. The **AT1 Solution Design exemplar** — the agreed "to be" improvement design (also the assessor model). Generated; a stripped, in-world copy is the design **provided** to the AT2 team.
-2. The **AT2 instruments** — the project/team-plan deliverable spec, the **CloudFormation write** deliverable (divided by component + integration), the **led-meeting observation checklist**, the **reflection** prompt.
-3. The **AT3** as-deployed Deployment Report exemplar + the **deployable improved lab-pack** (the combined template + the assessor reference fallback).
-
-**Author-fresh (accepted):** no standalone ICTCLD504 / BSBXTW401 source assessments located; CL3 is authored fresh by design.
-
----
-
-## 5. Group coverage map
-
-Every group in `consolidated_uoc.md` (82 items) mapped to where it is covered under the AT model above.
-
-| Group | Phase | Where | Mode | How evidenced |
-|---|---|---|---|---|
-| **G1** — Analyse cloud architecture (504 el 1) | 1 | **AT1 Part A** | individual | Solution Design *Review of the Existing Architecture* + findings — review, evaluate, business impact, compliance assessment, options, confirmed decisions, all four goals + metrics. `504 PC 1.1–1.6`, `PE 1` (assess), `PE 3`, `KE 1/2/3`. |
-| **G2** — Plan team outcomes (401 el 1) | 2 | **AT2 Part A** | group | Team plan — objectives, performance expectations, accountability, contingencies. `401 PC 1.1–1.4`, `KE 1/2/9`. |
-| **G3** — Design & improve architecture (504 el 2) | 1 | **AT1 Part A + B** | individual | Whole-improvement design across all four concerns + documented/justified incl. cost-benefit (Part A); presented for review + sign-off (Part B). `504 PC 2.1–2.5`, `PE 1` (improve), `KE 4/5/6/8/9`. |
-| **G4** — Coordinate the team (401 el 2) | 2 | **AT2 Part A + B** | group / observed | Allocate components by expertise (Part A); communicate + facilitate collaboration across the write (Part B led meetings). `401 PC 2.1–2.4`, `KE 3/6/7`. |
-| **G5** — Deploy, monitor & test (504 el 3) | 3 | **AT3** | individual | Deploy the combined template; monitor/test/demonstrate all four concerns on the whole system; refine. `504 PC 3.1–3.4`, `PE 2/4`, `KE 7/10`. |
-| **G6** — Support the team (401 el 3) | 2 | **AT2 Part B** | observed + reflection | Coaching, support, issue-resolution and **conflict management** during the write, observed + the reflection. `401 PC 3.1–3.4`, `PE 2/5`, `KE 4/5/8/10`. |
-| **G7** — Finalise improvements (504 el 4) | 3 | **AT3** | individual | As-deployed report + long-term strategy + final sign-off. `504 PC 4.1–4.3`, `PE 5`. |
-| **G8** — Monitor team performance (401 el 4) | 2 | **AT2 Part B** | individual | Measure each member's component contribution against the plan, feedback, development opportunities, action plans. `401 PC 4.1–4.4`, `PE 3/4`. |
-| **G9** — Foundation skills | — | **all ATs (implicit)** | — | FS Oral → AT1 Part B; FS Interact with others → AT2 Part B; reading/problem-solving/self-management co-evidenced across the deliverables. |
-| **G10** — Assessment conditions: environment & resource access | — | **delivery env** | — | Scenario website + AWS Academy labs (cloud vendor, managed DB, console/CLI, IDE, SSH/RDP, requirements) + simulated-environment condition. |
-| **G11** — Assessment conditions: assessor requirements | — | **institutional** | — | Institution's assessor-qualification policy; one statement per AT cover sheet. |
-
-**PE distribution check.** AT1: `504 PE 1` (assess + improve), `504 PE 3`. AT2: `401 PE 1/2/3/4/5`. AT3: `504 PE 2/4/5`. All 10 PE placed.
-
-**KE distribution check.** AT1: `504 KE 1/2/3` (analysis) + `504 KE 4/5/6/8/9` (design). AT2: `401 KE 1–10` (team plan + coordinate + support + reflection). AT3: `504 KE 7/10`. All 20 KE placed.
-
-**Verification:** every group G1–G11 has a row; every PC, PE and KE is allocated; FS cross-cutting; AC = environment (G10) + assessor condition (G11). No item is unaddressed. **401 lands entirely in AT2; 504 entirely in AT1 (design) + AT3 (deploy/operate).**
-
----
-
-## 6. Required authoring worklist
+| AT | Working title | Mode | Format | Unit focus |
+|----|---|---|---|---|
+| **AT1** | Design | **Individual** | **A** Solution Design (analyse + design the whole improvement) · **B** presentation + sign-off | **ICTCLD504** el 1–2 |
+| **AT2** | Team Implementation | **Group** | **A** project/team plan + component allocation · **B** the divided CloudFormation write + integration + team sign-off | **BSBXTW401** el 1–4 |
+| **AT3** | Implement | **Individual** | Deploy the combined template + demonstrate/test/refine/document the **whole system** + final sign-off | **ICTCLD504** el 3–4 |
 
 ### AT1 — Design
-1. **Solution Design exemplar** (reuse the CL2 Solution Design type) — the agreed "to be" improvement (all four components, all four concerns, compliance slice, cost-benefit, IaC-partitioned), + the contextual `KE 6` question. *(Generated; a stripped, in-world copy = the design provided to AT2.)*
-2. **AT1 Student + Assessor instruments** — the Solution Design deliverable (Part A) + the presentation/sign-off (Part B); marking guide with bidirectional UoC traceability + the FS-Oral observation.
+- **Mode / Format / Unit focus:** Individual; Part A Solution Design (analyse the baseline + design the
+  whole improvement across all four concerns, incl. the compliance assessment + cost-benefit) + Part B
+  observed presentation and sign-off; ICTCLD504 el 1–2.
+- **UoC coverage:** [ICTCLD504 PC 1.1–1.6, 2.1–2.5] · [ICTCLD504 PE 1, 3] · [ICTCLD504 KE 1–6, 8, 9] · [ICTCLD504 FS Oral communication] · [ICTCLD504 FS Reading] · [ICTCLD504 FS Writing] · [ICTCLD504 AC 5]
+- **Scenario requirements:** SR-CL3-03 · SR-CL3-04 · SR-CL3-05 · SR-CL3-06 · SR-CL3-09 · SR-CL3-10
 
 ### AT2 — Team Implementation
-3. **Project/team-plan + CloudFormation-write deliverable spec** (NEW) — team plan + component allocation (Part A); the divided write + integration + team sign-off gate (Part B). *(Write is 401's vehicle, not 504-assessed.)*
-4. **Led-meeting observation checklist** (NEW — BSBXTW401) + **reflection** prompt (NEW).
-5. **AT2 Student + Assessor instruments** (group).
+- **Mode / Format / Unit focus:** Group; Part A team plan + allocate one IaC component per member; Part B
+  the team writes the agreed design's CloudFormation (divided by component, integrated) across
+  individually-led meetings + a team sign-off gate; BSBXTW401 el 1–4. *(The write is 401's vehicle — not
+  504-assessed.)*
+- **UoC coverage:** [BSBXTW401 PC 1.1–1.4, 2.1–2.4, 3.1–3.4, 4.1–4.4] · [BSBXTW401 PE 1–5] · [BSBXTW401 KE 1–10] · [BSBXTW401 FS Get the work done] · [BSBXTW401 FS Interact with others] · [BSBXTW401 FS Navigate the world of work]
+- **Scenario requirements:** SR-CL3-01 · SR-CL3-07 · SR-CL3-08
 
 ### AT3 — Implement
-6. **As-deployed Deployment Report exemplar** (reuse the CL2 Deployment Report type) — the whole improved system.
-7. **AT3 Student + Assessor instruments** (individual).
-8. **AT3 lab artefacts (support) — produced + proven live 2026-06-21** (AWS Academy Cloud Architecting Sandbox; full record in `docs/lab-pack-standard.md` + the lab-pack `claude-notes.md`). AT3 follows an **apply-as-update** model: deploy the baseline, then apply the improvement as a CloudFormation **change-set**.
-   - **Baseline lab-pack** — the *existing state* as CloudFormation: single-AZ Ledgerline (Windows EC2 + internal ALB + single-AZ RDS for SQL Server + S3 + VPC), **encrypted at rest, empty database** (the system + data are imaginary story; data is out of scope). CL1-AT3 pattern, re-pointed at Ledgerline. The lab deploys **SQL Server Express** as a stand-in for the scenario's Standard edition (SE is not deployable on the sandbox's permitted instance classes).
-   - **Reference upgrade change-set** — the model implementation of the agreed design *as a CloudFormation update to the baseline stack* (same logical IDs); doubles as the **AT2 model answer** + the **AT3 fallback** if a team's write is unusable. All changes are **in-place/additive — no replacements**, and the change-set **leaves the RDS instance untouched** (the lab role denies `rds:ModifyDBInstance` — RDS is create-only; DB-tier DR config is out-of-band).
-   - Local validation harness (cfn-lint clean + pytest 15/15) + student README, per docs/lab-pack-standard.md.
+- **Mode / Format / Unit focus:** Individual; deploy the combined (agreed, validated) template, monitor/test
+  /demonstrate all four concerns on the deployed whole system, refine, document the as-deployed result + a
+  long-term strategy, obtain final sign-off; ICTCLD504 el 3–4. *(An assessor reference combined template is
+  the fallback so a team integration failure can't block this individual evidence.)*
+- **UoC coverage:** [ICTCLD504 PC 3.1–3.4, 4.1–4.3] · [ICTCLD504 PE 2, 4, 5] · [ICTCLD504 KE 7, 10] · [ICTCLD504 FS Problem solving] · [ICTCLD504 FS Self-management] · [ICTCLD504 FS Writing]
+- **Scenario requirements:** SR-CL3-01 · SR-CL3-02 · SR-CL3-06 · SR-CL3-07 · SR-CL3-09
 
-### Cluster-level
-9. **`assessment_plan.md`** — this document.
-10. **`mappings/`** — per-unit Assessment Mapping `.docx` (504, 401).
-11. **Realign `consolidated_uoc.md`** + the scenario `IR-6` wording (re-point "Improvement Business Case" → the Solution Design's cost-benefit justification, since the business case is dropped).
-
----
-
-## 7. Open questions / TBDs
-
-1. **Component breakdown — resolved.** The approved Solution Design commits the **four** CloudFormation component stacks (**network / compute / database / storage**); these are the AT2 write-allocation units (one per team member, teams of four).
-2. **Team model — resolved:** **teams of 4**, one IaC component each; formation at the assessor's discretion; AT2 run as **rotating-chair working meetings** (each chairs ≥1; assessor observes the chair).
-3. **Vehicle & `[ICTCLD504 KE 6]` — resolved:** assess on Ledgerline, practise on the website; KE 6 as the contextual object-storage contrast question in the AT1 design.
-4. **Business case — dropped:** not required by either UoC and out of sequence; the 504 approval gate is the AT1 design presentation; cost-benefit rides in the Solution Design.
-5. **UoC transcription — resolved (2026-06-11);** **source-assessment reuse — accepted author-fresh;** **Pre-validation — downstream gate** (run by the validation team after authoring).
-6. **Encryption / data — resolved (2026-06-16):** the baseline is **encrypted at rest** (RDS/EBS/S3) and the lab database is **empty** — the accounting system and its data are imaginary story justifying the infrastructure choices. **Encryption is not an improvement** and data migration is **out of scope**, so every AT3 change is an **in-place/additive change-set** (no replacement, no IR-4 data-loss exposure). CL3 is an *infrastructure*-improvement exercise, not a data one.
+**Template basis:** AT1 reuses the CL2 **Solution Design** type; AT3 reuses the CL2 **Deployment Report**
+type. New = the AT2 project/team-plan + CloudFormation-write deliverable spec, the led-meeting observation
+checklist, and the reflection prompt. No business case; no separate "Architecture Analysis" type (the
+analysis is the Solution Design's review section).
 
 ---
 
-## 8. Critical-path next steps
+## 4. Provenance
 
-1. **Settle the component breakdown** (§7.1) — AT2 and AT3 both reference it.
-2. **Generate the AT1 Solution Design exemplar** (the agreed "to be" design) + derive the stripped in-world copy provided to AT2; build the AT1 instruments + presentation.
-3. **Author AT2** — the project/team-plan + CloudFormation-write spec, the observation checklist + reflection; derive the group instruments.
-4. **Author AT3** — the as-deployed Deployment Report exemplar; build the deployable improved lab-pack + the reference fallback; derive the individual instruments.
-5. **Realign `consolidated_uoc.md`** + the scenario `IR-6` wording; generate `mappings/`; run the coverage validator; hand to Pre-Validation.
+**Lightest cluster, heaviest reuse.** The technical workflow (analyse → design → deploy → test → document →
+sign-off) is structurally CL1 AT3 + CL2, re-pointed at Ledgerline with a team-leadership overlay on the
+write.
+
+- **Reused / proven:** CL1 AT3's improve-an-existing-baseline shape + the lab-pack standard
+  (`docs/lab-pack-standard.md`); CL2's Solution Design (AT1) + Deployment Report (AT3) generators, the
+  Kangan Project Assessment instrument generators, the scenario world, and the validators. Students learned
+  IaC in CL2 (505), so the AT2 write reuses an existing skill (not re-assessed).
+- **New (CL3-specific):** the AT1 Solution Design exemplar (the agreed "to be" design); the AT2 instruments
+  (team-plan + write spec, observation checklist, reflection); the AT3 as-deployed Deployment Report
+  exemplar + the deployable improved lab-pack + assessor reference fallback.
+- **Author-fresh (accepted):** no standalone ICTCLD504 / BSBXTW401 source assessments located — CL3 is
+  greenfield by design (step-3 audit not applicable).
+
+---
+
+## 5. Coverage verification
+
+The per-AT **UoC coverage** in §3 is the authoritative item→AT mapping; this section is the rollup proof
+that nothing is unassessed (across `consolidated_uoc.md`, 82 items).
+
+- **PC** — 504: AT1 `1.1–2.5`, AT3 `3.1–4.3` (all 18). 401: AT2 `1.1–4.4` (all 16).
+- **PE** — 504: AT1 `1, 3`, AT3 `2, 4, 5` (all 5). 401: AT2 `1–5` (all 5).
+- **KE** — 504: AT1 `1–6, 8, 9`, AT3 `7, 10` (all 10). 401: AT2 `1–10` (all 10).
+- **FS** — 504: AT1 Oral/Reading/Writing, AT3 Problem-solving/Self-management/Writing (all 5). 401: AT2
+  Get-the-work-done/Interact-with-others/Navigate-the-world-of-work (all 3).
+- **AC** — environment/legislative ACs are discharged via the `SR-*` register (§6, AC link column); the
+  assessor-requirement ACs (`[ICTCLD504 AC 8]`, `[BSBXTW401 AC 2]`) are institutional, one statement per AT
+  cover sheet.
+
+**Verification:** every consolidated PC / PE / KE / FS is covered by ≥1 AT above; **401 lands entirely in
+AT2; 504 entirely in AT1 (design) + AT3 (deploy/operate).** (Confirmed mechanically — `validate-cluster-
+coverage` = 72/72.)
+
+---
+
+## 6. Scenario requirements register
+
+The conditions the scenario must enable for these assessments. The scenario plan must satisfy every `SR-*`;
+the **AC link** names the UoC Assessment Condition each environmental requirement discharges.
+
+| SR | Condition the scenario must enable | AT(s) | AC link |
+|----|---|---|---|
+| **SR-CL3-01** | AWS Academy lab — cloud vendor services, managed DB, console/SDK/CLI, IDE, browser, SSH/RDP; the team build + individual deploy/operate environment | AT2, AT3 | [ICTCLD504 AC 1] · [ICTCLD504 AC 2] · [ICTCLD504 AC 3] · [ICTCLD504 AC 4] · [ICTCLD504 AC 6] · [ICTCLD504 AC 7] · [BSBXTW401 AC 1] |
+| **SR-CL3-02** | Deployable single-AZ Ledgerline **baseline lab-pack** (EC2+ASG / internal ALB / single-AZ RDS for SQL Server / S3 / VPC; encrypted at rest, empty DB) — the as-is system AT3 deploys then improves | AT3 | — |
+| **SR-CL3-03** | Engagement framing — Master Services Agreement, Engagement Role Brief, Improvement Requirements (IR-1…7), ICT Manager Consultation Notes | AT1 | — |
+| **SR-CL3-04** | Indian Regulatory Requirements (CERT-In logging + Companies-Act books-of-account) driving the compliance assessment + the India residency slice | AT1 | [ICTCLD504 AC 5] |
+| **SR-CL3-05** | Current-state ICT records (baseline Solution Design, infrastructure/application specs, operational costing) carrying the Multi-AZ database limitation breadcrumb (TF-03) | AT1 | — |
+| **SR-CL3-06** | A required-personnel stakeholder who role-plays the design review + sign-off (AT1 Part B) and the final sign-off (AT3) | AT1, AT3 | — |
+| **SR-CL3-07** | The agreed "to be" improvement Solution Design provided to the team (AT2 build input) + an assessor reference combined template (AT3 fallback) | AT2, AT3 | — |
+| **SR-CL3-08** | A student team of four (the MTS improvement team) for the group write | AT2 | [BSBXTW401 AC 1] |
+| **SR-CL3-09** | YAT Solution Design + Deployment Report templates (intranet Templates section) | AT1, AT3 | — |
+| **SR-CL3-10** | The website (an object-storage-dependent system) for the contextual `[ICTCLD504 KE 6]` contrast question + the CL3 practice vehicle | AT1 | — |
+
+---
+
+## 7. Worklist
+
+- **AT1** — Solution Design exemplar (the agreed "to be" design; also the provided AT2 input) + the AT1
+  Student/Assessor instruments (Part A deliverable + Part B presentation/sign-off; marking guide with
+  bidirectional UoC traceability + FS-Oral observation).
+- **AT2** — the project/team-plan + CloudFormation-write deliverable spec (write divided by component +
+  integration + team sign-off), the led-meeting observation checklist + reflection prompt; the
+  Student/Assessor instruments (group).
+- **AT3** — the as-deployed Deployment Report exemplar; the deployable improved lab-pack (combined template +
+  assessor reference fallback; **proven live 2026-06-21**, apply-as-update change-set, SQL Server Express
+  stand-in, RDS create-only); the Student/Assessor instruments (individual).
+- **Cluster** — this plan; `mappings/` per-unit Assessment Mapping docs (built); `consolidated_uoc.md`
+  realignment to the write-is-the-seam model (the prose still describes the superseded owned-dimension /
+  business-case model).
+
+---
+
+## 8. Open questions / TBDs
+
+1. **Component breakdown — resolved:** four CloudFormation component stacks (**network / compute / database /
+   storage**) = the AT2 write-allocation units (one per member, teams of four).
+2. **Team model — resolved:** teams of 4; rotating-chair working meetings (each chairs ≥1; assessor observes
+   the chair).
+3. **Business case — dropped:** out of sequence; cost-benefit rides in the Solution Design.
+4. **Encryption / data — resolved:** baseline encrypted at rest, lab DB empty; encryption is not an
+   improvement and data migration is out of scope; every AT3 change is an in-place/additive change-set.
+5. **`consolidated_uoc.md` prose — `[TBD]`:** still describes the old owned-dimension / business-case model;
+   realign to write-is-the-seam (the item inventory is unaffected).
+6. **Pre-validation** — downstream institutional gate (run after authoring).
 
 ---
 
 ## Changelog
 
-- **2026-06-07 (v1):** Initial draft — integrated *lead a team to improve cloud infrastructure*; three-AT individual → group → individual; owned-dimension model; team-leadership evidence.
-- **2026-06-08 (v2 — re-vehicled):** Assess on Ledgerline, practise on the website; `[KE 6]` as a contextual contrast question.
-- **2026-06-11 (v3 — AC consistency):** Assessor-requirements AC tagged; new G11; 80 → 82 items.
-- **2026-06-11 (v4 — scenario alignment):** India-campus driver + compliance dimension; provided-vs-student-authored boundary; AT1 deliverable renamed "Team Plan".
-- **2026-06-11 (v5 — team model):** Teams of 4, assessor-formed, rotating-chair meetings.
-- **2026-06-11 (v6 — AT restructure):** Technical analysis+design moved into a group AT2 with an owned-dimension model + an "Architecture Analysis" document type.
-- **2026-06-16 (v7 — units-first restructure):** Retired owned-*dimension* (under-evidenced 504 `PC 3.3`) for owned-*component*; eliminated the Architecture Analysis type (analysis = the Solution Design's review); AT1 individual design, AT2 group plan, AT3 individual component build + hybrid 401.
-- **2026-06-16 (v8 — write-is-the-seam):** Resolved the individual/group tension cleanly by locating the **division on the YAML write** (not the technical deliverable): of design / write / deploy, only the write is free to divide (it is ICTCLD505, not 504), so it carries 401's divided, individually-accountable team work while design (AT1) and deploy (AT3) stay individual. Consequences: **AT1** = individual Design — *Part A* Solution Design (`504 el 1–2`), *Part B* presentation + sign-off (`PC 2.4/2.5`, FS Oral); **AT2** = group Team Implementation (`401 el 1–4` entirely) — *Part A* project/team plan + component allocation, *Part B* the divided CloudFormation write + integration + team sign-off (the write **not** 504-assessed); **AT3** = individual Implement — deploy the combined template + demonstrate/test/refine/document the **whole system** (`504 el 3–4`). **Business case dropped** (no UoC requires it; out of sequence; cost-benefit rides in the Solution Design). The agreed "to be" design is **provided** to AT2; an assessor **reference combined template** protects AT3 individual evidence from a team integration failure. Scalability defined as **elastic-capacity-on-demand** (demonstrable, not forecast). All 82 items remain placed; **401 entirely in AT2, 504 entirely in AT1 + AT3.** Component breakdown (the AT2 write-allocation units) is the one open item (§7.1).
-- **2026-06-21 (v9 — database reliability via backup/DR, not Multi-AZ):** Established that Ledgerline (a legacy, on-premises-era app) does not support a Multi-AZ (mirrored) database — vendor-certified single-instance only — surfaced as a "Multi-AZ database limitation" discovered during the cloud migration and seeded through the current-state ICT records as a **breadcrumb trail** (a new migration Technical Finding TF-03 + references in the application spec / infrastructure spec / operational costing). Reliability is therefore **application-tier Multi-AZ + database automated backups / point-in-time restore / cross-Region DR (to Melbourne, keeping financial data in Australia)**, not database Multi-AZ. The only route to DB failover — replacing the accounting product (new licence + data migration + change management + risk) — is evaluated and rejected as disproportionate (IR-2/IR-6); that cost-benefit call is the **AT1 analysis centrepiece**, with a prominent **ASSESSOR FOCUS** pushback note on the AT1 Part B presentation checklist for candidates who reflexively propose a Multi-AZ database. AT1 exemplar + assessor and AT3 instruments updated and regenerated; the AT3 lab-pack proving run no longer needs SQL-Server-Multi-AZ. Coverage unchanged (same PCs/KEs — the analysis content changes, not the mapping).
+- **2026-06-07 → 2026-06-21 (v1–v9):** initial integrated three-AT model through the write-is-the-seam
+  restructure (v8) and the database-reliability-via-backup/DR resolution (v9). See git history for the full
+  evolution (owned-dimension → owned-component → write-is-the-seam; business case dropped; Multi-AZ DB
+  limitation breadcrumb TF-03). All 82 items remained placed throughout.
+- **2026-06-22 (v10 — reformat to the assessment-plan standard):** restructured to
+  `docs/assessment-plan-format.md` — per-AT **UoC coverage** as canonical tags (now the authoritative
+  item→AT mapping, derived from the AT benchmarks), §5 recast as coverage verification, and a new **§6
+  scenario requirements register** (`SR-CL3-01…10`, with AC-link discharge of the environmental conditions).
+  No assessment-design change — only the plan's structure + the explicit scenario-requirement capture.
