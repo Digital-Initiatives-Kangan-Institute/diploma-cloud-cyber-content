@@ -23,10 +23,13 @@ split them — a validator without its engine breaks.
 | [validate-cluster-coverage](validate-cluster-coverage/) | 1.0.0 | Prove a cluster's ATs *together* evidence every consolidated item (gaps + phantoms). |
 | [validate-mapping-doc](validate-mapping-doc/) | 1.0.0 | Prove a unit's Assessment Mapping docx is **complete** vs its UoC and **accurate** vs the marking benchmarks. |
 | [validate-assessment-plan](validate-assessment-plan/) | 1.0.0 | Prove a cluster's `assessment_plan.md` conforms to the format standard (linter) and references every consolidated PC/PE/KE/FS item (UoC coverage). |
+| [generate-consolidated-plan](generate-consolidated-plan/) | 1.0.0 | Deterministically derive a scenario's **consolidated assessment plan** (AT roster + whole-of-scenario coverage + unioned `SR-*` register) from its per-cluster plans. |
+| [validate-consolidated-plan](validate-consolidated-plan/) | 1.0.0 | Prove a consolidated assessment plan is an exact, faithful union of its per-cluster source plans (catches stale aggregate / hand-edit / generator bug). |
 
 **Shared engine — `scripts/`:** `inventory_uoc.py` · `transcribe_uoc.py` · `validate_uoc.py` ·
 `validate_consolidated.py` · `validate_at_traceability.py` · `validate_cluster_coverage.py` ·
-`validate_mapping_doc.py` · `validate_assessment_plan.py`.
+`validate_mapping_doc.py` · `validate_assessment_plan.py` · `generate_consolidated_plan.py` ·
+`validate_consolidated_plan.py`.
 
 > **`validate-mapping-doc` dependency note:** its **completeness** check is stdlib-only and portable
 > like the rest of the pack. Its **accuracy** cross-check additionally imports the cluster's
