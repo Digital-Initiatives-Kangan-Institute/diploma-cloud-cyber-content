@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 """Validate a scenario plan against the scenario-plan format standard + the SR-* contract.
 
-Two checks (see docs/scenario-plan-format.md):
+The scenario plan has two parts (see docs/scenario-plan-format.md): Part 1 is the human-led narrative
+(story bible — linted for presence only); Part 2 is the forward build checklist (contract-bound).
+
+Two checks:
 
   FORMAT (linter — deterministic): the required sections are present and in order; the header carries a
-    STATUS + Assessment-binding line; §2 has an element table and a per-element '### SE-NN' block carrying a
-    'Satisfies:' field; every SE id is well-formed (SE-NN).
+    STATUS + Assessment-binding line; Part 2 has at least one '#### SE-NN' checklist-item block, and every
+    such block carries a 'Satisfies:' field and a 'Keynotes:' field; every SE id is well-formed (SE-NN).
 
   CROSS-CHECK (bidirectional, against the consolidated assessment plan's SR-* register): every SR-* in
-    assessment-plans/<SEMESTER>.md is satisfied by at least one scenario element (else UNCOVERED → FAIL);
-    no element claims an SR-* that is not in the register (else PHANTOM → FAIL). An element that satisfies
-    no SR-* is reported as info (allowed world-building, but a forgotten binding is visible).
+    assessment-plans/<SEMESTER>.md is satisfied by at least one checklist item (else UNCOVERED -> FAIL);
+    no item claims an SR-* that is not in the register (else PHANTOM -> FAIL). An item that satisfies no
+    SR-* is reported as info (allowed world-building, but a forgotten binding is visible).
 
 Stdlib only.
 
@@ -27,15 +30,14 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]  # .claude/skills/scripts/ -> content repo root
 SR_RE = re.compile(r"\bSR-[A-Z]+\d+-\d+\b")
-SE_RE = re.compile(r"\bSE-\d+\b")
 
 # (regex for the heading, human label) in required order
 REQUIRED = [
     (r"^#\s+.*Scenario Plan\b", "title — '# … Scenario Plan'"),
-    (r"^##\s+1\.\s+World overview\b", "## 1. World overview"),
-    (r"^##\s+2\.\s+Scenario elements\b", "## 2. Scenario elements"),
-    (r"^##\s+3\.\s+SR coverage\b", "## 3. SR coverage"),
-    (r"^##\s+4\.\s+Open questions\b", "## 4. Open questions"),
+    (r"^##\s+Part 1\b.*Scenario narrative\b", "## Part 1 — Scenario narrative"),
+    (r"^##\s+Part 2\b.*Build checklist\b", "## Part 2 — Build checklist"),
+    (r"^##\s+SR coverage\b", "## SR coverage"),
+    (r"^##\s+Open questions\b", "## Open questions"),
     (r"^##\s+Changelog\b", "## Changelog"),
 ]
 
@@ -74,25 +76,23 @@ def check_format(text):
     if "Assessment binding" not in text:
         problems.append("header missing an 'Assessment binding' line")
 
-    # 3) §2 — element table + per-element blocks with Satisfies
-    sec2 = section_span(lines, r"^##\s+2\.", [r"^##\s+3\."]) or ""
-    if not re.search(r"^\|.*\bSE-\d+\b", sec2, re.MULTILINE):
-        problems.append("§2 has no element table row (expected a markdown table listing the SE elements)")
-    se_blocks = re.findall(r"^###\s+(SE-\d+\b.*)$", sec2, re.MULTILINE)
-    if not se_blocks:
-        problems.append("§2 has no '### SE-NN' per-element detail blocks")
-
-    chunks = re.split(r"^###\s+SE-\d+\b.*$", sec2, flags=re.MULTILINE)[1:]
-    labels = re.findall(r"^###\s+(SE-\d+)\b", sec2, re.MULTILINE)
+    # 3) Part 2 — checklist items: '#### SE-NN' blocks, each with Satisfies + Keynotes
+    part2 = section_span(lines, r"^##\s+Part 2\b", [r"^##\s+SR coverage\b"]) or ""
+    se_labels = re.findall(r"^####\s+(SE-\d+)\b", part2, re.MULTILINE)
+    if not se_labels:
+        problems.append("Part 2 has no '#### SE-NN' checklist-item blocks")
+    chunks = re.split(r"^####\s+SE-\d+\b.*$", part2, flags=re.MULTILINE)[1:]
     satisfied = {}
-    for label, chunk in zip(labels, chunks):
+    for label, chunk in zip(se_labels, chunks):
+        if "Keynotes:" not in chunk:
+            problems.append(f"{label} block missing a 'Keynotes:' field")
         sat_line = next((ln for ln in chunk.splitlines() if "Satisfies:" in ln), None)
         if sat_line is None:
             problems.append(f"{label} block missing a 'Satisfies:' field")
             continue
         srs = SR_RE.findall(sat_line)
         if not srs:
-            advisories.append(f"{label} satisfies no SR-* (pure world-building — confirm intended)")
+            advisories.append(f"{label} satisfies no SR-* (world-building — confirm intended)")
         for sr in srs:
             satisfied.setdefault(sr, set()).add(label)
 
@@ -147,12 +147,12 @@ def main():
         uncovered = sorted(contract - satisfied.keys())
         phantom = sorted(satisfied.keys() - contract)
         if not uncovered and not phantom:
-            print(f"  CROSS-CHECK: PASS — all {len(contract)} SR-* in {consolidated.name} satisfied by an element")
+            print(f"  CROSS-CHECK: PASS — all {len(contract)} SR-* in {consolidated.name} satisfied by an item")
         else:
             cross_fail = True
             print(f"  CROSS-CHECK: FAIL — {len(uncovered)} uncovered, {len(phantom)} phantom (of {len(contract)} SR-*)")
             for sr in uncovered:
-                print(f"    [UNCOVERED] {sr} — no scenario element satisfies it")
+                print(f"    [UNCOVERED] {sr} — no checklist item satisfies it")
             for sr in phantom:
                 print(f"    [PHANTOM] {sr} — claimed by {', '.join(sorted(satisfied[sr]))} but not in the register")
     else:
