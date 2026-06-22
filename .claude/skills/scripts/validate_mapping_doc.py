@@ -120,8 +120,14 @@ def _sections_md(text):
 
 
 def _bullets(body):
+    raw = body.splitlines()
+    top = [ln for ln in raw if re.match(r"^- ", ln)]
+    # Parent-bullet special case (e.g. ICTICT517 PE "For one organisation:" + 6 sub-bullets):
+    # a single top-level bullet ending ':' means its sub-bullets are the assessable items.
+    if len(top) == 1 and top[0].rstrip().endswith(":"):
+        return [re.sub(r"^\s*-\s+", "", ln).strip() for ln in raw if re.match(r"^\s+- ", ln)]
     items = []
-    for ln in body.splitlines():
+    for ln in raw:
         s = ln.strip()
         if not s.startswith("- "):
             continue

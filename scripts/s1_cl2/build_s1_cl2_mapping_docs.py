@@ -1,5 +1,20 @@
 #!/usr/bin/env python3
-"""Build the S1-CL2 per-UoC Assessment Mapping docx files (ICTCLD501/503/505).
+"""S1-CL2 Assessment Mapping docs — THIN WRAPPER (cluster data + delegation only).
+
+================================================================================
+⚠  NOT the canonical generator. The docx-building mechanics live in the shared engine
+   ┖─ scripts/mapping/generate_mapping_doc.py  ← the single generator for ALL clusters.
+   This module now keeps only S1-CL2's *data* (UNITS, FS_MAP, AC_MAP, AT titles) and the
+   benchmark *inversion* the validator reads; build_unit() just calls engine.build_cluster("cl2").
+   • To (re)generate:   python scripts/mapping/generate_mapping_doc.py --build cl2
+   • To add a NEW cluster: add a CLUSTERS entry in the engine — do NOT copy this script's shape.
+   • Contract + pipeline: docs/mapping-document-standard.md
+   Idiosyncrasy kept for the validator: _split_codes() (CL2 criteria are one flat list per item,
+   split A/B/C->AT1, D->AT2). The engine instead inverts each AT's benchmark under its own column;
+   both yield the same result (proven by `--check cl2`). Prefer the engine's per-AT model for new work.
+================================================================================
+
+Build the S1-CL2 per-UoC Assessment Mapping docx files (ICTCLD501/503/505).
 
 Mirrors the CL1 mapping docs: the institutional "Assessment Mapping Tool" template,
 filled with each unit's items (Details, AT descriptions, and the AC/PC/PE/KE/FS rows in
@@ -19,7 +34,6 @@ USAGE:
     python scripts/s1_cl2/build_s1_cl2_mapping_docs.py --dump 501
     python scripts/s1_cl2/build_s1_cl2_mapping_docs.py --dump all
 """
-import copy
 import re
 import sys
 from pathlib import Path
@@ -27,8 +41,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_s1_cl2_at1_assessor as a1   # noqa: E402
 import build_s1_cl2_at2_assessor as a2   # noqa: E402
-
-from docx import Document  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[2]  # scripts/s1_cl2/ -> content repo root
 UOC = REPO / "S1-CL2-Cloud-Disaster-Recovery" / "units_of_competency"
@@ -292,38 +304,11 @@ def dump(unit_key):
 
 
 # ----------------------------------------------------------------------------
-# docx generation
+# docx generation — delegated to the shared engine (scripts/mapping/generate_mapping_doc.py).
+# This module supplies the data (UNITS, FS_MAP, AC_MAP, titles) + the inversion the engine and the
+# validator read; _split_codes below (still used by the validator) splits the flat criterion list
+# into AT columns. The docx-building mechanics are the engine's, one code path for all clusters.
 # ----------------------------------------------------------------------------
-
-# Table indices (confirmed against the blank template)
-T_DETAILS, T_DESC, T_AC, T_PC, T_PE, T_KE, T_FS = 1, 2, 3, 4, 5, 6, 7
-
-
-def _put(cell, text):
-    """Replace a cell's content with `text` (newlines become separate paragraphs)."""
-    for p in cell.paragraphs[1:]:
-        p._element.getparent().remove(p._element)
-    p0 = cell.paragraphs[0]
-    for r in list(p0.runs):
-        r.text = ""
-    lines = (text or "").split("\n")
-    (p0.runs[0] if p0.runs else p0.add_run("")).text = lines[0]
-    for ln in lines[1:]:
-        cell.add_paragraph().add_run(ln)
-
-
-def _reset(table, n_header=2):
-    """Remove data rows after the headers; return a deep-copied template row XML."""
-    rows = list(table.rows)
-    template_tr = copy.deepcopy(rows[n_header]._tr)
-    for row in rows[n_header:]:
-        row._tr.getparent().remove(row._tr)
-    return template_tr
-
-
-def _add(table, template_tr):
-    table._tbl.append(copy.deepcopy(template_tr))
-    return table.rows[-1]
 
 
 def _split_codes(crits):
@@ -334,82 +319,11 @@ def _split_codes(crits):
 
 
 def build_unit(unit_key):
-    code, title = UNITS[unit_key]
-    items = parse_source_unit(code)
-    inv = invert_benchmarks()
-    doc = Document(str(TEMPLATE))
-
-    # --- Table 1: Details ---
-    det = doc.tables[T_DETAILS]
-    _put(det.rows[1].cells[1], code)
-    _put(det.rows[1].cells[3], title)
-    _put(det.rows[1].cells[5], "1")
-    _put(det.rows[2].cells[1], "ICT50220")
-    _put(det.rows[2].cells[3], "Diploma of Information Technology")
-
-    # --- Table 2: Description of assessment tasks ---
-    desc = doc.tables[T_DESC]
-    _put(desc.rows[2].cells[1], AT1_TITLE); _put(desc.rows[2].cells[2], "1.0")
-    _put(desc.rows[3].cells[1], AT2_TITLE); _put(desc.rows[3].cells[2], "1.0")
-
-    # --- Table 4: PCs ---
-    pc_tbl = doc.tables[T_PC]
-    tmpl = _reset(pc_tbl)
-    last_elem = None
-    for num, txt, elem in items["pcs"]:
-        row = _add(pc_tbl, tmpl)
-        _put(row.cells[0], elem if elem != last_elem else "")
-        last_elem = elem
-        _put(row.cells[1], f"{num} {txt}")
-        at1, at2 = _split_codes(inv.get((code, "PC", num), []))
-        _put(row.cells[2], at1); _put(row.cells[3], at2)
-        for c in (4, 5, 6):
-            _put(row.cells[c], "")
-
-    # --- Table 5: PEs / Table 6: KEs (col0 desc; col1 AT1; col2 AT2) ---
-    for tnum, key, sect in ((T_PE, "pes", "PE"), (T_KE, "kes", "KE")):
-        tbl = doc.tables[tnum]
-        tmpl = _reset(tbl)
-        for i, txt in enumerate(items[key], 1):
-            row = _add(tbl, tmpl)
-            _put(row.cells[0], txt)
-            at1, at2 = _split_codes(inv.get((code, sect, str(i)), []))
-            _put(row.cells[1], at1); _put(row.cells[2], at2)
-            for c in (3, 4, 5):
-                _put(row.cells[c], "")
-
-    # --- Table 7: FSs (col0 skill; col2 description; col3 AT1; col4 AT2) ---
-    fs_tbl = doc.tables[T_FS]
-    tmpl = _reset(fs_tbl)
-    for skill, fdesc in items["fss"]:
-        row = _add(fs_tbl, tmpl)
-        m = FS_MAP.get(code, {}).get(skill, {})
-        _put(row.cells[0], skill)
-        _put(row.cells[1], "")
-        _put(row.cells[2], fdesc)
-        _put(row.cells[3], m.get("AT1", ""))
-        _put(row.cells[4], m.get("AT2", ""))
-        for c in (5, 6, 7):
-            _put(row.cells[c], "")
-
-    # --- Table 3: ACs (col0 desc; col1 AT1; col2 AT2) ---
-    ac_tbl = doc.tables[T_AC]
-    tmpl = _reset(ac_tbl)
-    ac_codes = AC_MAP.get(code, [])
-    for i, txt in enumerate(items["acs"]):
-        row = _add(ac_tbl, tmpl)
-        _put(row.cells[0], txt)
-        m = ac_codes[i] if i < len(ac_codes) else {}
-        _put(row.cells[1], m.get("AT1", ""))
-        _put(row.cells[2], m.get("AT2", ""))
-        for c in (3, 4, 5):
-            _put(row.cells[c], "")
-
-    MAPPINGS.mkdir(parents=True, exist_ok=True)
-    out = MAPPINGS / f"{code}_Assessment_Mapping.docx"
-    doc.save(str(out))
-    print(f"Wrote {out}  (PC {len(items['pcs'])}, PE {len(items['pes'])}, "
-          f"KE {len(items['kes'])}, FS {len(items['fss'])}, AC {len(items['acs'])})")
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "mapping"))
+    import generate_mapping_doc as engine  # noqa: E402
+    code = UNITS[unit_key][0]
+    for out in engine.build_cluster("cl2", only=[code]):
+        print(f"Wrote {out}")
 
 
 def main():
