@@ -30,6 +30,7 @@ UoC **taught / developed** in this Topic:
 | [ICTICT517 PC 3.2] | Detail standards, targets and implementation methods in action plan | C2 |
 | [ICTICT517 PE 6] | Develop an action plan for implementation | C2 |
 | [ICTICT517 PC 3.3] | Provide action plan to superior for feedback and approval | C3 (the written ask in §11) |
+| [ICTICT517 KE 1] | Key sections of an action plan for ICT implementation projects | C2 |
 
 UoC **applied** here but **taught/produced earlier** (not re-done):
 

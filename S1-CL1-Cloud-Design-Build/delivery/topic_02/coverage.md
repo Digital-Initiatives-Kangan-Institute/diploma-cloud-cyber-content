@@ -28,6 +28,7 @@ UoC **taught / developed** in this Topic:
 | [ICTICT517 PE 2] | Evaluate the current state of ICT | C2 |
 | [ICTICT517 PC 1.3] | Compare strategic plan against current state and determine gaps | C3 |
 | [ICTICT517 PE 3] | Identify gaps and opportunities; evaluate organisational impact | C3 |
+| [ICTICT517 KE 4] | Current and emerging system and product trends and directions (the external industry context/direction) | C1 |
 
 > Cloud-knowledge from Topic 1 is **applied** here (industry context in C1) but not re-taught.
 

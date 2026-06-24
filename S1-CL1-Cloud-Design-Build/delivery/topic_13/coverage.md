@@ -39,6 +39,11 @@ UoC **taught / developed** in this Topic:
 | [ICTCLD502 PC 5.1] | Adjust and improve availability of architecture according to simulations as required | C3 |
 | [ICTCLD502 PE 1] | Design and implement at least one fault-tolerant cloud infrastructure resilient to networking/compute/storage/database/data-centre failures | C1 · C2 *(the implement + prove portion)* |
 | [ICTCLD401 PC 3.2] | Test automatic scaling and fix errors (applied under load/resize) | C2 *(applied)* |
+| [ICTCLD502 PE 2] | Design and deploy automated infrastructure scaling for a business need | C1 |
+| [ICTCLD502 PE 3] | Simulate failures of a component and demonstrate fault tolerance | C2 |
+| [ICTCLD502 PE 4] | Use cloud management console, SDKs or command-line tools | C1 |
+| [ICTCLD502 PE 5] | Define, monitor and record resource availability | C2 |
+| [ICTCLD502 KE 5, 6, 9] | Testing/debugging techniques, measuring availability impact, and metrics to monitor performance | C2 |
 
 > **AT3 marking home: Part B — implementation + simulation window.** This Topic develops the skills assessed in AT3 Part B (the ~3.5 h maintenance-window implementation + the failure/resize simulations). AT3 build-topic refs **T9–T14** (implement · connectivity · availability measurement · failure sim · resize sim · compare/test).
 

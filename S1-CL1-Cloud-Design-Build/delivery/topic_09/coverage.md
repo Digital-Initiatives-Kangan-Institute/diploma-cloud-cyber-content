@@ -33,6 +33,7 @@ UoC **taught / developed** in this Topic:
 | [ICTCLD401 KE 5] | Performance monitoring and alarms | C1 |
 | [ICTCLD401 PC 2.6] | Test external/internal access and fix errors (validated against the design) | C2 *(developed T7–T8)* |
 | [ICTCLD401 PC 3.2] | Test automatic scaling and fix errors (validated) | C2 *(developed T8)* |
+| [ICTCLD401 PC 1.1] | Discuss and compare different cloud computing solutions, models and services according to business requirements | C3 |
 | [ICTCLD401 PC 1.3] | Select best cloud computing solution and service according to business requirements | C3 |
 | [ICTCLD401 PC 1.8] | Define workload according to business requirements and needs | C3 *(the workload the decisions are justified against)* |
 | [ICTCLD401 KE 6] | Functions/features/uses of compute, storage, scaling, database **options** (the basis for choosing) | C3 |
