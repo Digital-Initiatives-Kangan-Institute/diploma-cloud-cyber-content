@@ -22,17 +22,17 @@ The finalisation half of the DR-plan lifecycle — develop solution options, cho
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD501 PC 3.1]` | Develop a range of DR solutions according to business requirements | C1 |
-| `[ICTCLD501 PC 3.2]` | (Vendor protections) prioritise recovery against risks | C2 |
-| `[ICTCLD501 PC 3.3]` | (Insurance) complementary risk-transfer control | C2 |
-| `[ICTCLD501 PC 3.4]` | Identify other DR solution components | C2 |
-| `[ICTCLD501 PC 4.1]` | Align DR risk potential according to business requirements | C3 |
-| `[ICTCLD501 PC 4.2]` | Outline steps, timelines, key features, service providers | C3 |
-| `[ICTCLD501 PC 4.3]` | Document the DR plan according to business needs | C3 |
-| `[ICTCLD501 PE 1]` | Develop and evaluate a DR plan covering at least three major risk events | C1, C3 |
-| `[ICTCLD501 PE 3]` | Document how the plan reaches RTO/RPO targets | C3 |
-| `[ICTCLD501 KE 3]` | DR techniques applicable to cloud environments | C1 |
-| `[ICTCLD501 KE 4]` | ISO/IEC 27001 / 27002 / 27031 standards | C2 |
+| [ICTCLD501 PC 3.1] | Develop a range of DR solutions according to business requirements | C1 |
+| [ICTCLD501 PC 3.2] | (Vendor protections) prioritise recovery against risks | C2 |
+| [ICTCLD501 PC 3.3] | (Insurance) complementary risk-transfer control | C2 |
+| [ICTCLD501 PC 3.4] | Identify other DR solution components | C2 |
+| [ICTCLD501 PC 4.1] | Align DR risk potential according to business requirements | C3 |
+| [ICTCLD501 PC 4.2] | Outline steps, timelines, key features, service providers | C3 |
+| [ICTCLD501 PC 4.3] | Document the DR plan according to business needs | C3 |
+| [ICTCLD501 PE 1] | Develop and evaluate a DR plan covering at least three major risk events | C1, C3 |
+| [ICTCLD501 PE 3] | Document how the plan reaches RTO/RPO targets | C3 |
+| [ICTCLD501 KE 3] | DR techniques applicable to cloud environments | C1 |
+| [ICTCLD501 KE 4] | ISO/IEC 27001 / 27002 / 27031 standards | C2 |
 
 > Taught here; formally **evidenced** in AT1 Part B §5–6 + the KE appendix.
 

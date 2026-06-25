@@ -24,16 +24,16 @@ Plus the industry practice that governs it: parameters over hard-coding, least-p
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD505 PC 3.1]` | Learn template syntax of the selected IaC service | C1 |
-| `[ICTCLD505 PC 3.2]` | Create and deploy a template to provision a related resource set | C1 |
-| `[ICTCLD505 PC 3.3]` | Update and redeploy to modify and add resources | C2 |
-| `[ICTCLD505 PC 3.4]` | Confirm deployment; configure via console or CLI | C2 |
-| `[ICTCLD505 PC 3.5]` | Parameterise and deploy to reuse configuration | C2 |
-| `[ICTCLD505 PC 3.6]` | Remove deployed resources; delete templates | C3 |
-| `[ICTCLD505 PC 3.7]` | Test and troubleshoot template errors | C3 |
-| `[ICTCLD505 PE 2]` | Create, run and update at least one own template | C1–C3 |
-| `[ICTCLD505 KE 8]` | Parameterisation for configuration and code reuse | C2 |
-| `[ICTCLD505 KE 9]` | Industry standard practices to define IaC | C1 |
+| [ICTCLD505 PC 3.1] | Learn template syntax of the selected IaC service | C1 |
+| [ICTCLD505 PC 3.2] | Create and deploy a template to provision a related resource set | C1 |
+| [ICTCLD505 PC 3.3] | Update and redeploy to modify and add resources | C2 |
+| [ICTCLD505 PC 3.4] | Confirm deployment; configure via console or CLI | C2 |
+| [ICTCLD505 PC 3.5] | Parameterise and deploy to reuse configuration | C2 |
+| [ICTCLD505 PC 3.6] | Remove deployed resources; delete templates | C3 |
+| [ICTCLD505 PC 3.7] | Test and troubleshoot template errors | C3 |
+| [ICTCLD505 PE 2] | Create, run and update at least one own template | C1–C3 |
+| [ICTCLD505 KE 8] | Parameterisation for configuration and code reuse | C2 |
+| [ICTCLD505 KE 9] | Industry standard practices to define IaC | C1 |
 
 > Taught here; formally **evidenced** in AT2 §4.3 (the student's own microservice template) — the authored artefact realised in Topic 8.
 

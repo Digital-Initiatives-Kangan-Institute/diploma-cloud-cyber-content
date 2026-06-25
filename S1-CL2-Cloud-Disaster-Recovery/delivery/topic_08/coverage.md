@@ -23,13 +23,13 @@ Deploying the serverless audit-log microservice from the supplied code — the i
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD503 PC 3.1]` | Review microservice design and code components | C1 |
-| `[ICTCLD503 PC 3.2]` | Deploy and configure cloud services to implement the application | C2 |
-| `[ICTCLD503 PC 3.3]` | Test microservice components; confirm the application functions | C3 |
-| `[ICTCLD503 PC 3.4]` | Troubleshoot and fix errors | C4 |
-| `[ICTCLD503 PE 3]` | Deploy a microservice using cloud serverless technologies | C2 |
-| `[ICTCLD503 PE 4]` | Use management consoles, SDKs or command line tools | C2 |
-| `[ICTCLD503 KE 5]` | Testing and debugging techniques | C3, C4 |
+| [ICTCLD503 PC 3.1] | Review microservice design and code components | C1 |
+| [ICTCLD503 PC 3.2] | Deploy and configure cloud services to implement the application | C2 |
+| [ICTCLD503 PC 3.3] | Test microservice components; confirm the application functions | C3 |
+| [ICTCLD503 PC 3.4] | Troubleshoot and fix errors | C4 |
+| [ICTCLD503 PE 3] | Deploy a microservice using cloud serverless technologies | C2 |
+| [ICTCLD503 PE 4] | Use management consoles, SDKs or command line tools | C2 |
+| [ICTCLD503 KE 5] | Testing and debugging techniques | C3, C4 |
 
 > Taught here; formally **evidenced** in AT2 §4.4 (the deployed, tested microservice).
 

@@ -21,10 +21,10 @@ Observing the running system — metrics and a scaling-relevant alarm on the ser
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD503 PC 4.1]` | Set up metrics and trigger scaling alarms according to design specifications | C1, C2 |
-| `[ICTCLD501 KE 6]` | Techniques and methods to monitor and create alerts in cloud environments | C1, C2 |
+| [ICTCLD503 PC 4.1] | Set up metrics and trigger scaling alarms according to design specifications | C1, C2 |
+| [ICTCLD501 KE 6] | Techniques and methods to monitor and create alerts in cloud environments | C1, C2 |
 
-> Taught here; formally **evidenced** in AT2 §4.5 (the configured metric + alarm). `[ICTCLD501 KE 6]` is the monitoring/alerting knowledge that also underpins the DR plan's detection step (AT1 Topic 4) — taught here in its practical form.
+> Taught here; formally **evidenced** in AT2 §4.5 (the configured metric + alarm). [ICTCLD501 KE 6] is the monitoring/alerting knowledge that also underpins the DR plan's detection step (AT1 Topic 4) — taught here in its practical form.
 
 ---
 

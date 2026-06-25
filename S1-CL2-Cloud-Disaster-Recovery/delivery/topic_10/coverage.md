@@ -23,15 +23,15 @@ Closing out the build: user documentation, the Deployment Report, sign-off, and 
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD505 PC 4.1]` | Create user documentation including IaC templates | C1 |
-| `[ICTCLD505 PE 4]` | Create user documentation | C1 |
-| `[ICTCLD505 FS Writing]` | Prepare user documentation in a logical manner using required syntax | C1 |
-| `[ICTCLD503 PC 4.2]` | Confirm, seek and respond to feedback with required personnel | C2 |
-| `[ICTCLD503 PC 4.3]` | Obtain final sign-off from required personnel | C3 |
-| `[ICTCLD505 PC 4.2]` | Obtain final sign-off from required personnel | C3 |
-| `[ICTCLD505 FS Oral communication]` | Confirm requirements / articulate concepts for the audience | C3 |
+| [ICTCLD505 PC 4.1] | Create user documentation including IaC templates | C1 |
+| [ICTCLD505 PE 4] | Create user documentation | C1 |
+| [ICTCLD505 FS Writing] | Prepare user documentation in a logical manner using required syntax | C1 |
+| [ICTCLD503 PC 4.2] | Confirm, seek and respond to feedback with required personnel | C2 |
+| [ICTCLD503 PC 4.3] | Obtain final sign-off from required personnel | C3 |
+| [ICTCLD505 PC 4.2] | Obtain final sign-off from required personnel | C3 |
+| [ICTCLD505 FS Oral communication] | Confirm requirements / articulate concepts for the audience | C3 |
 
-> The **written KE appendix** (C4) re-evidences the knowledge developed across Topics 6–9 — `[ICTCLD505 KE 3–9]`, `[ICTCLD503 KE 5]`, and the shared foundations `[ICTCLD503 KE 1, 2]` / `[ICTCLD505 KE 1, 2]` — against the student's own build (AT2 criterion D12).
+> The **written KE appendix** (C4) re-evidences the knowledge developed across Topics 6–9 — [ICTCLD505 KE 3–9], [ICTCLD503 KE 5], and the shared foundations [ICTCLD503 KE 1, 2] / [ICTCLD505 KE 1, 2] — against the student's own build (AT2 criterion D12).
 
 ---
 

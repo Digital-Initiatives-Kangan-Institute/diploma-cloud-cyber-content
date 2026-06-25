@@ -24,27 +24,27 @@ Infrastructure as Code from first principles, then operating a template you were
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD505 PC 1.1]` | Identify and review benefits of IaC | C1 |
-| `[ICTCLD505 PC 1.2]` | Determine ways automation leverages cloud platforms | C1 |
-| `[ICTCLD505 PC 1.3]` | Determine potential issues and errors when implementing IaC | C1 |
-| `[ICTCLD505 PC 1.4]` | Evaluate and select an IaC service compatible with the platform | C1 |
-| `[ICTCLD505 PC 2.1]` | Learn template syntax of the selected IaC service | C2 |
-| `[ICTCLD505 PC 2.2]` | Review pre-defined templates; determine resources and dependencies | C2 |
-| `[ICTCLD505 PC 2.3]` | Deploy, update and delete resources using predefined templates | C3 |
-| `[ICTCLD505 PC 2.4]` | Confirm deployments; configure via console or CLI | C3 |
-| `[ICTCLD505 PC 2.5]` | Remove deployed resources; delete templates | C3 |
-| `[ICTCLD505 PC 2.6]` | Test and troubleshoot template errors | C4 |
-| `[ICTCLD505 PE 1]` | Deploy, update and remove infrastructure using templates | C3 |
-| `[ICTCLD505 PE 3]` | Use management console, SDKs or command line tools | C3 |
-| `[ICTCLD505 KE 3]` | Benefits of IaC vs manual provisioning | C1 |
-| `[ICTCLD505 KE 4]` | IaC services on a cloud platform | C1 |
-| `[ICTCLD505 KE 5]` | Template syntax | C2 |
-| `[ICTCLD505 KE 6]` | Tooling to execute templates | C3 |
-| `[ICTCLD505 KE 7]` | Testing/debugging techniques and common errors | C4 |
-| `[ICTCLD505 KE 10]` | Methods to create, manage, provision and update templates | C3 |
-| `[ICTCLD505 KE 11]` | Techniques/metrics to deploy and manage templates | C1, C3 |
-| `[ICTCLD503 KE 1]` / `[ICTCLD505 KE 1]` | Industry technology standards | C5 |
-| `[ICTCLD503 KE 2]` / `[ICTCLD505 KE 2]` | Industry standard hardware/software/storage | C5 |
+| [ICTCLD505 PC 1.1] | Identify and review benefits of IaC | C1 |
+| [ICTCLD505 PC 1.2] | Determine ways automation leverages cloud platforms | C1 |
+| [ICTCLD505 PC 1.3] | Determine potential issues and errors when implementing IaC | C1 |
+| [ICTCLD505 PC 1.4] | Evaluate and select an IaC service compatible with the platform | C1 |
+| [ICTCLD505 PC 2.1] | Learn template syntax of the selected IaC service | C2 |
+| [ICTCLD505 PC 2.2] | Review pre-defined templates; determine resources and dependencies | C2 |
+| [ICTCLD505 PC 2.3] | Deploy, update and delete resources using predefined templates | C3 |
+| [ICTCLD505 PC 2.4] | Confirm deployments; configure via console or CLI | C3 |
+| [ICTCLD505 PC 2.5] | Remove deployed resources; delete templates | C3 |
+| [ICTCLD505 PC 2.6] | Test and troubleshoot template errors | C4 |
+| [ICTCLD505 PE 1] | Deploy, update and remove infrastructure using templates | C3 |
+| [ICTCLD505 PE 3] | Use management console, SDKs or command line tools | C3 |
+| [ICTCLD505 KE 3] | Benefits of IaC vs manual provisioning | C1 |
+| [ICTCLD505 KE 4] | IaC services on a cloud platform | C1 |
+| [ICTCLD505 KE 5] | Template syntax | C2 |
+| [ICTCLD505 KE 6] | Tooling to execute templates | C3 |
+| [ICTCLD505 KE 7] | Testing/debugging techniques and common errors | C4 |
+| [ICTCLD505 KE 10] | Methods to create, manage, provision and update templates | C3 |
+| [ICTCLD505 KE 11] | Techniques/metrics to deploy and manage templates | C1, C3 |
+| [ICTCLD503 KE 1] / [ICTCLD505 KE 1] | Industry technology standards | C5 |
+| [ICTCLD503 KE 2] / [ICTCLD505 KE 2] | Industry standard hardware/software/storage | C5 |
 
 > Taught here; formally **evidenced** in AT2 §4.2 (operate the provided data-store template) + the written KE appendix (assembled in Topic 10).
 
