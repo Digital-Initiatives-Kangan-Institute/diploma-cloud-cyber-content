@@ -30,15 +30,16 @@ The paper spec couldn't anticipate deploy realities:
 
 - **Required lab = AWS Academy Learner Lab, `us-east-1`** (course-wide single product; see the
   region-substitution standard). Design region is Sydney (`ap-southeast-2`); deploy is `us-east-1`.
-- ✅ **Deploy + Multi-AZ proven live in the Learner Lab `us-east-1` (2026-06-26).** Baseline and the
-  AT3 hardened end-state (RDS `MultiAZ: true`, `db.t3.medium`, standby in a 2nd AZ; cross-AZ ASG) both
-  reach CREATE_COMPLETE, no AZ/capacity refusal. Proven with a throwaway probe (baseline + both
-  multi-AZ flips). *(Originally proven in the Cloud Architecting Sandbox — baseline 2026-06-07 `eae2e18`,
-  Multi-AZ 2026-06-15 — before the single-product move; this corrected an earlier wrong "Multi-AZ not
-  supported" note, do not reinstate it.)*
-- ⚠️ **Open — placeholder health-check loop.** In the Learner Lab the Windows placeholder instances
-  churn on an ELB health-check replace loop (~6 min) — a UserData/bootstrap issue, not multi-AZ; fix
-  before any live "lose an AZ, stay up" failover demo. (Recorded in `docs/lab-pack-standard.md`.)
+- ✅ **PROVEN live end-to-end in the Learner Lab `us-east-1` (2026-07-01):** the baseline reaches
+  CREATE_COMPLETE **and serves the placeholder page**. The Multi-AZ hardened end-state (RDS
+  `MultiAZ: true`, `db.t3.medium`, standby in a 2nd AZ; cross-AZ ASG) reached CREATE_COMPLETE with no
+  AZ/capacity refusal via a throwaway probe (2026-06-26). *(Originally proven in the Cloud Architecting
+  Sandbox — baseline 2026-06-07 `eae2e18`, Multi-AZ 2026-06-15 — before the single-product move; this
+  corrected an earlier wrong "Multi-AZ not supported" note, do not reinstate it.)*
+- ✅ **Placeholder health-check loop — resolved (transient).** The ~6-min ELB replace loop seen on the
+  2026-06-26 throwaway probe did **not** reproduce: the baseline (identical placeholder UserData) serves
+  clean end-to-end (2026-07-01). Treat the probe churn as an insufficient-boot-time artefact. (Only the
+  Multi-AZ hardened state hasn't been re-served since — an optional confirmation, not a blocker.)
 - **Parked — EC2 instance role:** the AT2 design gives the instance an "Application-Service" role
   (RDS/S3/CloudWatch access); this baseline runs with none. The Learner Lab provides `LabRole` if a
   later step needs one; keep it a clean optional parameter (off by default).

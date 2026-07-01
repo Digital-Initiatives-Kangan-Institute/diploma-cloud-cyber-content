@@ -8,9 +8,10 @@ only what is specific to THIS pack. See also `assessments/assessment_plan.md` §
 > standard). Design regions stay real — Sydney `ap-southeast-2`, India `ap-south-1`, Melbourne DR
 > `ap-southeast-4` — but everything **deploys to `us-east-1`**, and **residency/DR are design-only** (not
 > deployed). The proving runs below were done in the Cloud Architecting Sandbox *before* the single-product
-> move; their AWS Academy constraints apply to the Learner Lab too, but an explicit **Learner-Lab re-prove
-> of the SQL-Server / `ModifyDBInstance` findings is pending** (only the CL1 multi-AZ slice has been
-> re-proven in the Learner Lab, 2026-06-26).
+> move. ✅ **Re-proven live in the Learner Lab `us-east-1` (2026-07-01):** baseline → improved
+> apply-as-update reached UPDATE_COMPLETE in-place (cross-AZ ASG, bucket lifecycle, PrivateAppBAssoc added;
+> RDS untouched). SQL Server **Express** deployed clean; `rds:ModifyDBInstance` is moot — the change-set
+> never modifies RDS.
 
 ## What this pack is
 
