@@ -60,8 +60,9 @@ def build(path):
     content_slide(prs, pg(), "Choose your Region — data residency first", "(applied from Topic 1)", [
         (0, "Region is the first build decision — and it's compliance, not preference."),
         (0, "The design mandates ap-southeast-2 (Sydney): financial records + PII stay onshore."),
+        (0, "In the AWS Academy Learner Lab you deploy to us-east-1 — [scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]. Same build; only the location label changes."),
         (0, "Set the console Region before creating anything — resources are Region-scoped."),
-        (0, "Wrong-Region resources are wrong evidence — the assessor checks the Region in every screenshot.",
+        (0, "Deploy everything in the lab's Region (us-east-1) — the assessor checks the Region matches in every screenshot.",
             {"bold": True, "color": A1, "mark_color": A1}),
     ], accent=A1)
     content_slide(prs, pg(), "Evidence discipline — capture as you build", "", [
@@ -72,21 +73,21 @@ def build(path):
             {"bold": True, "color": A1, "mark_color": A1}),
     ], accent=A1)
     demo_slide(prs, pg(), "Set up the build workspace", [
-        (0, "Sign in to the AWS Academy lab; set the Region to ap-southeast-2."),
+        (0, "Sign in to the AWS Academy Learner Lab; set the Region to us-east-1 — [scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]."),
         (0, "Confirm the identity you're building as."),
         (0, "Capture the first named screenshot (the Region selector) into the evidence log."),
         (0, "Show where configuration exports come from."),
     ], accent=A1)
     activity_slide(prs, pg(), "Set up your build workspace", [
-        (0, "In the AWS Academy lab, set up to build the Accounting System foundation:", {"bold": True}),
-        (1, "set the Region to ap-southeast-2 (confirm it — data residency)"),
+        (0, "In the AWS Academy Learner Lab, set up to build the Accounting System foundation:", {"bold": True}),
+        (1, "set the Region to us-east-1 — [scenario: ap-southeast-2 (Sydney) | deploy: us-east-1] (confirm it in your evidence)"),
         (1, "confirm your build identity"),
         (1, "capture your first named evidence screenshot (Region visible) into your evidence log"),
         (0, "Open the supplied Accounting Baseline Solution Design and skim it end to end."),
     ], "~15 min", accent=A1)
     takeaways_slide(prs, pg(), "Section 1 · Working to a supplied design", [
         "Architecture = requirements → design → build; in AT2 you're the builder, to a supplied design.",
-        "Region first — ap-southeast-2 for data residency; visible in all evidence.",
+        "Region first — the design mandates Sydney (ap-southeast-2) for residency; you deploy to us-east-1 in the lab, visible in all evidence.",
         "Capture evidence live as you build — the report is made from it.",
     ], accent=A1)
 

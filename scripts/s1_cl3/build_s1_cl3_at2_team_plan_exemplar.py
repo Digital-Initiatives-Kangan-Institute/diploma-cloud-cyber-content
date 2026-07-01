@@ -197,10 +197,11 @@ def build(path):
                 "Keep the instance single-AZ per the Ledgerline constraint; coordinate the SG rule with "
                 "Compute."],
                ["Cooper L. (Storage)",
-                "Write the storage CloudFormation (S3 buckets with encryption/versioning/lifecycle, EBS) and "
-                "the separate ap-south-1 residency stack.",
-                "Keep the residency buckets in the Mumbai region; reconcile lifecycle/retention with the "
-                "design and the Indian Regulatory Requirements."]],
+                "Write the storage CloudFormation (S3 buckets with encryption/versioning/lifecycle, EBS), "
+                "importing/naming what the other components reference.",
+                "Reconcile lifecycle/retention with the design. The India log/books residency is addressed "
+                "in the design only (per the Indian Regulatory Requirements) - it is not built as a "
+                "separate deployed stack."]],
               widths=[3.0, 7.5, 5.0])
 
     h1("6. Contingency planning")

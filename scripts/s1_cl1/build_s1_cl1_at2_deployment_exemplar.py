@@ -86,8 +86,9 @@ def build(path):
     h1("1. Executive Summary")
     add_uoc_evidence_tag(doc, "[ICTCLD401 PC 4.1] — partial (document and communicate the work)")
     add_body_paragraph(doc, "This report documents the foundation build phase of the YAT LMS cloud migration: the "
-                 "baseline AWS infrastructure for the LMS, deployed in the Sydney region (ap-southeast-2), "
-                 "availability zone ap-southeast-2a. The build delivered identity and access management, the "
+                 "baseline AWS infrastructure for the LMS. The design specifies the Sydney region (ap-southeast-2); "
+                 "in the AWS Academy Learner Lab it is deployed to us-east-1 - [scenario: ap-southeast-2 (Sydney) | "
+                 "deploy: us-east-1] - in availability zone us-east-1a. The build delivered identity and access management, the "
                  "network (a VPC with public, private-app and private-data subnets), the compute tier (an EC2 "
                  "Auto Scaling Group behind an Application Load Balancer), a managed MySQL database on RDS, "
                  "S3 and EBS storage, a three-tier security-group model, and a baseline of CloudWatch "
@@ -124,9 +125,9 @@ def build(path):
                  "human users via an IAM policy that denies actions without MFA. The EC2 instances assume an "
                  "instance profile granting only the S3 and CloudWatch access the application needs.")
     add_described_evidence(doc, "SCREENSHOT", "should show the IAM Groups list with the four groups and member counts, and an "
-                          "IAM user with an MFA device enabled; region ap-southeast-2 visible.")
+                          "IAM user with an MFA device enabled; region us-east-1 visible.")
     h3("4.2 Network topology")
-    add_body_paragraph(doc, "I deployed a VPC (10.0.0.0/16) with three subnets in ap-southeast-2a: public-web-a "
+    add_body_paragraph(doc, "I deployed a VPC (10.0.0.0/16) with three subnets in us-east-1a: public-web-a "
                  "(10.0.1.0/24) for the ALB and NAT Gateway, private-app-a (10.0.2.0/24) for the EC2 "
                  "instances, and private-data-a (10.0.3.0/24) for RDS. An Internet Gateway serves the public "
                  "subnet; a NAT Gateway gives the private app tier outbound internet (e.g. Windows Update) "
@@ -182,7 +183,7 @@ def build(path):
                 "DB ~68 GB + ~25 GB/yr growth ≈ 3 years' headroom; bulk attachments go to S3, not the DB."],
                ["C4", "ASG scaling threshold", "Scale out at 65% CPU",
                 "Below the point where response time degrades for this workload."],
-               ["C5", "MTS-Consultants permission boundary", "Limited to ap-southeast-2 + LMS-tagged resources",
+               ["C5", "MTS-Consultants permission boundary", "Limited to us-east-1 + LMS-tagged resources",
                 "Least privilege; no IAM or billing actions."],
                ["C6", "Admin access to instances", "SSM Session Manager (no bastion)",
                 "Removes a public RDP jump host to harden and audit; access is logged."],
@@ -292,7 +293,7 @@ def build(path):
                  "OS patching and the underlying hardware, which YAT previously owned on the on-prem server.")
     h3("Q4 — User access protocols and organisational hierarchy")
     add_body_paragraph(doc, "The MTS-Consultants group has build-and-operate permissions within a permission boundary "
-                 "limiting it to ap-southeast-2 and LMS-tagged resources, with no IAM or billing rights. It "
+                 "limiting it to us-east-1 and LMS-tagged resources, with no IAM or billing rights. It "
                  "serves the external consultant function. Its permissions must differ from YAT-ICT-Admins "
                  "(who hold full administration as the system owner) so that an external party can do the "
                  "delivery work without being able to alter identity, billing, or resources outside the "
@@ -315,7 +316,7 @@ def build(path):
     h1("Appendix A — Build evidence (screenshots)")
     add_body_paragraph(doc, "Evidence captures are described below in lieu of live screenshots for this exemplar.")
     for kind, d in [
-        ("SCREENSHOT A1", "IAM dashboard / groups — the four groups with member counts; an MFA-enabled user; region ap-southeast-2."),
+        ("SCREENSHOT A1", "IAM dashboard / groups — the four groups with member counts; an MFA-enabled user; region us-east-1."),
         ("SCREENSHOT A2", "VPC subnets — public-web-a, private-app-a, private-data-a with CIDRs and AZ; route tables (IGW / NAT)."),
         ("SCREENSHOT A3", "EC2 instances + ASG — running instance(s) with tags; ASG min/desired/max and scaling policy."),
         ("SCREENSHOT A4", "ALB target group — instance(s) reporting Healthy."),

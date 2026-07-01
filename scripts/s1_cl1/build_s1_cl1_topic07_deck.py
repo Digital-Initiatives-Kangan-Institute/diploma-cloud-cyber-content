@@ -82,7 +82,7 @@ def build(path):
         (0, "Open the Solution Design for this engagement (on the intranet) and study its network topology (§4.4) — you build to that.",
             {"bold": True, "color": A1, "mark_color": A1}),
         (0, "VPC 10.0.0.0/16 (room to expand); DNS resolution + flow logs on."),
-        (0, "Subnets in ap-southeast-2a: public-egress-a (NAT only) · private-app-a (app + internal ALB) · private-data-a (database)."),
+        (0, "Subnets in the first Availability Zone: public-egress-a (NAT only) · private-app-a (app + internal ALB) · private-data-a (database)."),
         (0, "Internet Gateway is egress-only — patching via NAT; no inbound path from the internet."),
         (0, "Staff reach the service over the campus Site-to-Site VPN; route tables set per tier."),
     ], accent=A1)

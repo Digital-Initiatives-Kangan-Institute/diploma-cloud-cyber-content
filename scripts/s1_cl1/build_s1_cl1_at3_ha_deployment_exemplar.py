@@ -87,15 +87,20 @@ def build(path):
     add_body_paragraph(doc, "This report documents the high-availability hardening of the YAT LMS, applied to the "
                  "single-AZ foundation delivered in the previous phase. Working within a single Saturday "
                  "late-night maintenance window (~3.5 hours), I enabled RDS Multi-AZ, extended the Auto "
-                 "Scaling Group and Application Load Balancer across two Availability Zones (ap-southeast-2a "
-                 "and 2b), added HA-tuned monitoring, and configured a cross-Region backup copy to "
-                 "ap-southeast-4 (Melbourne). Failure and resize simulations confirmed the LMS now survives "
+                 "Scaling Group and Application Load Balancer across two Availability Zones (us-east-1a "
+                 "and 1b), added HA-tuned monitoring, and configured a cross-Region backup copy to a separate "
+                 "DR destination. Failure and resize simulations confirmed the LMS now survives "
                  "an instance loss, an AZ impairment, and an RDS failover with only brief, sub-90-second "
                  "blips. Measured availability across the maintenance window was 99.96%. The 99.9% strategic "
                  "target is now achievable.")
     add_body_paragraph(doc, "Cross-Region active-active DR and application-layer clustering remain out of scope (noted "
                  "in §7.3). This report, with the companion HA Design (Part A), closes out MTS's role on the "
                  "engagement.")
+    add_body_paragraph(doc, "Region substitution: the design places the primary system in ap-southeast-2 (Sydney) and the "
+                 "DR backup copy in ap-southeast-4 (Melbourne). The AWS Academy Learner Lab is single-region, so both "
+                 "deploy to us-east-1 - [scenario: ap-southeast-2 (Sydney) | deploy: us-east-1] and [scenario: "
+                 "ap-southeast-4 (Melbourne) | deploy: us-east-1]. The build process is identical; only the Region on the "
+                 "console is the substitute, and each element below is evidenced on that substituted Region.")
 
     h1("2. Engagement Context")
     add_body_paragraph(doc, "This phase implements the YAT LMS Cloud Architecture — HA Design (Part A of this AT3 "
@@ -121,13 +126,13 @@ def build(path):
     add_body_paragraph(doc, "Minimal change: I added an AWS Backup service role and a cross-Region copy role for the "
                  "backup plan. No change to the human IAM groups or MFA enforcement from the AT2 baseline.")
     add_described_evidence(doc, "SCREENSHOT", "should show the AWS Backup service role / cross-Region copy role added; "
-                            "region ap-southeast-2.")
+                            "region us-east-1.")
     h3("4.2 Network topology (cross-AZ subnets)")
-    add_body_paragraph(doc, "I added three subnets in ap-southeast-2b — public-web-b, private-app-b, private-data-b — "
+    add_body_paragraph(doc, "I added three subnets in us-east-1b — public-web-b, private-app-b, private-data-b — "
                  "mirroring the AZ-a CIDR plan, with route-table associations. A second NAT Gateway in "
                  "public-web-b gives the AZ-b app subnet AZ-independent outbound access, so a single NAT or "
                  "AZ failure can't sever egress.")
-    add_described_evidence(doc, "SCREENSHOT", "should show all six subnets across ap-southeast-2a and 2b with CIDRs/AZ, and "
+    add_described_evidence(doc, "SCREENSHOT", "should show all six subnets across us-east-1a and 1b with CIDRs/AZ, and "
                             "the second NAT Gateway.")
     h3("4.3 Compute (cross-AZ Auto Scaling)")
     add_body_paragraph(doc, "I extended the ASG across both AZ subnets and raised capacity to min 2 / desired 2 / max 4, "
@@ -138,21 +143,22 @@ def build(path):
     h3("4.4 Application Load Balancer (cross-AZ targets)")
     add_body_paragraph(doc, "I extended the ALB's subnet group to both AZs and confirmed the target group reports "
                  "healthy targets in each AZ, so the ALB can route around an AZ-level failure.")
-    add_described_evidence(doc, "SCREENSHOT", "should show the ALB target group with healthy targets in both ap-southeast-2a "
-                            "and 2b.")
+    add_described_evidence(doc, "SCREENSHOT", "should show the ALB target group with healthy targets in both us-east-1a "
+                            "and 1b.")
     h3("4.5 Database (Multi-AZ)")
     add_body_paragraph(doc, "I enabled Multi-AZ on the RDS instance; AWS provisioned a synchronous standby in "
-                 "ap-southeast-2b. The conversion caused one brief failover blip, after which the primary "
+                 "us-east-1b. The conversion caused one brief failover blip, after which the primary "
                  "endpoint resolved to the new active instance. Multi-AZ removes the database single point of "
                  "failure that the AT2 baseline carried.")
     add_described_evidence(doc, "SCREENSHOT", "should show the RDS instance with Multi-AZ = Yes and the standby AZ; and the "
                             "RDS event log entry for the Multi-AZ conversion.")
     h3("4.6 Storage (cross-Region backup)")
-    add_body_paragraph(doc, "I configured an AWS Backup plan with a cross-Region copy of the RDS and EBS snapshots to "
-                 "ap-southeast-4 (Melbourne) — keeping the data onshore per the data-residency requirement "
-                 "while protecting against a regional event.")
-    add_described_evidence(doc, "SCREENSHOT", "should show the AWS Backup plan with the cross-Region copy rule to "
-                            "ap-southeast-4.")
+    add_body_paragraph(doc, "I configured an AWS Backup plan with a cross-Region copy of the RDS and EBS snapshots to the "
+                 "DR destination — the design's ap-southeast-4 (Melbourne), deployed to us-east-1 in the lab "
+                 "([scenario: ap-southeast-4 (Melbourne) | deploy: us-east-1]) — keeping the data onshore per the "
+                 "data-residency requirement while protecting against a regional event.")
+    add_described_evidence(doc, "SCREENSHOT", "should show the AWS Backup plan with the cross-Region copy rule to the DR "
+                            "destination (us-east-1, substituting ap-southeast-4).")
     h3("4.7 Security (HA-related adjustments)")
     add_body_paragraph(doc, "No security-group changes were required — cross-AZ traffic already flows within the VPC "
                  "under the existing tiered rules, and the new subnets inherited the tier-appropriate groups.")
@@ -164,7 +170,7 @@ def build(path):
     add_described_evidence(doc, "SCREENSHOT", "should show the HA-tuned alarms list and the service-level availability "
                             "dashboard.")
     h3("4.9 Cross-Region backup / replication")
-    add_body_paragraph(doc, "Completed — see §4.6 (AWS Backup cross-Region copy to ap-southeast-4).")
+    add_body_paragraph(doc, "Completed — see §4.6 (AWS Backup cross-Region copy to the DR destination; ap-southeast-4 substituted to us-east-1).")
 
     h1("5. Configuration Decisions")
     add_data_table(doc, ["#", "Decision", "Choice", "Rationale"],
@@ -172,7 +178,7 @@ def build(path):
                 "The planned maintenance window absorbs the single conversion blip; no need to wait."],
                ["C2", "Post-HA ASG capacity", "min 2 / desired 2 / max 4 across AZs",
                 "Survives an AZ loss with a healthy instance still serving; max 4 covers the peak."],
-               ["C3", "Cross-Region backup destination", "ap-southeast-4 (Melbourne)",
+               ["C3", "Cross-Region backup destination", "ap-southeast-4 (Melbourne); deployed to us-east-1 (substituted)",
                 "Regional protection while keeping financial/personal data onshore (data residency)."],
                ["C4", "HA alarm thresholds", "Healthy host < 1 per AZ (1 min); replica lag > 30 s",
                 "Detects loss of AZ capacity or replication health before it becomes an outage."]],
@@ -234,7 +240,7 @@ def build(path):
         "The HA Design document (Part A) — the operational reference for the resilient architecture.",
         "The HA-tuned monitoring and alarms (§4.8) and the SNS notification destinations.",
         "The simulation outcomes (§6) — the expected behaviour for future HA testing.",
-        "The cross-Region backup schedule and the restore procedure (ap-southeast-4).",
+        "The cross-Region backup schedule and the restore procedure (ap-southeast-4, substituted to us-east-1 in the lab).",
     ])
     h3("7.3 Known limitations and what's next")
     add_bullet_list(doc, [
@@ -312,7 +318,7 @@ def build(path):
     h1("Appendix A — Build evidence (screenshots)")
     add_body_paragraph(doc, "Evidence captures are described below in lieu of live screenshots for this exemplar.")
     for kind, d in [
-        ("SCREENSHOT A1", "VPC subnets — all six across ap-southeast-2a and 2b with CIDRs/AZ; second NAT Gateway."),
+        ("SCREENSHOT A1", "VPC subnets — all six across us-east-1a and 1b with CIDRs/AZ; second NAT Gateway."),
         ("SCREENSHOT A2", "ASG spanning both AZs, min/desired/max ≥ 2, instances healthy in each AZ."),
         ("SCREENSHOT A3", "ALB target group — healthy targets in both AZs."),
         ("SCREENSHOT A4", "RDS — Multi-AZ = Yes, standby AZ; RDS event log Multi-AZ conversion."),
@@ -320,7 +326,7 @@ def build(path):
         ("SCREENSHOT A6", "ASG activity history — replacement event from the failure simulation."),
         ("SCREENSHOT A7", "RDS event log — failover event from the failover simulation."),
         ("SCREENSHOT A8", "CloudWatch availability metric across the 3.5-hour window, dips visible."),
-        ("SCREENSHOT A9", "AWS Backup plan with cross-Region copy to ap-southeast-4."),
+        ("SCREENSHOT A9", "AWS Backup plan with cross-Region copy to the DR destination (us-east-1, substituting ap-southeast-4)."),
     ]:
         add_described_evidence(doc, kind, d)
     h1("Appendix B — Configuration exports")
